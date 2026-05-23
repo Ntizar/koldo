@@ -33,11 +33,12 @@
 ### APIs guardadas en `/root/.env`
 ```env
 GITHUB_TOKEN=***          # scope repo, clásico PAT
-ESIOS_API_TOKEN=***       # Red Eléctrica España
+ESIOS_API_TOKEN=***       # Red Eléctrica España — datos eléctricos
+NAP_API_KEY=***           # NAP Transportes — UUID, transporte público España
 ```
 
 ### Pendiente
-- Migrar ambas a NaN Cloud Env tab (persistente entre reinicios)
+- Migrar las 3 a NaN Cloud Env tab (persistente entre reinicios)
 - El usuario debe entrar en cloud.nan.builders > microVM > Env
 
 ### API ESIOS
