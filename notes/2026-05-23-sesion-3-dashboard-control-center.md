@@ -1,58 +1,35 @@
----
-nombre: Sesión Dashboard Control Center
-tipo: nota
-fecha: 2026-05-23
-tags: [dashboard, aurora, file-manager, seguridad, liquid-glass]
----
+# Resumen sesión 23-05-2026 (tarde-noche)
 
-# Sesión 3 — Dashboard Control Center con Aurora Liquid Glass
+## Dashboard completado (fase 1)
 
-## Logros
+**URL**: https://nantizar-ntizar.apps.nan.builders
+**Pass**: $Nan603060
+**Repo**: Ntizar/nan-dashboard (privado)
 
-1. **Añadido gestor de archivos completo** al dashboard
-   - Navegación por carpetas con breadcrumbs
-   - Crear carpetas y archivos desde el navegador
-   - Borrar con re-autenticación y confirmación
-   - Rutas seguras: solo /persist, /root, /hermes-home
+### Secciones actuales
 
-2. **Seguridad mejorada**
-   - Auth middleware ahora solo protege `/api/*` (la página HTML carga sin auth)
-   - Re-autenticación (X-Auth-Confirm) para operaciones destructivas
-   - Path traversal protection
-   - No se puede borrar proyectos principales ni sobreescribir el dashboard
-   - Audit log de todas las acciones
+| Sección | Propósito |
+|---------|-----------|
+| 🟢 **Barra estado** | Modelo activo, RAM, uptime, plataformas (polls 10s) |
+| 📅 **Calendario** | Histórico de sesiones, navegación meses, click en día |
+| ⚙️ **Sistema** | CPU, RAM, discos con barras de progreso |
+| 🤖 **Agente** | Modelo, proveedor, modelos disponibles (click = cambiar) |
+| 🧠 **Cerebro** | Timeline sesiones + skills de Koldo |
+| 🔐 **APIs** | Tokens configurados |
+| 🧠 **Skills** | Skills del repo Koldo, clickables con modal |
+| 🐙 **GitHub** | Todos los repos desde API web |
+| ⚡ **Servicios** | Puertos abiertos + procesos activos (via /proc/net/tcp) |
+| 📂 **Gestor** | Navegador de archivos, crear/borrar con re-auth |
+| 📋 **Actividad** | Audit log del dashboard |
 
-3. **Enlaces a GitHub** en cada repo (clickable)
+### Bugs corregidos
+- Services endpoint: usaba `ss -tlnp` que no existe → cambiado a `/proc/net/tcp`
+- Skills/read devolvía HTML por servidor viejo corriendo
+- Indentación en regex split
 
-4. **Skills interactivas** — click para ver contenido en modal + ayuda contextual
-
-5. **Integración Ntizar-Aurora Liquid Glass**
-   - CDN: `ntizar.css` desde jsdelivr
-   - Tema oscuro con fondo `#0a0e1c` (azul marino, no negro)
-   - Tarjetas glass con backdrop-filter blur
-   - Gradientes azul+naranja (brand + accent)
-   - Botones con gradientes `nz-btn--primary` (azul) y `nz-btn--accent` (naranja)
-   - Diseño responsive
-
-6. **Creada skill Koldo**: `dashboard-control-center.md` con documentación completa
-
-## Problemas encontrados y soluciones
-
-- **Bad password tras cambiar contraseña**: el auth middleware bloqueaba el HTML de login. Solución: middleware solo en `/api/*`
-- **EADDRINUSE**: al matar procesos, fallaba porque `lsof` no estaba instalado. Solución: `fuser -k 4000/tcp`
-- **Skills/read devolvía HTML**: el servidor anterior (sin el endpoint) seguía corriendo. Solución: matar proceso explícitamente
-
-## Pendiente
-
-- [ ] Migrar API keys de /root/.env a NaN Cloud Env tab
-- [ ] Exponer NAP Dashboard en `ntizar.apps.nan.builders/nap/` via reverse proxy
-- [ ] Sección Config: modelo activo, proveedor, TTS/STT
-- [ ] Sección Cron: tareas programadas
-- [ ] Editor de texto en el navegador
-- [ ] Subida de archivos drag&drop
-- [ ] X/Twitter OAuth (pospuesto)
-
-## Contraseñas activas
-
-- NaN Dashboard: `$Nan603060`
-- Admin dashboard login: `admin` + pass (campo único)
+### Pendiente
+- [ ] Migrar API keys a NaN Cloud Env
+- [ ] Exponer NAP en `nantizar-ntizar.apps.nan.builders/nap/` vía proxy
+- [ ] Multi-agente: cuando haya más microVMs
+- [ ] Sección Config: cambiar modelo, TTS, STT desde dashboard
+- [ ] Editor de texto en navegador
