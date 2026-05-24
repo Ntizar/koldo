@@ -1,0 +1,12 @@
+# Excluye basura del build context que envía Kaniko.
+.git/
+.github/
+.gitignore
+.dockerignore
+*.log
+.DS_Store
+Thumbs.db
+node_modules/
+.env
+.env.*
+!.env.example
