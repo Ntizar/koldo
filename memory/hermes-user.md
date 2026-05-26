@@ -1,0 +1,3 @@
+User prefers TTS voice responses using Álvaro's voice (es-ES-AlvaroNeural, Edge TTS provider, Spanish from Spain).
+§
+User name: David Antizar (also goes by Ntizar on GitHub). The agent's name is Koldo — Hermes is the framework underneath, but always present as Koldo. User prefers CSS style matching Esios dashboard: blue + orange color scheme with liquid glass effects. Portfolio at https://ntizar-ntizar.apps.nan.builders on container port 3500. nan-dashboard repo at https://github.com/Ntizar/nan-dashboard (work on that repo, delete and recreate as needed).

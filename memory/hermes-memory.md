@@ -1,0 +1,9 @@
+Cron job schedules use Madrid time (CET/CEST, UTC+1/UTC+2), NOT UTC. koldo-autoconfig: 08:00 Madrid, esios-daily-telegram: 09:00 Madrid, GitHub Stars Learning: 02:00-04:00 Madrid. All cron jobs use standard cron schedule syntax (e.g., "0 8 * * *").
+§
+User has a private GitHub repo called "koldo" under the ntizar organization that is not visible via the public API. User has multiple public repos under github.com/ntizar/ (25+ repos). User has expressed concern about losing information from the agent deleting itself. User wants the agent to be connected to GitHub for automatic backups and updates.
+§
+Ntizar portfolio: repo nan-dashboard en /root/workspace/nan-dashboard. Puerto 4000 (NO 3500, ese es ESIOS). Estilo Esios: azul #2563eb + naranja #f97316 + liquid glass, tema claro, fuente Inter. Express + cookie-parser para auth con session cookies. Admin password configurable via env ADMIN_PASSWORD.
+§
+esios-dashboard: /root/workspace/esios-work. Puerto 4000. ESIOS_API_TOKEN env. 2018 indicadores ESIOS en data/all-esios-indicators.json. Dockerfile multi-stage non-root + HEALTHCHECK. Arquitectura v2.0: src/ modular (config, shared, infra, domains, jobs). server.js 647 líneas. Helmet + CORS whitelist + /metrics. FS async. Monte Carlo en domains/forecast/. Informes IA en domains/reports/. Cache con métricas en infra/cache/. Frontend modular: index.html 223 líneas, css/styles.css, js/ (9 módulos). Tests: Jest 24/24 pasando (time, utils, env, api).
+§
+ESIOS telemedida units: ALL telemedida indicators (10035, 10037, 10206, 10351, 10352, etc.) return values in kWh, NOT MW. Must divide by 1000 to get MW. This is a common pitfall — always verify units with a direct fetch before integrating. CO2 libre (10006) returns kWh of clean generation (~229,000), NOT percentage. CO2 specific (10355) returns t/MWh (~0.74), NOT t/h. CO2 total = gen_total_MWh * specific_factor.
