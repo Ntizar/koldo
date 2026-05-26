@@ -10,6 +10,7 @@
 | [scientific-agent-skills](skills/ia/scientific-agent-skills.md) | K-Dense-AI/scientific-agent-skills | 2026-05-26 | 25.9k |
 | [orca](skills/ia/orca.md) | stablyai/orca | 2026-05-26 | 3.4k |
 | [pinto-model-zoo](skills/ia/pinto-model-zoo.md) | PINTO0309/PINTO_model_zoo | 2026-05-26 | 4.3k |
+| [gaze-tracking](skills/ia/gaze-tracking.md) | antoinelame/GazeTracking | 2026-05-26 | 2.6k |
 
 ### 🎙 Audio / Voz
 | Skill | Repo | Fecha | Stars |
@@ -33,11 +34,23 @@
 |-------|------|-------|-------|
 | [postgres-mcp](skills/devops/postgres-mcp.md) | crystaldba/postgres-mcp | 2026-05-26 | 2.8k |
 | [google-eng-practices](skills/devops/google-eng-practices.md) | google/eng-practices | 2026-05-26 | 22.6k |
+| [vidpipe](skills/devops/vidpipe.md) | htekdev/vidpipe | 2026-05-26 | 165 |
 
 ### 🔌 Backend / Integraciones
 | Skill | Repo | Fecha | Stars |
 |-------|------|-------|-------|
 | [nango](skills/backend/nango.md) | NangoHQ/nango | 2026-05-26 | 8.5k |
+
+### 🎨 Frontend / Visualización
+| Skill | Repo | Fecha | Stars |
+|-------|------|-------|-------|
+| [awesome-design-systems](skills/frontend/awesome-design-systems.md) | alexpate/awesome-design-systems | 2026-05-26 | 24.5k |
+| [mini-tokyo-3d](skills/frontend/mini-tokyo-3d.md) | nagix/mini-tokyo-3d | 2026-05-26 | 4.1k |
+
+### 🌍 GIS / Geoespacial
+| Skill | Repo | Fecha | Stars |
+|-------|------|-------|-------|
+| [city2graph](skills/gis/city2graph.md) | c2g-dev/city2graph | 2026-05-26 | 1.2k |
 
 ---
 
@@ -68,35 +81,37 @@
 | 12 | cporter202/API-mega-list | Data / Referencia | 5.5k |
 | 13 | PINTO0309/PINTO_model_zoo | IA / Modelos | 4.3k |
 
+### Sesión 4 (2026-05-26) - 5 skills nuevas
+| # | Repo | Categoría | Stars |
+|---|------|-----------|-------|
+| 14 | antoinelame/GazeTracking | IA / Computer Vision | 2.6k |
+| 15 | alexpate/awesome-design-systems | Frontend / Design Systems | 24.5k |
+| 16 | nagix/mini-tokyo-3d | Frontend / Visualización 3D | 4.1k |
+| 17 | htekdev/vidpipe | DevOps / Video AI | 165 |
+| 18 | c2g-dev/city2graph | GIS / Graph Neural Networks | 1.2k |
+
 ---
 
 ## Repos Pendientes para Explorar
 
 ### IA / ML
-- ⏳ antoinelame/GazeTracking - Eye Tracking library (2.6k)
-- ⏳ alexpate/awesome-design-systems - Colección de design systems (24.5k)
+- ⏳ Barath19/Boxer3D - AR 3D object detection with LiDAR (397)
+- ⏳ duy-phamduc68/TrafficLab-3D - Digital twin traffic visualization (309)
 
 ### Frontend / Diseño
 - ⏳ Z1Code/glass-refraction - Liquid Glass design system
-- ⏳ nagix/mini-tokyo-3d - 3D digital map of Tokyo transit (4.1k)
+- ⏳ vasile/transit-map - Simulaciones de mapas de transporte (372)
+- ⏳ maptalks/maptalks.three - 3D map layers with three.js (645)
 
 ### GIS / Geoespacial
-- ⏳ c2g-dev/city2graph - Geospatial relations to graphs (1.2k)
 - ⏳ Aouei/remote-sensing-satellite-downloader - Descarga datos satelitales
 - ⏳ sparkyniner/DRISH-X - Inteligencia con satélite Sentinel-2 (223)
 
-### DevOps / Infraestructura
-- ⏳ htekdev/vidpipe - CLI tool para procesamiento de video
-
 ### Otros
-- ⏳ vasile/transit-map - Simulaciones de mapas de transporte (372)
-- ⏳ maptalks/maptalks.three - 3D map layers with three.js (645)
-- ⏳ Barath19/Boxer3D - AR 3D object detection with LiDAR (397)
-- ⏳ duy-phamduc68/TrafficLab-3D - Digital twin traffic visualization (309)
 - ⏳ BlinkTagInc/gtfs-to-html - GTFS to HTML timetables (225)
 - ⏳ acunap/praxis - Shell scripting
 - ⏳ 686f6c61/Workshop-IA-Agentes-Herramientas - Workshop IA agentes
-- ⏳ xmihura/Kanvas - Project management with Obsidian Canvas
+- ⏳ XMihura/Kanvas - Project management with Obsidian Canvas
 - ⏳ nicolaswurtz/extras-opendata-sncf-reseau - Datos abiertos SNCF
 - ⏳ DPhi-Space/SimSat - Satellite simulation
 - ⏳ orcunkok/AWS-Dem-Downloader - AWS Terrain Tiles downloader
@@ -110,6 +125,7 @@
 - ⏳ NicAOB97/LSE-Detection - Spanish Sign Language Detection
 - ⏳ KikeOnRails/YoloConteo - Person counter
 - ⏳ munish0838/parali - Crop burn detection with Liquid-VLM
+- ⏳ gabrielAHN/gtfs-viz - GTFS visualization client-side
 
 ---
 
@@ -117,7 +133,7 @@
 - `ia` - Inteligencia Artificial y Machine Learning
 - `herramientas` - Tools y CLI utilities
 - `data` - Data Science, BI, Visualización
-- `frontend` - UI, CSS, Design Systems
+- `frontend` - UI, CSS, Design Systems, Visualización 3D
 - `gis` - Geoespacial y Satellite
 - `devops` - Infraestructura y DevOps
 - `audio` - Procesamiento de audio y voz
@@ -126,6 +142,6 @@
 ---
 
 *Última actualización: 2026-05-26*
-*Sesiones completadas: 3*
-*Total skills: 13*
-*Total repos pendientes: ~29*
+*Sesiones completadas: 4*
+*Total skills creados: 18*
+*Total repos pendientes: ~24*

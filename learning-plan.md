@@ -1,9 +1,9 @@
 # Learning Plan - Exploración de Repositorios Estrella
 
 ## Objetivo
-Explorar y extraer conocimiento valioso de los 42 repositorios estrella de @Ntizar.
+Explorar y extraer conocimiento valioso de los 47 repositorios estrella de @Ntizar.
 
-## Sesión Actual: 2026-05-26 (Sesión 3)
+## Sesión Actual: 2026-05-26 (Sesión 4)
 
 ### Sesión 1 (2026-05-26) - ✅ COMPLETADA (3 skills)
 | # | Repo | Categoría | Estado |
@@ -21,57 +21,66 @@ Explorar y extraer conocimiento valioso de los 42 repositorios estrella de @Ntiz
 | 7 | metabase/metabase | Data / Business Intelligence | ✅ COMPLETADO |
 | 8 | crystaldba/postgres-mcp | DevOps / Database / MCP | ✅ COMPLETADO |
 
-### Sesión 3 (2026-05-26) - ✅ COMPLETADA (5 skills nuevas)
-| # | Repo | Categoría | Stars |
-|---|------|-----------|-------|
-| 9 | jamiepine/voicebox | Audio / Voz / IA | 28.5k |
-| 10 | google/eng-practices | DevOps / Ingeniería de Software | 22.6k |
-| 11 | NangoHQ/nango | Backend / Integraciones | 8.5k |
-| 12 | cporter202/API-mega-list | Data / Referencia de APIs | 5.5k |
-| 13 | PINTO0309/PINTO_model_zoo | IA / Modelos Multi-Framework | 4.3k |
+### Sesión 3 (2026-05-26) - ✅ COMPLETADA (5 skills)
+| # | Repo | Categoría | Stars | Estado |
+|---|------|-----------|-------|--------|
+| 9 | jamiepine/voicebox | Audio / Voz / IA | 28.5k | ✅ COMPLETADO |
+| 10 | google/eng-practices | DevOps / Ingeniería de Software | 22.6k | ✅ COMPLETADO |
+| 11 | NangoHQ/nango | Backend / Integraciones | 8.5k | ✅ COMPLETADO |
+| 12 | cporter202/API-mega-list | Data / Referencia de APIs | 5.5k | ✅ COMPLETADO |
+| 13 | PINTO0309/PINTO_model_zoo | IA / Modelos Multi-Framework | 4.3k | ✅ COMPLETADO |
+
+### Sesión 4 (2026-05-26) - ✅ COMPLETADA (5 skills nuevas)
+| # | Repo | Categoría | Stars | Estado |
+|---|------|-----------|-------|--------|
+| 14 | antoinelame/GazeTracking | IA / Computer Vision / Eye Tracking | 2.6k | ✅ COMPLETADO |
+| 15 | alexpate/awesome-design-systems | Frontend / Design Systems | 24.5k | ✅ COMPLETADO |
+| 16 | nagix/mini-tokyo-3d | Frontend / Visualización 3D | 4.1k | ✅ COMPLETADO |
+| 17 | htekdev/vidpipe | DevOps / Video AI / Content Pipeline | 165 | ✅ COMPLETADO |
+| 18 | c2g-dev/city2graph | GIS / Graph Neural Networks | 1.2k | ✅ COMPLETADO |
 
 ---
 
 ## Repos Pendientes para Explorar
 
-### IA / ML
-- ⏳ antoinelame/GazeTracking - Eye Tracking library (2.6k)
-- ⏳ alexpate/awesome-design-systems - Colección de design systems (24.5k)
-
 ### Frontend / Diseño
 - ⏳ Z1Code/glass-refraction - Liquid Glass design system
-- ⏳ nagix/mini-tokyo-3d - 3D digital map of Tokyo transit (4.1k)
-
-### GIS / Geoespacial
-- ⏳ c2g-dev/city2graph - Geospatial relations to graphs (1.2k)
-- ⏳ Aouei/remote-sensing-satellite-downloader - Descarga datos satelitales
-- ⏳ sparkyniner/DRISH-X - Inteligencia con satélite Sentinel-2 (223)
-
-### DevOps / Infraestructura
-- ⏳ htekdev/vidpipe - CLI tool para procesamiento de video
-
-### Otros
 - ⏳ vasile/transit-map - Simulaciones de mapas de transporte (372)
 - ⏳ maptalks/maptalks.three - 3D map layers with three.js (645)
+- ⏳ gabrielAHN/gtfs-viz - GTFS visualization client-side (49)
+
+### IA / ML / Computer Vision
 - ⏳ Barath19/Boxer3D - AR 3D object detection with LiDAR (397)
 - ⏳ duy-phamduc68/TrafficLab-3D - Digital twin traffic visualization (309)
+- ⏳ munish0838/parali - Crop burn detection with Liquid-VLM (4)
+- ⏳ NicAOB97/LSE-Detection - Spanish Sign Language Detection (1)
+- ⏳ KikeOnRails/YoloConteo - Person counter (1)
+
+### GIS / Geoespacial
+- ⏳ Aouei/remote-sensing-satellite-downloader - Descarga datos satelitales (4)
+- ⏳ sparkyniner/DRISH-X - Inteligencia con satélite Sentinel-2 (223)
+- ⏳ DPhi-Space/SimSat - Satellite simulation (60)
+- ⏳ orcunkok/AWS-Dem-Downloader - AWS Terrain Tiles downloader (8)
+
+### Transporte / GTFS
 - ⏳ BlinkTagInc/gtfs-to-html - GTFS to HTML timetables (225)
-- ⏳ acunap/praxis - Shell scripting
-- ⏳ 686f6c61/Workshop-IA-Agentes-Herramientas - Workshop IA agentes
-- ⏳ xmihura/Kanvas - Project management with Obsidian Canvas
-- ⏳ nicolaswurtz/extras-opendata-sncf-reseau - Datos abiertos SNCF
-- ⏳ DPhi-Space/SimSat - Satellite simulation
-- ⏳ orcunkok/AWS-Dem-Downloader - AWS Terrain Tiles downloader
-- ⏳ fitomad/bicimad - BiciMad API client
-- ⏳ cristobal-GC/electriciPy_market - Mercado eléctrico español
-- ⏳ PabloCastellano/libreborme - BORME analysis platform
-- ⏳ searchcraft-inc/searchcraft-mcp-server - Vertical search MCP
-- ⏳ searchcraft-inc/searchcraft-client-php - Searchcraft PHP client
-- ⏳ belubeluga/djturbo - Django Turbo
-- ⏳ ronvidev/modelo_lstm_lsp - LSTM model
-- ⏳ NicAOB97/LSE-Detection - Spanish Sign Language Detection
-- ⏳ KikeOnRails/YoloConteo - Person counter
-- ⏳ munish0838/parali - Crop burn detection with Liquid-VLM
+- ⏳ MobilityData/awesome-transit - Community list of transit APIs (1.8k)
+- ⏳ OneBusAway/onebusaway-gtfs-realtime-visualizer - GTFS-realtime visualizer (68)
+- ⏳ WRI-Cities/static-GTFS-manager - GUI for GTFS data (159)
+- ⏳ WRI-Cities/payanam - Tool for mapping GTFS (17)
+
+### Herramientas / Otros
+- ⏳ acunap/praxis - Shell scripting (3)
+- ⏳ 686f6c61/Workshop-IA-Agentes-Herramientas - Workshop IA agentes (36)
+- ⏳ XMihura/Kanvas - Project management with Obsidian Canvas (169)
+- ⏳ PabloCastellano/libreborme - BORME analysis platform (134)
+- ⏳ searchcraft-inc/searchcraft-mcp-server - Vertical search MCP (7)
+- ⏳ searchcraft-inc/searchcraft-client-php - Searchcraft PHP client (16)
+- ⏳ belubeluga/djturbo - Django Turbo (7)
+- ⏳ ronvidev/modelo_lstm_lsp - LSTM model (30)
+- ⏳ fitomad/bicimad - BiciMad API client (4)
+- ⏳ cristobal-GC/electriciPy_market - Mercado eléctrico español (31)
+- ⏳ nicolaswurtz/extras-opendata-sncf-reseau - Datos abiertos SNCF (47)
 
 ---
 
@@ -79,7 +88,7 @@ Explorar y extraer conocimiento valioso de los 42 repositorios estrella de @Ntiz
 - `ia` - Inteligencia Artificial y Machine Learning
 - `herramientas` - Tools y CLI utilities
 - `data` - Data Science, BI, Visualización
-- `frontend` - UI, CSS, Design Systems
+- `frontend` - UI, CSS, Design Systems, Visualización 3D
 - `gis` - Geoespacial y Satellite
 - `devops` - Infraestructura y DevOps
 - `audio` - Procesamiento de audio y voz
@@ -88,6 +97,6 @@ Explorar y extraer conocimiento valioso de los 42 repositorios estrella de @Ntiz
 ---
 
 *Última actualización: 2026-05-26*
-*Sesiones completadas: 3*
-*Total skills creados: 13*
-*Total repos pendientes: ~29*
+*Sesiones completadas: 4*
+*Total skills creados: 18*
+*Total repos pendientes: ~24*
