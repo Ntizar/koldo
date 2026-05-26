@@ -1,72 +1,80 @@
 # Learning Plan - Exploración de Repositorios Estrella
 
 ## Objetivo
-Explorar y extraer conocimiento valioso de los 40 repositorios estrella de @Ntizar.
+Explorar y extraer conocimiento valioso de los 42 repositorios estrella de @Ntizar.
 
-## Sesión Actual: 2026-05-26 (Sesión 1)
+## Sesión Actual: 2026-05-26 (Sesión 2)
 
-### Prioridad de Exploración
-Repos seleccionados para esta sesión (los más relevantes y con mayor potencial de conocimiento):
+### Sesión 1 (2026-05-26) - ✅ COMPLETADA (3 skills)
+| # | Repo | Categoría | Estado |
+|---|------|-----------|--------|
+| 1 | NousResearch/hermes-agent | IA / Agentes | ✅ COMPLETADO |
+| 2 | microsoft/markitdown | Herramientas / Documentos | ✅ COMPLETADO |
+| 3 | microsoft/VibeVoice | IA / Audio | ✅ COMPLETADO |
 
-#### IA / Machine Learning
-1. ✅ **NousResearch/hermes-agent** - El agente que crece contigo (Hermes Agent) → ✅ COMPLETADO
-2. ✅ **microsoft/markitdown** - Conversión de archivos a Markdown (125k stars) → ✅ COMPLETADO
-3. ✅ **microsoft/VibeVoice** - Voice AI open-source (47k stars) → ✅ COMPLETADO
-4. ⏳ **Blaizzy/mlx-vlm** - Vision Language Models en Mac con MLX
-5. ⏳ **K-Dense-AI/scientific-agent-skills** - Agent Skills para investigación
-
-#### Data / Visualización
-6. ⏳ **metabase/metabase** - Business Intelligence open source (47k stars)
-7. ⏳ **cporter202/API-mega-list** - Colección masiva de APIs
-8. ⏳ **vasile/transit-map** - Simulaciones de mapas de transporte
-
-#### Frontend / Diseño
-9. ⏳ **Z1Code/glass-refraction** - Liquid Glass design system
-10. ⏳ **alexpate/awesome-design-systems** - Colección de design systems
-11. ⏳ **stablyai/orca** - IDE para agentes de código paralelos
-
-#### GIS / Geoespacial
-12. ⏳ **c2g-dev/city2graph** - Geospatial relations to graphs
-13. ⏳ **Aouei/remote-sensing-satellite-downloader** - Descarga datos satelitales
-14. ⏳ **sparkyniner/DRISH-X** - Inteligencia con satélite Sentinel-2
-
-#### DevOps / Infraestructura
-15. ⏳ **crystaldba/postgres-mcp** - Postgres MCP para AI agents
-16. ⏳ **google/eng-practices** - Google Engineering Practices
-17. ⏳ **htekdev/vidpipe** - CLI tool para procesamiento de video
-
-#### Otros
-18. ⏳ **jamiepine/voicebox** - AI voice studio open-source
-19. ⏳ **antoinelame/GazeTracking** - Eye Tracking library
-20. ⏳ **PINTO0309/PINTO_model_zoo** - Model zoo multi-framework
+### Sesión 2 (2026-05-26) - ✅ COMPLETADA (5 skills nuevas)
+| # | Repo | Categoría | Estado |
+|---|------|-----------|--------|
+| 4 | Blaizzy/mlx-vlm | IA / Vision Language Models | ✅ COMPLETADO |
+| 5 | K-Dense-AI/scientific-agent-skills | IA / Agent Skills | ✅ COMPLETADO |
+| 6 | stablyai/orca | IA / Agent IDE | ✅ COMPLETADO |
+| 7 | metabase/metabase | Data / Business Intelligence | ✅ COMPLETADO |
+| 8 | crystaldba/postgres-mcp | DevOps / Database / MCP | ✅ COMPLETADO |
 
 ---
 
-## Estado por Sesión
+## Repos Pendientes para Explorar
 
-### Sesión 1 (2026-05-26)
-| # | Repo | Estado | Categoría |
-|---|------|--------|-----------|
-| 1 | NousResearch/hermes-agent | 🔄 En progreso | IA |
-| 2 | microsoft/markitdown | 🔄 En progreso | Herramientas |
-| 3 | microsoft/VibeVoice | 🔄 En progreso | IA/Audio |
-| 4 | Blaizzy/mlx-vlm | ⏳ Pendiente | IA/Vision |
-| 5 | K-Dense-AI/scientific-agent-skills | ⏳ Pendiente | IA/Agentes |
-| 6 | metabase/metabase | ⏳ Pendiente | BI/Data |
-| 7 | cporter202/API-mega-list | ⏳ Pendiente | APIs |
-| 8 | vasile/transit-map | ⏳ Pendiente | Visualización |
-| 9 | Z1Code/glass-refraction | ⏳ Pendiente | Frontend |
-| 10 | alexpate/awesome-design-systems | ⏳ Pendiente | Frontend |
-| 11 | stablyai/orca | ⏳ Pendiente | IA/DevTools |
-| 12 | crystaldba/postgres-mcp | ⏳ Pendiente | DevOps/DB |
-| 13 | google/eng-practices | ⏳ Pendiente | DevOps |
-| 14 | htekdev/vidpipe | ⏳ Pendiente | Herramientas |
-| 15 | jamiepine/voicebox | ⏳ Pendiente | IA/Audio |
-| 16 | c2g-dev/city2graph | ⏳ Pendiente | GIS |
-| 17 | Aouei/remote-sensing-satellite-downloader | ⏳ Pendiente | GIS |
-| 18 | sparkyniner/DRISH-X | ⏳ Pendiente | GIS/IA |
-| 19 | antoinelame/GazeTracking | ⏳ Pendiente | IA/Vision |
-| 20 | PINTO0309/PINTO_model_zoo | ⏳ Pendiente | IA/Modelos |
+### IA / ML
+- ⏳ antoinelame/GazeTracking - Eye Tracking library
+- ⏳ PINTO0309/PINTO_model_zoo - Model zoo multi-framework
+
+### Data / Visualización
+- ⏳ cporter202/API-mega-list - Colección masiva de APIs
+- ⏳ vasile/transit-map - Simulaciones de mapas de transporte
+
+### Frontend / Diseño
+- ⏳ Z1Code/glass-refraction - Liquid Glass design system
+- ⏳ alexpate/awesome-design-systems - Colección de design systems
+
+### GIS / Geoespacial
+- ⏳ c2g-dev/city2graph - Geospatial relations to graphs
+- ⏳ Aouei/remote-sensing-satellite-downloader - Descarga datos satelitales
+- ⏳ sparkyniner/DRISH-X - Inteligencia con satélite Sentinel-2
+
+### DevOps / Infraestructura
+- ⏳ google/eng-practices - Google Engineering Practices
+- ⏳ htekdev/vidpipe - CLI tool para procesamiento de video
+
+### Audio
+- ⏳ jamiepine/voicebox - AI voice studio open-source
+
+### Otros
+- ⏳ acunap/praxis - Shell scripting
+- ⏳ NangoHQ/nango - Product integrations with AI
+- ⏳ 686f6c61/Workshop-IA-Agentes-Herramientas - Workshop IA agentes
+- ⏳ xmihura/Kanvas - Project management with Obsidian Canvas
+- ⏳ nicolaswurtz/extras-opendata-sncf-reseau - Datos abiertos SNCF
+- ⏳ DPhi-Space/SimSat - Satellite simulation
+- ⏳ maptalks/maptalks.three - 3D map layers with three.js
+- ⏳ nagix/mini-tokyo-3d - 3D digital map of Tokyo transit
+- ⏳ BlinkTagInc/gtfs-to-html - GTFS to HTML timetables
+- ⏳ orcunkok/AWS-Dem-Downloader - AWS Terrain Tiles downloader
+- ⏳ duy-phamduc68/TrafficLab-3D - Digital twin traffic visualization
+- ⏳ Barath19/Boxer3D - AR 3D object detection with LiDAR
+- ⏳ munish0838/parali - Crop burn detection with Liquid-VLM
+- ⏳ NicAOB97/LSE-Detection - Spanish Sign Language Detection
+- ⏳ KikeOnRails/YoloConteo - Person counter
+- ⏳ fitomad/bicimad - BiciMad API client
+- ⏳ cristobal-GC/electriciPy_market - Mercado eléctrico español
+- ⏳ PabloCastellano/libreborme - BORME analysis platform
+- ⏳ searchcraft-inc/searchcraft-mcp-server - Vertical search MCP
+- ⏳ searchcraft-inc/searchcraft-client-php - Searchcraft PHP client
+- ⏳ belubeluga/djturbo - Django Turbo
+- ⏳ ronvidev/modelo_lstm_lsp - LSTM model
+- ⏳ sparkyniner/DRISH-X - Satellite freight intelligence
+
+---
 
 ## Categorías de Skills
 - `ia` - Inteligencia Artificial y Machine Learning
@@ -76,3 +84,10 @@ Repos seleccionados para esta sesión (los más relevantes y con mayor potencial
 - `gis` - Geoespacial y Satellite
 - `devops` - Infraestructura y DevOps
 - `audio` - Procesamiento de audio y voz
+
+---
+
+*Última actualización: 2026-05-26*
+*Sesiones completadas: 2*
+*Total skills creados: 8*
+*Total repos pendientes: ~34*
