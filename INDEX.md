@@ -120,19 +120,16 @@
 
 ### IA / ML
 - ⏳ Barath19/Boxer3D - AR 3D object detection with LiDAR (397)
-- ⏳ duy-phamduc68/TrafficLab-3D - Digital twin traffic visualization (309)
 
 ### Frontend / Diseño
 - ⏳ Z1Code/glass-refraction - Liquid Glass design system
 - ⏳ vasile/transit-map - Simulaciones de mapas de transporte (372)
-- ⏳ maptalks/maptalks.three - 3D map layers with three.js (645)
 
 ### GIS / Geoespacial
 - ⏳ Aouei/remote-sensing-satellite-downloader - Descarga datos satelitales
 - ⏳ sparkyniner/DRISH-X - Inteligencia con satélite Sentinel-2 (223)
 
 ### Otros
-- ⏳ BlinkTagInc/gtfs-to-html - GTFS to HTML timetables (225)
 - ⏳ acunap/praxis - Shell scripting
 - ⏳ 686f6c61/Workshop-IA-Agentes-Herramientas - Workshop IA agentes
 - ⏳ XMihura/Kanvas - Project management with Obsidian Canvas
@@ -141,8 +138,6 @@
 - ⏳ orcunkok/AWS-Dem-Downloader - AWS Terrain Tiles downloader
 - ⏳ fitomad/bicimad - BiciMad API client
 - ⏳ cristobal-GC/electriciPy_market - Mercado eléctrico español
-- ⏳ PabloCastellano/libreborme - BORME analysis platform
-- ⏳ searchcraft-inc/searchcraft-mcp-server - Vertical search MCP
 - ⏳ searchcraft-inc/searchcraft-client-php - Searchcraft PHP client
 - ⏳ belubeluga/djturbo - Django Turbo
 - ⏳ ronvidev/modelo_lstm_lsp - LSTM model
@@ -166,6 +161,6 @@
 ---
 
 *Última actualización: 2026-05-26*
-*Sesiones completadas: 5*
-*Total skills creados: 23*
-*Total repos pendientes: ~19*
+*Sesiones completadas: 6*
+*Total skills creados: 28*
+*Total repos pendientes: ~14*
