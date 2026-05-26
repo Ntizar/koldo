@@ -42,15 +42,30 @@
 | [nango](skills/backend/nango.md) | NangoHQ/nango | 2026-05-26 | 8.5k |
 
 ### 🎨 Frontend / Visualización
-| Skill | Repo | Fecha | Stars |
-|-------|------|-------|-------|
-| [awesome-design-systems](skills/frontend/awesome-design-systems.md) | alexpate/awesome-design-systems | 2026-05-26 | 24.5k |
-| [mini-tokyo-3d](skills/frontend/mini-tokyo-3d.md) | nagix/mini-tokyo-3d | 2026-05-26 | 4.1k |
+|| Skill | Repo | Fecha | Stars |
+||-------|------|-------|-------|
+|| [awesome-design-systems](skills/frontend/awesome-design-systems.md) | alexpate/awesome-design-systems | 2026-05-26 | 24.5k |
+|| [mini-tokyo-3d](skills/frontend/mini-tokyo-3d.md) | nagix/mini-tokyo-3d | 2026-05-26 | 4.1k |
+|| [glass-refraction](skills/frontend/glass-refraction.md) | Z1Code/glass-refraction | 2026-05-26 | 35 |
+|| [transit-map](skills/frontend/transit-map.md) | vasile/transit-map | 2026-05-26 | 372 |
 
 ### 🌍 GIS / Geoespacial
-| Skill | Repo | Fecha | Stars |
-|-------|------|-------|-------|
-| [city2graph](skills/gis/city2graph.md) | c2g-dev/city2graph | 2026-05-26 | 1.2k |
+|| Skill | Repo | Fecha | Stars |
+||-------|------|-------|-------|
+|| [city2graph](skills/gis/city2graph.md) | c2g-dev/city2graph | 2026-05-26 | 1.2k |
+|| [drish-x](skills/gis/drish-x.md) | sparkyniner/DRISH-X | 2026-05-26 | 224 |
+
+### 🔌 Backend / Integraciones
+|| Skill | Repo | Fecha | Stars |
+||-------|------|-------|-------|
+|| [nango](skills/backend/nango.md) | NangoHQ/nango | 2026-05-26 | 8.5k |
+|| [awesome-transit](skills/backend/awesome-transit.md) | MobilityData/awesome-transit | 2026-05-26 | 1.8k |
+
+### 🛠 Herramientas
+|| Skill | Repo | Fecha | Stars |
+||-------|------|-------|-------|
+|| [markitdown](skills/herramientas/markitdown.md) | microsoft/markitdown | 2026-05-26 | 125k |
+|| [kanvas](skills/herramientas/kanvas.md) | XMihura/Kanvas | 2026-05-26 | 169 |
 
 ---
 
@@ -82,13 +97,22 @@
 | 13 | PINTO0309/PINTO_model_zoo | IA / Modelos | 4.3k |
 
 ### Sesión 4 (2026-05-26) - 5 skills nuevas
-| # | Repo | Categoría | Stars |
-|---|------|-----------|-------|
-| 14 | antoinelame/GazeTracking | IA / Computer Vision | 2.6k |
-| 15 | alexpate/awesome-design-systems | Frontend / Design Systems | 24.5k |
-| 16 | nagix/mini-tokyo-3d | Frontend / Visualización 3D | 4.1k |
-| 17 | htekdev/vidpipe | DevOps / Video AI | 165 |
-| 18 | c2g-dev/city2graph | GIS / Graph Neural Networks | 1.2k |
+|| # | Repo | Categoría | Stars |
+||---|------|-----------|-------|--------|
+|| 14 | antoinelame/GazeTracking | IA / Computer Vision | 2.6k |
+|| 15 | alexpate/awesome-design-systems | Frontend / Design Systems | 24.5k |
+|| 16 | nagix/mini-tokyo-3d | Frontend / Visualización 3D | 4.1k |
+|| 17 | htekdev/vidpipe | DevOps / Video AI | 165 |
+|| 18 | c2g-dev/city2graph | GIS / Graph Neural Networks | 1.2k |
+
+### Sesión 5 (2026-05-26) - 5 skills nuevas
+|| # | Repo | Categoría | Stars |
+||---|------|-----------|-------|--------|
+|| 19 | Z1Code/glass-refraction | Frontend / CSS / Liquid Glass | 35 |
+|| 20 | vasile/transit-map | Frontend / Visualización Transporte | 372 |
+|| 21 | MobilityData/awesome-transit | Backend / Transporte Público | 1.8k |
+|| 22 | XMihura/Kanvas | Herramientas / Gestión Proyectos IA | 169 |
+|| 23 | sparkyniner/DRISH-X | GIS / Inteligencia Satelital | 224 |
 
 ---
 
@@ -142,6 +166,6 @@
 ---
 
 *Última actualización: 2026-05-26*
-*Sesiones completadas: 4*
-*Total skills creados: 18*
-*Total repos pendientes: ~24*
+*Sesiones completadas: 5*
+*Total skills creados: 23*
+*Total repos pendientes: ~19*
