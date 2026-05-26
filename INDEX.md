@@ -41,7 +41,7 @@
 | 2 | microsoft/markitdown | Herramientas |
 | 3 | microsoft/VibeVoice | Audio |
 
-### Sesión 2 (2026-05-26) - 4 skills nuevas
+### Sesión 2 (2026-05-26) - 5 skills nuevas
 | # | Repo | Categoría |
 |---|------|-----------|
 | 4 | Blaizzy/mlx-vlm | IA / Vision Language Models |
