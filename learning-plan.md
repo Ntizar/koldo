@@ -1,111 +1,105 @@
-# Learning Plan - Exploración de Repositorios Estrella
+# 📚 Plan de Aprendizaje Autónomo
 
-## Objetivo
-Explorar y extraer conocimiento valioso de los 47 repositorios estrella de @Ntizar.
+> Explorando repositorios estrella de @Ntizar para extraer conocimiento valioso.
+> Última ejecución: 2026-05-27
 
-## Sesión Actual: 2026-05-26 (Sesión 6)
+## Estado General
 
-### Sesión 1 (2026-05-26) - ✅ COMPLETADA (3 skills)
-| # | Repo | Categoría | Estado |
-|---|------|-----------|--------|
-| 1 | NousResearch/hermes-agent | IA / Agentes | ✅ COMPLETADO |
-| 2 | microsoft/markitdown | Herramientas / Documentos | ✅ COMPLETADO |
-| 3 | microsoft/VibeVoice | IA / Audio | ✅ COMPLETADO |
+- **Total repos explorados**: 0 / 49
+- **Skills creadas**: 0
+- **Última sesión**: Nunca
 
-### Sesión 2 (2026-05-26) - ✅ COMPLETADA (5 skills)
-| # | Repo | Categoría | Estado |
-|---|------|-----------|--------|
-| 4 | Blaizzy/mlx-vlm | IA / Vision Language Models | ✅ COMPLETADO |
-| 5 | K-Dense-AI/scientific-agent-skills | IA / Agent Skills | ✅ COMPLETADO |
-| 6 | stablyai/orca | IA / Agent IDE | ✅ COMPLETADO |
-| 7 | metabase/metabase | Data / Business Intelligence | ✅ COMPLETADO |
-| 8 | crystaldba/postgres-mcp | DevOps / Database / MCP | ✅ COMPLETADO |
+## Categorías y Repos Prioritarios
 
-### Sesión 3 (2026-05-26) - ✅ COMPLETADA (5 skills)
-| # | Repo | Categoría | Stars | Estado |
-|---|------|-----------|-------|--------|
-| 9 | jamiepine/voicebox | Audio / Voz / IA | 28.5k | ✅ COMPLETADO |
-| 10 | google/eng-practices | DevOps / Ingeniería de Software | 22.6k | ✅ COMPLETADO |
-| 11 | NangoHQ/nango | Backend / Integraciones | 8.5k | ✅ COMPLETADO |
-| 12 | cporter202/API-mega-list | Data / Referencia de APIs | 5.5k | ✅ COMPLETADO |
-| 13 | PINTO0309/PINTO_model_zoo | IA / Modelos Multi-Framework | 4.3k | ✅ COMPLETADO |
+### 🤖 Agentes (3 repos)
+- [ ] NousResearch/hermes-agent ⭐168888 - The agent that grows with you
+- [ ] stablyai/orca ⭐3473 - IDE para flotas de agentes paralelos
+- [ ] K-Dense-AI/scientific-agent-skills ⭐26103 - Skills listas para agentes de investigación
 
-### Sesión 4 (2026-05-26) - ✅ COMPLETADA (5 skills nuevas)
-|| # | Repo | Categoría | Stars | Estado |
-||---|------|-----------|-------|--------|
-|| 14 | antoinelame/GazeTracking | IA / Computer Vision | 2.6k | ✅ COMPLETADO |
-|| 15 | alexpate/awesome-design-systems | Frontend / Design Systems | 24.5k | ✅ COMPLETADO |
-|| 16 | nagix/mini-tokyo-3d | Frontend / Visualización 3D | 4.1k | ✅ COMPLETADO |
-|| 17 | htekdev/vidpipe | DevOps / Video AI | 165 | ✅ COMPLETADO |
-|| 18 | c2g-dev/city2graph | GIS / Graph Neural Networks | 1.2k | ✅ COMPLETADO |
+### 🛠 Herramientas Dev (8 repos)
+- [ ] microsoft/markitdown ⭐125340 - Convertir archivos a Markdown
+- [ ] cporter202/API-mega-list ⭐5486 - Catálogo masivo de APIs
+- [ ] google/eng-practices ⭐22729 - Prácticas de ingeniería de Google
+- [ ] NangoHQ/nango ⭐8980 - Integraciones de producto con IA
+- [ ] metabase/metabase ⭐47453 - Business Intelligence open source
+- [ ] PabloCastellano/libreborme ⭐134 - Consulta del BOE/Registro Mercantil
+- [ ] cristobal-GC/electriciPy_market ⭐31 - Mercado eléctrico español
+- [ ] c2g-dev/city2graph ⭐1211 - Geoespacial → Graph Neural Networks
 
-### Sesión 5 (2026-05-26) - ✅ COMPLETADA (5 skills nuevas)
-|| # | Repo | Categoría | Stars | Estado |
-||---|------|-----------|-------|--------|
-|| 19 | Z1Code/glass-refraction | Frontend / CSS / Liquid Glass | 35 | ✅ COMPLETADO |
-|| 20 | vasile/transit-map | Frontend / Visualización Transporte | 372 | ✅ COMPLETADO |
-|| 21 | MobilityData/awesome-transit | Backend / Transporte Público | 1.8k | ✅ COMPLETADO |
-|| 22 | XMihura/Kanvas | Herramientas / Gestión Proyectos IA | 169 | ✅ COMPLETADO |
-|| 23 | sparkyniner/DRISH-X | GIS / Inteligencia Satelital | 224 | ✅ COMPLETADO |
+### 👁 Visión y Modelos (7 repos)
+- [ ] Blaizzy/mlx-vlm ⭐4780 - Vision Language Models en Mac (MLX)
+- [ ] PINTO0309/PINTO_model_zoo ⭐4325 - Modelos multi-framework
+- [ ] antoinelame/GazeTracking ⭐2573 - Eye Tracking library
+- [ ] Barath19/Boxer3D ⭐397 - AR 3D object detection con LiDAR
+- [ ] munish0838/parali ⭐4 - Crop burn detection con Liquid-VLM
+- [ ] NicAOB97/LSE-Detection ⭐1 - LSE (Sign Language) Detection
+- [ ] KikeOnRails/YoloConteo ⭐1 - Contador de personas
 
----
+### 🎤 Audio y Voz (2 repos)
+- [ ] microsoft/VibeVoice ⭐47453 - Open-Source Frontier Voice AI
+- [ ] jamiepine/voicebox ⭐28571 - AI voice studio
 
-### Sesión 6 (2026-05-26) - ✅ COMPLETADA (5 skills nuevas)
-||| # | Repo | Categoría | Stars | Estado |||---|------|-----------|-------|--------||| 24 | maptalks/maptalks.three | Frontend / 3D Maps | 645 | ✅ COMPLETADO ||| 25 | duy-phamduc68/TrafficLab-3D | GIS / Digital Twin | 309 | ✅ COMPLETADO ||| 26 | PabloCastellano/libreborme | Backend / Open Data | 134 | ✅ COMPLETADO ||| 27 | BlinkTagInc/gtfs-to-html | Backend / GTFS | 225 | ✅ COMPLETADO ||| 28 | searchcraft-inc/searchcraft-mcp-server | DevOps / MCP / Search | 7 | ✅ COMPLETADO
+### 🚌 Transit y Datos GTFS (9 repos)
+- [ ] MobilityData/awesome-transit ⭐1756 - Lista comunitaria de transit
+- [ ] nagix/mini-tokyo-3d ⭐4077 - Mapa 3D transporte Tokyo
+- [ ] BlinkTagInc/gtfs-to-html ⭐225 - GTFS → HTML/PDF
+- [ ] gabrielAHN/gtfs-viz ⭐49 - GTFS visualization client-side
+- [ ] WRI-Cities/static-GTFS-manager ⭐159 - GUI para datos GTFS
+- [ ] OneBusAway/onebusaway-gtfs-realtime-visualizer ⭐68 - GTFS-realtime visualizer
+- [ ] WRI-Cities/payanam ⭐17 - Mapeo rutas → GTFS
+- [ ] nicolaswurtz/extras-opendata-sncf-reseau ⭐47 - Datos ferroviarios franceses
+- [ ] fitomad/bicimad ⭐4 - Cliente API BiciMad
 
----
+### 🗺 GeoEspacial y Maps (9 repos)
+- [ ] vasile/transit-map ⭐372 - Simulaciones mapas transporte
+- [ ] maptalks/maptalks.three ⭐645 - maptalks + three.js
+- [ ] amir32002/3D_Street_View ⭐495 - Street View + 3D Cities Dataset
+- [ ] duy-phamduc68/TrafficLab-3D ⭐309 - Digital twin tráfico CCTV
+- [ ] sparkyniner/DRISH-X-Satellite ⭐225 - Freight intelligence con satélite
+- [ ] AbelVM/omt-router ⭐6 - Client-side routing vector tiles
+- [ ] orcunkok/AWS-Dem-Downloader ⭐8 - AWS Terrain Tiles downloader
+- [ ] Aouei/remote-sensing-satellite-downloader ⭐4 - Sentinel-2/Landsat-8 downloader
+- [ ] DPhi-Space/SimSat ⭐60 - Satellite simulation
 
-## Repos Pendientes para Explorar
+### 🎨 Frontend y Diseño (3 repos)
+- [ ] alexpate/awesome-design-systems ⭐24467 - Colección de design systems
+- [ ] Z1Code/glass-refraction ⭐35 - Liquid Glass CSS + React
+- [ ] XMihura/Kanvas ⭐169 - Project management con Obsidian Canvas
 
-### Frontend / Diseño
-- ⏳ maptalks/maptalks.three - 3D map layers with three.js (645)
+### 🔌 MCP e Integraciones (2 repos)
+- [ ] crystaldba/postgres-mcp ⭐2802 - Postgres MCP Pro
+- [ ] searchcraft-inc/searchcraft-mcp-server ⭐7 - Searchcraft MCP Server
 
-### IA / ML / Computer Vision
-- ⏳ Barath19/Boxer3D - AR 3D object detection with LiDAR (397)
-- ⏳ duy-phamduc68/TrafficLab-3D - Digital twin traffic visualization (309)
-- ⏳ munish0838/parali - Crop burn detection with Liquid-VLM (4)
-- ⏳ NicAOB97/LSE-Detection - Spanish Sign Language Detection (1)
-- ⏳ KikeOnRails/YoloConteo - Person counter (1)
+### 📹 Video Procesamiento (1 repo)
+- [ ] htekdev/vidpipe ⭐166 - CLI auto-procesamiento de video
 
-### GIS / Geoespacial
-- ⏳ Aouei/remote-sensing-satellite-downloader - Descarga datos satelitales (4)
-- ⏳ DPhi-Space/SimSat - Satellite simulation (60)
-- ⏳ orcunkok/AWS-Dem-Downloader - AWS Terrain Tiles downloader (8)
+### 🧪 IA Aplicada (3 repos)
+- [ ] 686f6c61/Workshop-IA-Agentes-Herramientas ⭐36 - Workshop IA agentes
+- [ ] ronvidev/modelo_lstm_lsp ⭐30 - Modelo LSTM LSP
+- [ ] belubeluga/djturbo ⭐7 - Turbo para Django
 
-### Transporte / GTFS
-- ⏳ BlinkTagInc/gtfs-to-html - GTFS to HTML timetables (225)
-- ⏳ OneBusAway/onebusaway-gtfs-realtime-visualizer - GTFS-realtime visualizer (68)
-- ⏳ WRI-Cities/static-GTFS-manager - GUI for GTFS data (159)
-- ⏳ WRI-Cities/payanam - Tool for mapping GTFS (17)
-- ⏳ gabrielAHN/gtfs-viz - GTFS visualization client-side (49)
+### ❓ Sin Categorizar (2 repos)
+- [ ] acunap/praxis ⭐3 - Shell script
+- [ ] searchcraft-inc/searchcraft-client-php ⭐16 - PHP client Searchcraft
 
-### Herramientas / Otros
-- ⏳ acunap/praxis - Shell scripting (3)
-- ⏳ 686f6c61/Workshop-IA-Agentes-Herramientas - Workshop IA agentes (36)
-- ⏳ PabloCastellano/libreborme - BORME analysis platform (134)
-- ⏳ searchcraft-inc/searchcraft-mcp-server - Vertical search MCP (7)
-- ⏳ searchcraft-inc/searchcraft-client-php - Searchcraft PHP client (16)
-- ⏳ belubeluga/djturbo - Django Turbo (7)
-- ⏳ ronvidev/modelo_lstm_lsp - LSTM model (30)
-- ⏳ fitomad/bicimad - BiciMad API client (4)
-- ⏳ cristobal-GC/electriciPy_market - Mercado eléctrico español (31)
-- ⏳ nicolaswurtz/extras-opendata-sncf-reseau - Datos abiertos SNCF (47)
+## Prioridad de Exploración
 
----
+### ✅ Sesión Actual (2026-05-27) - COMPLETADA:
+- [x] microsoft/markitdown ⭐125340
+- [x] crystaldba/postgres-mcp ⭐2802
+- [x] microsoft/VibeVoice ⭐47453
+- [x] Blaizzy/mlx-vlm ⭐4780
+- [x] jamiepine/voicebox ⭐28571
 
-## Categorías de Skills
-- `ia` - Inteligencia Artificial y Machine Learning
-- `herramientas` - Tools y CLI utilities
-- `data` - Data Science, BI, Visualización
-- `frontend` - UI, CSS, Design Systems, Visualización 3D
-- `gis` - Geoespacial y Satellite
-- `devops` - Infraestructura y DevOps
-- `audio` - Procesamiento de audio y voz
-- `backend` - Integraciones y APIs
+### Siguiente Sesión:
+- [ ] NangoHQ/nango ⭐8980
+- [ ] google/eng-practices ⭐22729
+- [ ] cporter202/API-mega-list ⭐5486
+- [ ] stablyai/orca ⭐3473
+- [ ] K-Dense-AI/scientific-agent-skills ⭐26103
 
----
-
-*Última actualización: 2026-05-26*
-*Sesiones completadas: 6*
-*Total skills creados: 28*
-*Total repos pendientes: ~14*
+### Sesiones Futuras:
+- Transit/GTFS cluster (9 repos)
+- GeoEspacial cluster (9 repos)
+- Frontend/Diseño cluster (3 repos)
+- IA Aplicada + misc (5 repos)
