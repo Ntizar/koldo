@@ -5,8 +5,8 @@
 
 ## Estado General
 
-- **Total repos explorados**: 5 / 49
-- **Skills creadas**: 5
+- **Total repos explorados**: 10 / 49
+- **Skills creadas**: 10
 - **Última sesión**: 2026-05-27
 
 ## Categorías y Repos Prioritarios
@@ -84,19 +84,26 @@
 
 ## Prioridad de Exploración
 
-### ✅ Sesión Actual (2026-05-27) - COMPLETADA: 5/5 repos
+### ✅ Sesión 1 (2026-05-27) - COMPLETADA: 5/5 repos
 - [x] microsoft/markitdown ⭐125340
 - [x] crystaldba/postgres-mcp ⭐2802
 - [x] microsoft/VibeVoice ⭐47453
 - [x] Blaizzy/mlx-vlm ⭐4780
 - [x] jamiepine/voicebox ⭐28571
 
+### ✅ Sesión 2 (2026-05-27) - COMPLETADA: 5/5 repos
+- [x] NangoHQ/nango ⭐9010
+- [x] google/eng-practices ⭐22761
+- [x] cporter202/API-mega-list ⭐5487
+- [x] stablyai/orca ⭐3487
+- [x] K-Dense-AI/scientific-agent-skills ⭐26143
+
 ### Siguiente Sesión:
-- [ ] NangoHQ/nango ⭐8980
-- [ ] google/eng-practices ⭐22729
-- [ ] cporter202/API-mega-list ⭐5486
-- [ ] stablyai/orca ⭐3473
-- [ ] K-Dense-AI/scientific-agent-skills ⭐26103
+- [ ] NousResearch/hermes-agent ⭐169243
+- [ ] PINTO0309/PINTO_model_zoo ⭐4333
+- [ ] antoinelame/GazeTracking ⭐2573
+- [ ] stablyai/orca ⭐3487 (ya hecho)
+- [ ] c2g-dev/city2graph ⭐1212
 
 ### Sesiones Futuras:
 - Transit/GTFS cluster (9 repos)
