@@ -21,6 +21,59 @@ const ESIOS_BASE = 'https://api.esios.ree.es';
 const TELEGRAM_API = 'https://api.telegram.org';
 const CACHE_DIR = '/tmp/esios-telegram-cache';
 
+// ─── Carga de variables de entorno ──────────────────────────────
+// Soporta .env en el directorio del script (para cron jobs sin env)
+function loadEnvFile(filePath) {
+  try {
+    const lines = fs.readFileSync(filePath, 'utf8').split('\n');
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx === -1) continue;
+      const key = trimmed.substring(0, eqIdx).trim();
+      let val = trimmed.substring(eqIdx + 1).trim();
+      // Remove surrounding quotes
+      if ((val.startsWith('"') && val.endsWith('"')) ||
+          (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      if (!process.env[key]) process.env[key] = val;
+    }
+  } catch (e) {
+    // .env no existe o no se puede leer — OK
+  }
+}
+
+// Cargar .env desde el directorio del script
+loadEnvFile(path.join(__dirname, '.env'));
+// También intentar desde el directorio del proyecto (padre)
+loadEnvFile(path.join(__dirname, '..', '.env'));
+
+// Fallback: leer TELEGRAM_BOT_TOKEN de /proc/1/environ (gateway process)
+// Las variables del gateway no se heredan en sesiones cron
+if (!process.env.TELEGRAM_BOT_TOKEN) {
+  try {
+    const procEnv = fs.readFileSync('/proc/1/environ', 'utf8').split('\0');
+    for (const entry of procEnv) {
+      const m = entry.match(/^TELEGRAM_BOT_TOKEN=(.+)$/);
+      if (m) { process.env.TELEGRAM_BOT_TOKEN = m[1]; break; }
+    }
+  } catch (e) { /* no se puede leer */ }
+}
+
+// Fallback: TELEGRAM_CHAT_ID desde TELEGRAM_HOME_CHANNEL en .env
+if (!process.env.TELEGRAM_CHAT_ID) {
+  const homeEnv = '/hermes-home/.env';
+  try {
+    const lines = fs.readFileSync(homeEnv, 'utf8').split('\n');
+    for (const line of lines) {
+      const m = line.trim().match(/^TELEGRAM_HOME_CHANNEL=(.+)$/);
+      if (m) { process.env.TELEGRAM_CHAT_ID = m[1]; break; }
+    }
+  } catch (e) { /* no se puede leer */ }
+}
+
 function getEnv(key) {
   const val = process.env[key];
   if (!val) throw new Error(`Faltan ${key} o TELEGRAM_CHAT_ID`);
