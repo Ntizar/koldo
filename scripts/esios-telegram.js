@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
  * esios-telegram.js — Resumen diario del mercado eléctrico español vía Telegram
+ * Incluye gráficos horarios con emojis para precios y generación.
  *
  * Variables de entorno:
  *   TELEGRAM_BOT_TOKEN  — Token del bot de Telegram
@@ -41,17 +42,14 @@ function getYesterdayStr() {
 const TARGET_DATE = process.argv[2] || getYesterdayStr();
 
 // ─── Mapa de indicadores con unidades correctas ──────────────────
-// Fuente: data/esios-reference.json + data/esios-indicator-index.md
 //
 // Reglas de conversión:
-//   MWh/periodo → MW: dividir entre 1000
 //   MWh → MW: dividir entre 1000
 //   MW: usar directo
 //   €/MWh: usar directo
 //   tCO2/h: usar directo
-//   %: usar directo
 //
-// IDs CORRECTOS (verificados contra índice robusto):
+// IDs CORRECTOS (verificados contra esios-indicator-index.md):
 const INDICATORS = [
   // Precios
   { name: 'precios',           id: 1001,  unit: 'price_eur_mwh' },
@@ -132,7 +130,7 @@ function parseValues(resp, unit) {
       hour: '2-digit', hourCycle: 'h23',
     }).formatToParts(dt);
     const obj = Object.fromEntries(parts.map(p => [p.type, p.value]));
-    return { hora: `${obj.hour}:00`, valor: val };
+    return { hora: parseInt(obj.hour), valor: val };
   });
 }
 
@@ -157,6 +155,115 @@ function min(values) {
 function fmt(n) {
   if (n == null) return '—';
   return n.toFixed(2);
+}
+
+// ─── Gráficos horarios con emojis ────────────────────────────────
+function buildHourlyChart(data, label, color, unit, maxBars = 24) {
+  // data: [{hora: 0-23, valor: number}]
+  const values = data.map(d => d.valor);
+  const valid = values.filter(v => v != null);
+  if (!valid.length) return '';
+
+  const minVal = Math.min(...valid);
+  const maxVal = Math.max(...valid);
+  const range = maxVal - minVal || 1;
+
+  // Escala de emojis: ▁▂▃▅▆▇█ (8 niveles)
+  const bars = [' ', '▁', '▂', '▃', '▅', '▆', '▇', '█'];
+
+  let chart = `  ${label}\n`;
+
+  // Calcular altura del gráfico (número de filas)
+  const rows = 6;
+
+  // Generar cada fila de arriba a abajo
+  for (let row = rows - 1; row >= 0; row--) {
+    const threshold = minVal + (range * (row + 1) / rows);
+    let line = '  ';
+    for (const d of data) {
+      if (d.valor == null) {
+        line += '   ';
+      } else if (d.valor >= threshold) {
+        // Calcular qué barra corresponde
+        const level = Math.min(7, Math.floor((d.valor - minVal) / range * 8));
+        line += bars[Math.max(1, level)] + ' ';
+      } else {
+        line += '  ';
+      }
+    }
+    chart += line + '\n';
+  }
+
+  // Eje X con horas
+  chart += '  ';
+  for (let h = 0; h < 24; h++) {
+    if (h % 3 === 0) {
+      chart += `${String(h).padStart(2, ' ')} `;
+    } else {
+      chart += '   ';
+    }
+  }
+  chart += '\n';
+
+  return chart;
+}
+
+function buildStackedChart(datasets, maxBars = 24) {
+  // datasets: [{name, color, data: [{hora, valor}]}]
+  // Genera un gráfico apilado con emojis
+  const allHours = new Set();
+  datasets.forEach(ds => ds.data.forEach(d => allHours.add(d.hora)));
+  const hours = Array.from(allHours).sort((a, b) => a - b);
+
+  if (!hours.length) return '';
+
+  // Calcular totales apilados por hora
+  const stacked = hours.map(h => {
+    let total = 0;
+    const parts = datasets.map(ds => {
+      const d = ds.data.find(v => v.hora === h);
+      const val = d && d.valor != null ? d.valor : 0;
+      total += val;
+      return val;
+    });
+    return { hora: h, total, parts, names: datasets.map(ds => ds.name) };
+  });
+
+  const maxTotal = Math.max(...stacked.map(s => s.total));
+  const minTotal = Math.min(...stacked.map(s => s.total));
+  const range = maxTotal - minTotal || 1;
+
+  const bars = [' ', '▁', '▂', '▃', '▅', '▆', '▇', '█'];
+  const rows = 6;
+
+  let chart = '';
+
+  for (let row = rows - 1; row >= 0; row--) {
+    const threshold = minTotal + (range * (row + 1) / rows);
+    let line = '  ';
+    for (const s of stacked) {
+      if (s.total >= threshold) {
+        const level = Math.min(7, Math.floor((s.total - minTotal) / range * 8));
+        line += bars[Math.max(1, level)] + ' ';
+      } else {
+        line += '  ';
+      }
+    }
+    chart += line + '\n';
+  }
+
+  // Eje X
+  chart += '  ';
+  for (let h = 0; h < 24; h++) {
+    if (h % 3 === 0) {
+      chart += `${String(h).padStart(2, ' ')} `;
+    } else {
+      chart += '   ';
+    }
+  }
+  chart += '\n';
+
+  return chart;
 }
 
 // ─── Fetch de datos ──────────────────────────────────────────────
@@ -215,50 +322,76 @@ function buildSummary(data) {
 
   let msg = `📊 *Resumen ESIOS — ${TARGET_DATE}*\n\n`;
 
-  // Precios
+  // ── Precios con gráfico ──
   msg += `💰 *Precios (PVPC)*\n`;
-  msg += `  Media: ${fmt(pAvg)} €/MWh\n`;
-  msg += `  Máx: ${fmt(pMax)} €/MWh\n`;
-  msg += `  Mín: ${fmt(pMin)} €/MWh\n\n`;
+  msg += `  Media: ${fmt(pAvg)} €/MWh · Máx: ${fmt(pMax)} · Mín: ${fmt(pMin)}\n\n`;
+  msg += buildHourlyChart(data.precios, '💰 Precios (€/MWh)', '🔵', '€/MWh');
+  msg += `\n`;
 
-  // Demanda
+  // ── Demanda con gráfico ──
   msg += `⚡ *Demanda real*\n`;
-  msg += `  Media: ${fmt(dAvg)} MW\n`;
-  msg += `  Máx: ${fmt(dMax)} MW\n`;
-  msg += `  Mín: ${fmt(dMin)} MW\n\n`;
+  msg += `  Media: ${fmt(dAvg)} MW · Máx: ${fmt(dMax)} · Mín: ${fmt(dMin)}\n\n`;
+  msg += buildHourlyChart(data.demanda, '⚡ Demanda (MW)', '🟠', 'MW');
+  msg += `\n`;
 
-  // Generación medida (promedio MW)
+  // ── Generación medida con gráfico apilado ──
   msg += `🏭 *Generación medida (media)*\n`;
-  msg += `  Eólica: ${fmt(eAvg)} MW\n`;
-  msg += `  Solar FV: ${fmt(sAvg)} MW\n`;
-  msg += `  Hidráulica: ${fmt(hAvg)} MW\n`;
-  msg += `  Carbón: ${fmt(cAvg)} MW\n`;
-  msg += `  Cogeneración: ${fmt(cogAvg)} MW\n`;
-  msg += `  Otras renov.: ${fmt(oRenAvg)} MW\n`;
+  msg += `  Eólica: ${fmt(eAvg)} MW · Solar FV: ${fmt(sAvg)} MW\n`;
+  msg += `  Hidráulica: ${fmt(hAvg)} MW · Carbón: ${fmt(cAvg)} MW\n`;
+  msg += `  Cogeneración: ${fmt(cogAvg)} MW · Otras renov.: ${fmt(oRenAvg)} MW\n`;
   msg += `  Total medida: ${fmt(gTotAvg)} MW\n\n`;
 
-  // Generación real tiempo
-  msg += `🌿 *Generación real tiempo*\n`;
-  msg += `  Renovables: ${fmt(gRenAvg)} MW\n`;
-  msg += `  No renovables: ${fmt(gNoRenAvg)} MW\n\n`;
+  // Gráfico apilado de generación medida
+  const genDatasets = [
+    { name: 'Eólica', color: '#22c55e', data: data.eolica },
+    { name: 'Solar', color: '#eab308', data: data.solar },
+    { name: 'Hidráulica', color: '#3b82f6', data: data.hidrica },
+    { name: 'Carbón', color: '#6b7280', data: data.carbon },
+    { name: 'Cogen.', color: '#a855f7', data: data.cogeneracion },
+    { name: 'Otras', color: '#ec4899', data: data.otrasRen },
+  ];
+  msg += buildStackedChart(genDatasets);
+  msg += `\n`;
 
-  // CO2
+  // ── Generación real tiempo ──
+  msg += `🌿 *Generación real tiempo*\n`;
+  msg += `  Renovables: ${fmt(gRenAvg)} MW · No renovables: ${fmt(gNoRenAvg)} MW\n\n`;
+
+  const realDatasets = [
+    { name: 'Renovable', color: '#22c55e', data: data.genRenReal },
+    { name: 'No renovable', color: '#ef4444', data: data.genNoRenReal },
+  ];
+  msg += buildStackedChart(realDatasets);
+  msg += `\n`;
+
+  // ── CO2 ──
   msg += `🌍 *CO2*\n`;
   msg += `  Gen limpia (CO2 libre): ${fmt(cLibreAvg)} MW\n`;
   msg += `  CO2 asociado gen real: ${fmt(cRatioAvg)} tCO₂/h\n\n`;
 
-  // Previsión D+1
+  // ── Previsión D+1 con gráfico ──
   msg += `🔮 *Previsión D+1 (media)*\n`;
   msg += `  Demanda: ${fmt(dPrevAvg)} MW\n`;
-  msg += `  Eólica: ${fmt(ePrevAvg)} MW\n`;
-  msg += `  Solar FV: ${fmt(sPrevAvg)} MW\n`;
+  msg += `  Eólica: ${fmt(ePrevAvg)} MW · Solar FV: ${fmt(sPrevAvg)} MW\n`;
   msg += `  Renovable total: ${fmt(rPrevAvg)} MW\n\n`;
 
-  // Interconexiones
+  const prevDatasets = [
+    { name: 'Eólica', color: '#22c55e', data: data.eolicaPrev },
+    { name: 'Solar', color: '#eab308', data: data.solarPrev },
+  ];
+  msg += buildStackedChart(prevDatasets);
+  msg += `\n`;
+
+  // ── Interconexiones con gráfico ──
   msg += `🔌 *Interconexiones netas (media)*\n`;
-  msg += `  Francia: ${fmt(iFRNet)} MW\n`;
-  msg += `  Portugal: ${fmt(iPTNet)} MW\n`;
+  msg += `  Francia: ${fmt(iFRNet)} MW · Portugal: ${fmt(iPTNet)} MW\n`;
   msg += `  *Nota:* positivo = exportación, negativo = importación\n`;
+
+  const interDatasets = [
+    { name: 'Francia', color: '#3b82f6', data: data.interFR },
+    { name: 'Portugal', color: '#f97316', data: data.interPT },
+  ];
+  msg += buildStackedChart(interDatasets);
 
   return msg;
 }
