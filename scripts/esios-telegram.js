@@ -7,6 +7,8 @@
  *   TELEGRAM_CHAT_ID    — Chat ID de destino
  *   ESIOS_API_TOKEN     — Token API de ESIOS/REE (también acepta ESIOS_API)
  *
+ * Fuentes de verdad: data/esios-reference.json + data/esios-indicator-index.md
+ *
  * Uso:
  *   node esios-telegram.js [YYYY-MM-DD]
  *   Si no se pasa fecha, usa ayer.
@@ -37,6 +39,50 @@ function getYesterdayStr() {
 }
 
 const TARGET_DATE = process.argv[2] || getYesterdayStr();
+
+// ─── Mapa de indicadores con unidades correctas ──────────────────
+// Fuente: data/esios-reference.json + data/esios-indicator-index.md
+//
+// Reglas de conversión:
+//   MWh/periodo → MW: dividir entre 1000
+//   MWh → MW: dividir entre 1000
+//   MW: usar directo
+//   €/MWh: usar directo
+//   tCO2/h: usar directo
+//   %: usar directo
+//
+// IDs CORRECTOS (verificados contra índice robusto):
+const INDICATORS = [
+  // Precios
+  { name: 'precios',           id: 1001,  unit: 'price_eur_mwh' },
+  // Demanda
+  { name: 'demanda',           id: 1293,  unit: 'power_mw' },
+  // Generación medida (MWh → MW: /1000)
+  { name: 'eolica',            id: 10037, unit: 'energy_mwh' },
+  { name: 'solar',             id: 10205, unit: 'power_mw' },       // MW directo
+  { name: 'hidrica',           id: 10035, unit: 'energy_mwh' },
+  { name: 'carbon',            id: 10036, unit: 'energy_mwh' },
+  { name: 'cogeneracion',      id: 10039, unit: 'energy_mwh' },
+  { name: 'otrasRen',          id: 10041, unit: 'energy_mwh' },
+  { name: 'genTotal',          id: 10043, unit: 'energy_mwh' },
+  // Generación real tiempo (MW directo)
+  { name: 'genRenReal',        id: 10351, unit: 'power_mw' },
+  { name: 'genNoRenReal',      id: 10352, unit: 'power_mw' },
+  // CO2
+  { name: 'co2Libre',          id: 10006, unit: 'power_mw' },       // MW gen limpia
+  { name: 'co2Ratio',          id: 10355, unit: 'emissions_tco2_per_h' },
+  // Previsión D+1 (MW directo)
+  { name: 'demandaPrev',       id: 2052,  unit: 'power_mw' },
+  { name: 'eolicaPrev',        id: 1777,  unit: 'power_mw' },
+  { name: 'solarPrev',         id: 1779,  unit: 'power_mw' },
+  { name: 'renovablePrev',     id: 10358, unit: 'power_mw' },
+  // Interconexiones (MWh → MW: /1000)
+  { name: 'interFR',           id: 10207, unit: 'energy_mwh' },
+  { name: 'interPT',           id: 10208, unit: 'energy_mwh' },
+];
+
+// Indicadores que necesitan conversión MWh → MW (/1000)
+const TO_MW_INDICATORS = new Set(['energy_mwh']);
 
 // ─── Helpers HTTP ────────────────────────────────────────────────
 function esiosFetch(path) {
@@ -73,10 +119,12 @@ function fetchIndicator(id, dateStr) {
   return esiosFetch(`/indicators/${id}?start_date=${encodeURIComponent(start)}&end_date=${encodeURIComponent(end)}&time_trunc=hour`);
 }
 
-function parseValues(resp) {
+function parseValues(resp, unit) {
   if (!resp || !resp.indicator || !resp.indicator.values) return [];
+  const toMw = TO_MW_INDICATORS.has(unit);
   return resp.indicator.values.map(v => {
-    const val = v.value == null ? null : Number(v.value);
+    let val = v.value == null ? null : Number(v.value);
+    if (val != null && toMw) val = val / 1000;
     const dt = new Date(v.datetime || v.datetime_local || v.tz_time);
     const parts = new Intl.DateTimeFormat('en-CA', {
       timeZone: 'Europe/Madrid',
@@ -115,46 +163,18 @@ function fmt(n) {
 async function fetchAll() {
   console.error(`📅 Fetching datos para ${TARGET_DATE}...`);
 
-  const results = await Promise.allSettled([
-    fetchIndicator(1001, TARGET_DATE),    // PVPC
-    fetchIndicator(1293, TARGET_DATE),    // Demanda real
-    fetchIndicator(4, TARGET_DATE),       // Nuclear
-    fetchIndicator(10037, TARGET_DATE),   // Eólica medida
-    fetchIndicator(10205, TARGET_DATE),   // Solar FV medida
-    fetchIndicator(10035, TARGET_DATE),   // Hidráulica medida
-    fetchIndicator(10036, TARGET_DATE),   // Carbón medida
-    fetchIndicator(10039, TARGET_DATE),   // Cogeneración medida
-    fetchIndicator(10041, TARGET_DATE),   // Otras renovables medida
-    fetchIndicator(10043, TARGET_DATE),   // Gen total medida
-    fetchIndicator(10351, TARGET_DATE),   // Gen real renovable
-    fetchIndicator(10352, TARGET_DATE),   // Gen real no renovable
-    fetchIndicator(10006, TARGET_DATE),   // CO2 libre
-    fetchIndicator(10355, TARGET_DATE),   // CO2 específico
-    fetchIndicator(460, TARGET_DATE),     // Demanda prevista
-    fetchIndicator(541, TARGET_DATE),     // Eólica prevista
-    fetchIndicator(14, TARGET_DATE),      // Solar FV prevista
-    fetchIndicator(10350, TARGET_DATE),   // Renovable prevista
-    fetchIndicator(10014, TARGET_DATE),   // Interconexión Francia
-    fetchIndicator(10015, TARGET_DATE),   // Interconexión Portugal
-  ]);
-
-  const labels = [
-    'precios', 'demanda', 'nuclear', 'eolica', 'solar',
-    'hidrica', 'carbon', 'cogeneracion', 'otrasRen', 'genTotal',
-    'genRenReal', 'genNoRenReal',
-    'co2Libre', 'co2Ratio',
-    'demandaPrev', 'eolicaPrev', 'solarPrev', 'renovablePrev',
-    'interFR', 'interPT',
-  ];
+  const results = await Promise.allSettled(
+    INDICATORS.map(ind => fetchIndicator(ind.id, TARGET_DATE))
+  );
 
   const data = {};
-  labels.forEach((label, i) => {
+  INDICATORS.forEach((ind, i) => {
     const result = results[i];
     if (result.status === 'fulfilled') {
-      data[label] = parseValues(result.value);
+      data[ind.name] = parseValues(result.value, ind.unit);
     } else {
-      console.error(`  ⚠️ ${label}: ${result.reason.message}`);
-      data[label] = [];
+      console.error(`  ⚠️ ${ind.name} (ID ${ind.id}): ${result.reason.message}`);
+      data[ind.name] = [];
     }
   });
 
@@ -174,14 +194,21 @@ function buildSummary(data) {
   const eAvg = avg(data.eolica);
   const sAvg = avg(data.solar);
   const hAvg = avg(data.hidrica);
-  const nAvg = avg(data.nuclear);
   const cAvg = avg(data.carbon);
   const cogAvg = avg(data.cogeneracion);
   const oRenAvg = avg(data.otrasRen);
   const gTotAvg = avg(data.genTotal);
 
+  const gRenAvg = avg(data.genRenReal);
+  const gNoRenAvg = avg(data.genNoRenReal);
+
   const cLibreAvg = avg(data.co2Libre);
   const cRatioAvg = avg(data.co2Ratio);
+
+  const dPrevAvg = avg(data.demandaPrev);
+  const ePrevAvg = avg(data.eolicaPrev);
+  const sPrevAvg = avg(data.solarPrev);
+  const rPrevAvg = avg(data.renovablePrev);
 
   const iFRNet = avg(data.interFR);
   const iPTNet = avg(data.interPT);
@@ -200,29 +227,35 @@ function buildSummary(data) {
   msg += `  Máx: ${fmt(dMax)} MW\n`;
   msg += `  Mín: ${fmt(dMin)} MW\n\n`;
 
-  // Generación
-  msg += `🏭 *Generación media*\n`;
+  // Generación medida (promedio MW)
+  msg += `🏭 *Generación medida (media)*\n`;
   msg += `  Eólica: ${fmt(eAvg)} MW\n`;
   msg += `  Solar FV: ${fmt(sAvg)} MW\n`;
   msg += `  Hidráulica: ${fmt(hAvg)} MW\n`;
-  msg += `  Nuclear: ${fmt(nAvg)} MW\n`;
   msg += `  Carbón: ${fmt(cAvg)} MW\n`;
   msg += `  Cogeneración: ${fmt(cogAvg)} MW\n`;
   msg += `  Otras renov.: ${fmt(oRenAvg)} MW\n`;
   msg += `  Total medida: ${fmt(gTotAvg)} MW\n\n`;
 
-  // Renovables vs no renovables
-  msg += `🌿 *Generación real*\n`;
-  msg += `  Renovables: ${fmt(avg(data.genRenReal))} MW\n`;
-  msg += `  No renovables: ${fmt(avg(data.genNoRenReal))} MW\n\n`;
+  // Generación real tiempo
+  msg += `🌿 *Generación real tiempo*\n`;
+  msg += `  Renovables: ${fmt(gRenAvg)} MW\n`;
+  msg += `  No renovables: ${fmt(gNoRenAvg)} MW\n\n`;
 
   // CO2
   msg += `🌍 *CO2*\n`;
   msg += `  Gen limpia (CO2 libre): ${fmt(cLibreAvg)} MW\n`;
-  msg += `  Ratio CO2 específico: ${fmt(cRatioAvg)} tCO₂/MWh\n\n`;
+  msg += `  CO2 asociado gen real: ${fmt(cRatioAvg)} tCO₂/h\n\n`;
+
+  // Previsión D+1
+  msg += `🔮 *Previsión D+1 (media)*\n`;
+  msg += `  Demanda: ${fmt(dPrevAvg)} MW\n`;
+  msg += `  Eólica: ${fmt(ePrevAvg)} MW\n`;
+  msg += `  Solar FV: ${fmt(sPrevAvg)} MW\n`;
+  msg += `  Renovable total: ${fmt(rPrevAvg)} MW\n\n`;
 
   // Interconexiones
-  msg += `🔌 *Interconexiones netas*\n`;
+  msg += `🔌 *Interconexiones netas (media)*\n`;
   msg += `  Francia: ${fmt(iFRNet)} MW\n`;
   msg += `  Portugal: ${fmt(iPTNet)} MW\n`;
   msg += `  *Nota:* positivo = exportación, negativo = importación\n`;
