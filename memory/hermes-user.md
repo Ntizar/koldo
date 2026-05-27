@@ -1,3 +1,5 @@
-User prefers TTS voice responses using Álvaro's voice (es-ES-AlvaroNeural, Edge TTS provider, Spanish from Spain).
-§
 User name: David Antizar (also goes by Ntizar on GitHub). The agent's name is Koldo — Hermes is the framework underneath, but always present as Koldo. User prefers CSS style matching Esios dashboard: blue + orange color scheme with liquid glass effects. Portfolio at https://ntizar-ntizar.apps.nan.builders on container port 3500. nan-dashboard repo at https://github.com/Ntizar/nan-dashboard (work on that repo, delete and recreate as needed).
+§
+User name: David Antizar (alias Ntizar en GitHub). Agente se llama Koldo. TTS configurado con voz Álvaro (es-ES-AlvaroNeural, Edge TTS) en config.yaml sección tts.edge.voice. STT activado con provider local. CSS estilo Esios: azul #2563eb + naranja #f97316 + liquid glass. **TODO en castellano: repositorios, scripts, cron jobs, informes, descripciones, nombres de categorías. NUNCA usar inglés para nada del proyecto.**
+§
+Siempre hacer resumen chulo al terminar tareas: formato bonito, claro, con lo que se ha hecho. NUNCA responder con una frase seca o simple confirmación. El usuario quiere ver un resumen visualmente atractivo de cada tarea completada.
