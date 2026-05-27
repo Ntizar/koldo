@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * esios-telegram.js — Resumen diario del mercado eléctrico español vía Telegram
- * Genera imágenes de gráficos horarios y las envía como fotos.
+ * esios-telegram.js — Informe diario del mercado eléctrico español
+ * Con gráficos PNG y análisis del día.
  *
  * Variables de entorno:
  *   TELEGRAM_BOT_TOKEN  — Token del bot de Telegram
@@ -9,14 +9,10 @@
  *   ESIOS_API_TOKEN     — Token API de ESIOS/REE (también acepta ESIOS_API)
  *
  * Fuentes de verdad: data/esios-reference.json + data/esios-indicator-index.md
- *
- * Uso:
- *   node esios-telegram.js [YYYY-MM-DD]
- *   Si no se pasa fecha, usa ayer.
  */
 
 const https = require('https');
-const { createCanvas, loadImage } = require('canvas');
+const { createCanvas } = require('canvas');
 const fs = require('fs');
 const path = require('path');
 
@@ -36,7 +32,6 @@ const CHAT_ID = getEnv('TELEGRAM_CHAT_ID');
 const ESIOS_TOKEN = process.env.ESIOS_API_TOKEN || process.env.ESIOS_API;
 if (!ESIOS_TOKEN) throw new Error('Falta ESIOS_API_TOKEN o ESIOS_API');
 
-// ─── Fecha ───────────────────────────────────────────────────────
 function getYesterdayStr() {
   const d = new Date();
   d.setDate(d.getDate() - 1);
@@ -45,56 +40,47 @@ function getYesterdayStr() {
 
 const TARGET_DATE = process.argv[2] || getYesterdayStr();
 
-// ─── Mapa de indicadores con unidades correctas ──────────────────
+// ─── Indicadores que SÍ funcionan (verificados contra debug) ─────
+// Solo usamos los que devuelven datos reales
 const INDICATORS = [
-  { name: 'precios',           id: 1001,  unit: 'price_eur_mwh' },
-  { name: 'demanda',           id: 1293,  unit: 'power_mw' },
-  { name: 'eolica',            id: 10037, unit: 'energy_mwh' },
-  { name: 'solar',             id: 10205, unit: 'power_mw' },
-  { name: 'hidrica',           id: 10035, unit: 'energy_mwh' },
-  { name: 'carbon',            id: 10036, unit: 'energy_mwh' },
-  { name: 'cogeneracion',      id: 10039, unit: 'energy_mwh' },
-  { name: 'otrasRen',          id: 10041, unit: 'energy_mwh' },
-  { name: 'genTotal',          id: 10043, unit: 'energy_mwh' },
-  { name: 'genRenReal',        id: 10351, unit: 'power_mw' },
-  { name: 'genNoRenReal',      id: 10352, unit: 'power_mw' },
-  { name: 'co2Libre',          id: 10006, unit: 'power_mw' },
-  { name: 'co2Ratio',          id: 10355, unit: 'emissions_tco2_per_h' },
-  { name: 'demandaPrev',       id: 2052,  unit: 'power_mw' },
-  { name: 'eolicaPrev',        id: 1777,  unit: 'power_mw' },
-  { name: 'solarPrev',         id: 1779,  unit: 'power_mw' },
-  { name: 'renovablePrev',     id: 10358, unit: 'power_mw' },
-  { name: 'interFR',           id: 10207, unit: 'energy_mwh' },
-  { name: 'interPT',           id: 10208, unit: 'energy_mwh' },
+  { name: 'precios',           id: 1001,  unit: 'price_eur_mwh', label: 'PVPC' },
+  { name: 'demanda',           id: 1293,  unit: 'power_mw', label: 'Demanda real' },
+  { name: 'demandaPrev',       id: 2052,  unit: 'power_mw', label: 'Demanda prevista' },
+  { name: 'solar',             id: 10205, unit: 'power_mw', label: 'Solar medida' },
+  { name: 'genRenReal',        id: 10351, unit: 'power_mw', label: 'Gen real renovable' },
+  { name: 'genNoRenReal',      id: 10352, unit: 'power_mw', label: 'Gen real no renovable' },
+  { name: 'co2Libre',          id: 10006, unit: 'power_mw', label: 'Gen limpia CO2' },
+  { name: 'co2Ratio',          id: 10355, unit: 'emissions_tco2_per_h', label: 'CO2 asociado' },
+  { name: 'interFR',           id: 10207, unit: 'energy_mwh', label: 'Interconexión Francia' },
+  { name: 'interPT',           id: 10208, unit: 'energy_mwh', label: 'Interconexión Portugal' },
 ];
 
+// Indicadores que necesitan conversión MWh → MW (/1000)
 const TO_MW_INDICATORS = new Set(['energy_mwh']);
 
 // ─── Helpers HTTP ────────────────────────────────────────────────
-function esiosFetch(path) {
+function esiosFetch(p) {
   return new Promise((resolve, reject) => {
-    const req = https.request(
-      `${ESIOS_BASE}${path}`,
-      { headers: { 'x-api-key': ESIOS_TOKEN } },
-      (res) => {
-        let data = '';
-        res.on('data', (chunk) => { data += chunk; });
-        res.on('end', () => {
-          if (res.statusCode === 429) {
-            setTimeout(() => resolve(esiosFetch(path)), 2000);
-            return;
-          }
-          if (res.statusCode >= 400) {
-            reject(new Error(`ESIOS ${res.statusCode}: ${data}`));
-            return;
-          }
-          try { resolve(JSON.parse(data)); }
-          catch (e) { reject(new Error(`Parse error: ${data}`)); }
-        });
-      }
-    );
+    const req = https.request(ESIOS_BASE + p, {
+      headers: { 'x-api-key': ESIOS_TOKEN },
+    }, (res) => {
+      let data = '';
+      res.on('data', c => { data += c; });
+      res.on('end', () => {
+        if (res.statusCode === 429) {
+          setTimeout(() => resolve(esiosFetch(p)), 2000);
+          return;
+        }
+        if (res.statusCode >= 400) {
+          reject(new Error(`ESIOS ${res.statusCode}`));
+          return;
+        }
+        try { resolve(JSON.parse(data)); }
+        catch (e) { reject(new Error(`Parse error`)); }
+      });
+    });
     req.on('error', reject);
-    req.setTimeout(15000, () => { req.destroy(); reject(new Error('Timeout ESIOS')); });
+    req.setTimeout(15000, () => { req.destroy(); reject(new Error('Timeout')); });
     req.end();
   });
 }
@@ -145,13 +131,18 @@ function fmt(n) {
   return n.toFixed(2);
 }
 
-function fmtShort(n) {
+function fmtK(n) {
   if (n == null) return '—';
   if (Math.abs(n) >= 1000) return (n / 1000).toFixed(1) + 'k';
   return n.toFixed(0);
 }
 
-// ─── Generación de gráficos con Canvas ───────────────────────────
+function pct(n, d) {
+  if (n == null || d == null || d === 0) return '—';
+  return ((n / d) * 100).toFixed(1);
+}
+
+// ─── Canvas Charts ───────────────────────────────────────────────
 function ensureCacheDir() {
   if (!fs.existsSync(CACHE_DIR)) fs.mkdirSync(CACHE_DIR, { recursive: true });
 }
@@ -164,17 +155,11 @@ function cleanCache() {
   }
 }
 
-/**
- * Dibuja un gráfico de líneas estilo ESIOS dashboard
- * @param {string} title - Título del gráfico
- * @param {Array<{name: string, color: string, data: Array<{hora: number, valor: number|null}>}>} datasets - Datasets
- * @param {string} unit - Unidad (MW, €/MWh, tCO2/h)
- * @param {boolean} stacked - Si es apilado
- */
-function drawChart(title, datasets, unit, stacked = false) {
-  const W = 800;
-  const H = 380;
-  const PAD = { top: 50, right: 30, bottom: 50, left: 70 };
+function drawLineChart(title, datasets, unit, opts = {}) {
+  const { stacked = false, showZero = true } = opts;
+  const W = 900;
+  const H = 360;
+  const PAD = { top: 50, right: 30, bottom: 50, left: 80 };
   const chartW = W - PAD.left - PAD.right;
   const chartH = H - PAD.top - PAD.bottom;
 
@@ -187,35 +172,29 @@ function drawChart(title, datasets, unit, stacked = false) {
 
   // Título
   ctx.fillStyle = '#f1f5f9';
-  ctx.font = 'bold 20px sans-serif';
+  ctx.font = 'bold 22px sans-serif';
   ctx.textAlign = 'left';
   ctx.fillText(title, PAD.left, 30);
 
   // Calcular rango Y
   let allValues = [];
   datasets.forEach(ds => {
-    ds.data.forEach(d => {
-      if (d.valor != null) {
-        if (stacked) {
-          // Para apilado, acumular
-        } else {
-          allValues.push(d.valor);
+    if (stacked) {
+      for (let h = 0; h < 24; h++) {
+        let total = 0;
+        for (let di = 0; di <= ds.index; di++) {
+          const d = datasets[di].data.find(v => v.hora === h);
+          if (d && d.valor != null) total += d.valor;
         }
+        if (total !== 0) allValues.push(total);
       }
-    });
+    } else {
+      ds.data.forEach(d => { if (d.valor != null) allValues.push(d.valor); });
+    }
   });
 
-  if (stacked) {
-    // Calcular totales apilados por hora
-    for (let h = 0; h < 24; h++) {
-      let total = 0;
-      datasets.forEach(ds => {
-        const d = ds.data.find(v => v.hora === h);
-        if (d && d.valor != null) total += d.valor;
-      });
-      if (total > 0) allValues.push(total);
-    }
-  }
+  // Si hay valores negativos, incluir 0 en el rango
+  if (showZero && allValues.some(v => v < 0)) allValues.push(0);
 
   const valid = allValues.filter(v => v != null && isFinite(v));
   if (!valid.length) {
@@ -229,13 +208,13 @@ function drawChart(title, datasets, unit, stacked = false) {
   let yMin = Math.min(...valid);
   let yMax = Math.max(...valid);
 
-  // Margen del 10%
+  // Margen 10%
   const range = yMax - yMin || 1;
-  yMin = Math.max(0, yMin - range * 0.1);
+  yMin = yMin - range * 0.1;
   yMax = yMax + range * 0.1;
 
   // Grid lines
-  const yTicks = 5;
+  const yTicks = 6;
   ctx.strokeStyle = '#1e293b';
   ctx.lineWidth = 1;
   ctx.fillStyle = '#94a3b8';
@@ -249,7 +228,23 @@ function drawChart(title, datasets, unit, stacked = false) {
     ctx.moveTo(PAD.left, y);
     ctx.lineTo(W - PAD.right, y);
     ctx.stroke();
-    ctx.fillText(fmtShort(val), PAD.left - 8, y + 4);
+    ctx.fillText(fmtK(val), PAD.left - 8, y + 4);
+  }
+
+  // Línea cero si hay negativos
+  if (yMin < 0 && yMax > 0) {
+    const zeroY = PAD.top + chartH * (1 - (0 - yMin) / (yMax - yMin));
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    ctx.moveTo(PAD.left, zeroY);
+    ctx.lineTo(W - PAD.right, zeroY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#64748b';
+    ctx.textAlign = 'right';
+    ctx.fillText('0', PAD.left - 8, zeroY + 4);
   }
 
   // Eje Y label
@@ -269,7 +264,6 @@ function drawChart(title, datasets, unit, stacked = false) {
   for (let h = 0; h < 24; h += 3) {
     const x = PAD.left + (h / 23) * chartW;
     ctx.fillText(`${h}:00`, x, H - PAD.bottom + 20);
-    // Grid vertical
     ctx.strokeStyle = '#1e293b';
     ctx.beginPath();
     ctx.moveTo(x, PAD.top);
@@ -281,90 +275,71 @@ function drawChart(title, datasets, unit, stacked = false) {
   const colors = ['#2563eb', '#f97316', '#22c55e', '#eab308', '#ef4444', '#a855f7', '#ec4899', '#06b6d4'];
 
   datasets.forEach((ds, di) => {
+    ds.index = di;
     const color = ds.color || colors[di % colors.length];
 
-    // Dibujar área bajo la línea
+    // Área bajo la línea
     ctx.beginPath();
     let started = false;
-    let prevY = null;
-
     for (let h = 0; h < 24; h++) {
-      const d = ds.data.find(v => v.hora === h);
       const x = PAD.left + (h / 23) * chartW;
-
       let y;
       if (stacked) {
-        // Calcular valor apilado
-        let stackedVal = 0;
+        let total = 0;
         for (let di2 = 0; di2 <= di; di2++) {
-          const ds2 = datasets[di2];
-          const d2 = ds2.data.find(v => v.hora === h);
-          if (d2 && d2.valor != null) stackedVal += d2.valor;
+          const d2 = datasets[di2].data.find(v => v.hora === h);
+          if (d2 && d2.valor != null) total += d2.valor;
         }
-        y = PAD.top + chartH * (1 - (stackedVal - yMin) / (yMax - yMin));
+        y = PAD.top + chartH * (1 - (total - yMin) / (yMax - yMin));
       } else {
+        const d = ds.data.find(v => v.hora === h);
         if (d && d.valor != null) {
           y = PAD.top + chartH * (1 - (d.valor - yMin) / (yMax - yMin));
         } else {
           y = null;
         }
       }
-
       if (y != null) {
-        if (!started) {
-          ctx.moveTo(x, y);
-          started = true;
-        } else {
-          ctx.lineTo(x, y);
-        }
+        if (!started) { ctx.moveTo(x, y); started = true; }
+        else { ctx.lineTo(x, y); }
       } else {
         started = false;
       }
     }
-
-    // Área fill
     ctx.lineTo(PAD.left + chartW, PAD.top + chartH);
     ctx.lineTo(PAD.left, PAD.top + chartH);
     ctx.closePath();
-    ctx.fillStyle = color + '15';
+    ctx.fillStyle = color + '18';
     ctx.fill();
 
     // Línea
     ctx.beginPath();
     started = false;
     for (let h = 0; h < 24; h++) {
-      const d = ds.data.find(v => v.hora === h);
       const x = PAD.left + (h / 23) * chartW;
-
       let y;
       if (stacked) {
-        let stackedVal = 0;
+        let total = 0;
         for (let di2 = 0; di2 <= di; di2++) {
-          const ds2 = datasets[di2];
-          const d2 = ds2.data.find(v => v.hora === h);
-          if (d2 && d2.valor != null) stackedVal += d2.valor;
+          const d2 = datasets[di2].data.find(v => v.hora === h);
+          if (d2 && d2.valor != null) total += d2.valor;
         }
-        y = PAD.top + chartH * (1 - (stackedVal - yMin) / (yMax - yMin));
+        y = PAD.top + chartH * (1 - (total - yMin) / (yMax - yMin));
       } else {
+        const d = ds.data.find(v => v.hora === h);
         if (d && d.valor != null) {
           y = PAD.top + chartH * (1 - (d.valor - yMin) / (yMax - yMin));
         } else {
           y = null;
         }
       }
-
       if (y != null) {
-        if (!started) {
-          ctx.moveTo(x, y);
-          started = true;
-        } else {
-          ctx.lineTo(x, y);
-        }
+        if (!started) { ctx.moveTo(x, y); started = true; }
+        else { ctx.lineTo(x, y); }
       } else {
         started = false;
       }
     }
-
     ctx.strokeStyle = color;
     ctx.lineWidth = 2.5;
     ctx.lineJoin = 'round';
@@ -378,17 +353,15 @@ function drawChart(title, datasets, unit, stacked = false) {
       const x = PAD.left + (h / 23) * chartW;
       let y;
       if (stacked) {
-        let stackedVal = 0;
+        let total = 0;
         for (let di2 = 0; di2 <= di; di2++) {
-          const ds2 = datasets[di2];
-          const d2 = ds2.data.find(v => v.hora === h);
-          if (d2 && d2.valor != null) stackedVal += d2.valor;
+          const d2 = datasets[di2].data.find(v => v.hora === h);
+          if (d2 && d2.valor != null) total += d2.valor;
         }
-        y = PAD.top + chartH * (1 - (stackedVal - yMin) / (yMax - yMin));
+        y = PAD.top + chartH * (1 - (total - yMin) / (yMax - yMin));
       } else {
         y = PAD.top + chartH * (1 - (d.valor - yMin) / (yMax - yMin));
       }
-
       ctx.beginPath();
       ctx.arc(x, y, 3, 0, Math.PI * 2);
       ctx.fillStyle = color;
@@ -415,7 +388,7 @@ function drawChart(title, datasets, unit, stacked = false) {
   return canvas.toBuffer('image/png');
 }
 
-// ─── Enviar a Telegram ───────────────────────────────────────────
+// ─── Telegram ────────────────────────────────────────────────────
 function sendTelegramText(text) {
   return new Promise((resolve, reject) => {
     const payload = JSON.stringify({
@@ -423,31 +396,23 @@ function sendTelegramText(text) {
       text: text,
       parse_mode: 'Markdown',
     });
-
-    const req = https.request(
-      `${TELEGRAM_API}/bot${BOT_TOKEN}/sendMessage`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(payload),
-        },
+    const req = https.request(TELEGRAM_API + '/bot' + BOT_TOKEN + '/sendMessage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload),
       },
-      (res) => {
-        let data = '';
-        res.on('data', (chunk) => { data += chunk; });
-        res.on('end', () => {
-          if (res.statusCode >= 400) {
-            reject(new Error(`Telegram ${res.statusCode}: ${data}`));
-            return;
-          }
-          try { resolve(JSON.parse(data)); }
-          catch (e) { reject(new Error(`Parse error: ${data}`)); }
-        });
-      }
-    );
+    }, (res) => {
+      let data = '';
+      res.on('data', c => { data += c; });
+      res.on('end', () => {
+        if (res.statusCode >= 400) { reject(new Error(`Telegram ${res.statusCode}`)); return; }
+        try { resolve(JSON.parse(data)); }
+        catch (e) { reject(new Error('Parse error')); }
+      });
+    });
     req.on('error', reject);
-    req.setTimeout(15000, () => { req.destroy(); reject(new Error('Timeout Telegram')); });
+    req.setTimeout(15000, () => { req.destroy(); reject(new Error('Timeout')); });
     req.write(payload);
     req.end();
   });
@@ -456,35 +421,25 @@ function sendTelegramText(text) {
 function sendTelegramPhoto(filePath, caption) {
   return new Promise((resolve, reject) => {
     const formData = Buffer.from(
-      `--boundary\r\nContent-Disposition: form-data; name="chat_id"\r\n\r\n${CHAT_ID}\r\n--boundary\r\nContent-Disposition: form-data; name="caption"\r\n\r\n${caption || ''}\r\n--boundary\r\nContent-Disposition: form-data; name="photo"; filename="${path.basename(filePath)}"\r\nContent-Type: image/png\r\n\r\n`
+      `--boundary\r\nContent-Disposition: form-data; name="chat_id"\r\n\r\n${CHAT_ID}\r\n--boundary\r\nContent-Disposition: form-data; name="caption"\r\n\r\n${caption || ''}\r\n--boundary\r\nContent-Disposition: form-data; name="photo"; filename="chart.png"\r\nContent-Type: image/png\r\n\r\n`
     );
-
     const fileContent = fs.readFileSync(filePath);
     const boundaryEnd = Buffer.from(`\r\n--boundary--\r\n`);
 
-    const req = https.request(
-      `${TELEGRAM_API}/bot${BOT_TOKEN}/sendPhoto`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data; boundary=boundary',
-        },
-      },
-      (res) => {
-        let data = '';
-        res.on('data', (chunk) => { data += chunk; });
-        res.on('end', () => {
-          if (res.statusCode >= 400) {
-            reject(new Error(`Telegram ${res.statusCode}: ${data}`));
-            return;
-          }
-          try { resolve(JSON.parse(data)); }
-          catch (e) { reject(new Error(`Parse error: ${data}`)); }
-        });
-      }
-    );
+    const req = https.request(TELEGRAM_API + '/bot' + BOT_TOKEN + '/sendPhoto', {
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data; boundary=boundary' },
+    }, (res) => {
+      let data = '';
+      res.on('data', c => { data += c; });
+      res.on('end', () => {
+        if (res.statusCode >= 400) { reject(new Error(`Telegram ${res.statusCode}`)); return; }
+        try { resolve(JSON.parse(data)); }
+        catch (e) { reject(new Error('Parse error')); }
+      });
+    });
     req.on('error', reject);
-    req.setTimeout(30000, () => { req.destroy(); reject(new Error('Timeout Telegram')); });
+    req.setTimeout(30000, () => { req.destroy(); reject(new Error('Timeout')); });
     req.write(formData);
     req.write(fileContent);
     req.write(boundaryEnd);
@@ -492,14 +447,12 @@ function sendTelegramPhoto(filePath, caption) {
   });
 }
 
-// ─── Fetch de datos ──────────────────────────────────────────────
+// ─── Fetch ───────────────────────────────────────────────────────
 async function fetchAll() {
   console.error(`📅 Fetching datos para ${TARGET_DATE}...`);
-
   const results = await Promise.allSettled(
     INDICATORS.map(ind => fetchIndicator(ind.id, TARGET_DATE))
   );
-
   const data = {};
   INDICATORS.forEach((ind, i) => {
     const result = results[i];
@@ -510,144 +463,222 @@ async function fetchAll() {
       data[ind.name] = [];
     }
   });
-
   return data;
+}
+
+// ─── Análisis del día ────────────────────────────────────────────
+function analyzeDay(data) {
+  const pAvg = avg(data.precios);
+  const pMax = max(data.precios);
+  const pMin = min(data.precios);
+  const pMaxHora = data.precios.find(v => v.valor === pMax)?.hora;
+  const pMinHora = data.precios.find(v => v.valor === pMin)?.hora;
+
+  const dAvg = avg(data.demanda);
+  const dMax = max(data.demanda);
+  const dMin = min(data.demanda);
+  const dMaxHora = data.demanda.find(v => v.valor === dMax)?.hora;
+  const dMinHora = data.demanda.find(v => v.valor === dMin)?.hora;
+
+  const gRenAvg = avg(data.genRenReal);
+  const gNoRenAvg = avg(data.genNoRenReal);
+  const gTotalAvg = gRenAvg + gNoRenAvg;
+  const pctRenovable = pct(gRenAvg, gTotalAvg);
+
+  const solarAvg = avg(data.solar);
+  const solarMax = max(data.solar);
+  const solarMaxHora = data.solar.find(v => v.valor === solarMax)?.hora;
+
+  const co2Avg = avg(data.co2Ratio);
+  const co2Min = min(data.co2Ratio);
+  const co2Max = max(data.co2Ratio);
+
+  // Interconexiones: positivo = exportación, negativo = importación
+  const iFRNet = avg(data.interFR);
+  const iPTNet = avg(data.interPT);
+  const iTotalNet = iFRNet + iPTNet;
+  const iFRExport = data.interFR.filter(v => v.valor > 0).length;
+  const iPTExport = data.interPT.filter(v => v.valor > 0).length;
+
+  // Horas más caras vs más baratas
+  const sortedPrecios = [...data.precios].sort((a, b) => b.valor - a.valor);
+  const top3 = sortedPrecios.slice(0, 3);
+  const bottom3 = sortedPrecios.slice(-3).reverse();
+
+  // Horas más demanda
+  const sortedDemanda = [...data.demanda].sort((a, b) => b.valor - a.valor);
+  const topDemanda = sortedDemanda.slice(0, 3);
+
+  // Descripción del día
+  let analisis = '';
+
+  // Contexto de precios
+  if (pAvg > 150) {
+    analisis += `🔴 Día de precios elevados. El precio medio fue de ${fmt(pAvg)} €/MWh, por encima de los 150 €/MWh.`;
+  } else if (pAvg > 100) {
+    analisis += `🟡 Día de precios moderados-alto. El precio medio fue de ${fmt(pAvg)} €/MWh.`;
+  } else {
+    analisis += `🟢 Día de precios contenidos. El precio medio fue de ${fmt(pAvg)} €/MWh.`;
+  }
+
+  // Pico y valle
+  analisis += `\n\n`;
+  analisis += `El precio alcanzó su máximo de ${fmt(pMax)} €/MWh a las ${pMaxHora}:00 y su mínimo de ${fmt(pMin)} €/MWh a las ${pMinHora}:00. `;
+  analisis += `La diferencia entre pico y valle fue de ${fmt(pMax - pMin)} €/MWh.`;
+
+  // Demanda
+  analisis += `\n\n`;
+  analisis += `La demanda media fue de ${fmtK(dAvg)} MW, con un máximo de ${fmtK(dMax)} MW a las ${dMaxHora}:00 y mínimo de ${fmtK(dMin)} MW a las ${dMinHora}:00.`;
+
+  // Renovables
+  analisis += `\n\n`;
+  analisis += `La generación renovable media fue de ${fmtK(gRenAvg)} MW, un ${pctRenovable}% sobre la generación total (${fmtK(gTotalAvg)} MW).`;
+
+  if (pctRenovable > 60) {
+    analisis += ` ¡Alta penetración renovable!`;
+  } else if (pctRenovable > 40) {
+    analisis += ` Penetración renovable moderada.`;
+  } else {
+    analisis += ` Baja penetración renovable.`;
+  }
+
+  // Solar
+  if (solarAvg > 0) {
+    analisis += `\nLa solar FV media fue de ${fmtK(solarAvg)} MW, con un pico de ${fmtK(solarMax)} MW a las ${solarMaxHora}:00.`;
+  }
+
+  // CO2
+  analisis += `\nEl factor de emisión medio fue de ${fmt(co2Avg)} tCO₂/MWh (mín: ${fmt(co2Min)}, máx: ${fmt(co2Max)}).`;
+
+  // Interconexiones
+  analisis += `\n\n`;
+  if (iTotalNet > 0) {
+    analisis += `España fue exportador neto con ${fmtK(iTotalNet)} MW. `;
+  } else {
+    analisis += `España fue importador neto con ${fmtK(Math.abs(iTotalNet))} MW. `;
+  }
+  analisis += `Francia: ${iFRExport}/24h exportando. Portugal: ${iPTExport}/24h exportando.`;
+
+  return {
+    analisis,
+    stats: {
+      pAvg, pMax, pMin, pMaxHora, pMinHora,
+      dAvg, dMax, dMin, dMaxHora, dMinHora,
+      gRenAvg, gNoRenAvg, gTotalAvg, pctRenovable,
+      solarAvg, solarMax, solarMaxHora,
+      co2Avg, co2Min, co2Max,
+      iFRNet, iPTNet, iTotalNet, iFRExport, iPTExport,
+    }
+  };
 }
 
 // ─── Main ────────────────────────────────────────────────────────
 async function main() {
   ensureCacheDir();
-  console.error(`🚀 Iniciando resumen ESIOS para ${TARGET_DATE}`);
+  console.error(`🚀 Informe ESIOS para ${TARGET_DATE}`);
 
   const data = await fetchAll();
+  const { analisis, stats } = analyzeDay(data);
 
-  // Resumen texto
-  const pAvg = avg(data.precios);
-  const pMax = max(data.precios);
-  const pMin = min(data.precios);
-  const dAvg = avg(data.demanda);
-  const dMax = max(data.demanda);
-  const dMin = min(data.demanda);
-  const eAvg = avg(data.eolica);
-  const sAvg = avg(data.solar);
-  const hAvg = avg(data.hidrica);
-  const cAvg = avg(data.carbon);
-  const cogAvg = avg(data.cogeneracion);
-  const oRenAvg = avg(data.otrasRen);
-  const gTotAvg = avg(data.genTotal);
-  const gRenAvg = avg(data.genRenReal);
-  const gNoRenAvg = avg(data.genNoRenReal);
-  const cLibreAvg = avg(data.co2Libre);
-  const cRatioAvg = avg(data.co2Ratio);
-  const dPrevAvg = avg(data.demandaPrev);
-  const ePrevAvg = avg(data.eolicaPrev);
-  const sPrevAvg = avg(data.solarPrev);
-  const rPrevAvg = avg(data.renovablePrev);
-  const iFRNet = avg(data.interFR);
-  const iPTNet = avg(data.interPT);
+  // ── Texto resumen ──
+  const textSummary = `📊 *Informe ESIOS — ${TARGET_DATE}*\n\n` +
+    `💰 PVPC: ${fmt(stats.pAvg)} €/MWh\n` +
+    `  Pico: ${fmt(stats.pMax)} a las ${stats.pMaxHora}:00\n` +
+    `  Valle: ${fmt(stats.pMin)} a las ${stats.pMinHora}:00\n` +
+    `  Diferencia pico-valle: ${fmt(stats.pMax - stats.pMin)} €/MWh\n\n` +
+    `⚡ Demanda: ${fmtK(stats.dAvg)} MW media\n` +
+    `  Máx: ${fmtK(stats.dMax)} a las ${stats.dMaxHora}:00\n` +
+    `  Mín: ${fmtK(stats.dMin)} a las ${stats.dMinHora}:00\n\n` +
+    `🌿 Renovables: ${fmtK(stats.gRenAvg)} MW (${stats.pctRenovable}%)\n` +
+    `  No renovables: ${fmtK(stats.gNoRenAvg)} MW\n` +
+    `  Solar FV: ${fmtK(stats.solarAvg)} MW media\n\n` +
+    `🌍 CO₂: ${fmt(stats.co2Avg)} tCO₂/MWh\n\n` +
+    `🔌 Exportación neta: ${fmtK(stats.iTotalNet)} MW\n` +
+    `  Francia: ${stats.iFRExport}/24h exportando\n` +
+    `  Portugal: ${stats.iPTExport}/24h exportando\n\n` +
+    `📝 *Análisis:*\n${analisis}\n\n` +
+    `👇 Gráficos horarios abajo`;
 
-  // Texto resumen
-  const textSummary = `📊 *Resumen ESIOS — ${TARGET_DATE}*\n\n` +
-    `💰 PVPC: ${fmt(pAvg)} €/MWh (máx ${fmt(pMax)} · mín ${fmt(pMin)})\n` +
-    `⚡ Demanda: ${fmt(dAvg)} MW (máx ${fmt(dMax)} · mín ${fmt(dMin)})\n` +
-    `🏭 Gen medida: ${fmt(gTotAvg)} MW total\n` +
-    `  Eólica ${fmt(eAvg)} · Solar ${fmt(sAvg)} · Hídrica ${fmt(hAvg)} · Carbón ${fmt(cAvg)}\n` +
-    `🌿 Gen real: ${fmt(gRenAvg)} MW renov / ${fmt(gNoRenAvg)} MW no renov\n` +
-    `🌍 CO2: ${fmt(cRatioAvg)} tCO₂/h\n` +
-    `🔮 Prev D+1: ${fmt(ePrevAvg)} MW eólica · ${fmt(sPrevAvg)} MW solar\n` +
-    `🔌 Intercon: FR ${fmt(iFRNet)} · PT ${fmt(iPTNet)}\n\n` +
-    `👇 Gráficos abajo`;
-
-  // Enviar texto primero
-  console.error('📝 Enviando texto resumen...');
+  console.error('📝 Enviando texto...');
   await sendTelegramText(textSummary);
 
-  // Gráfico 1: Precios
-  console.error('🎨 Generando gráfico de precios...');
-  const preciosImg = drawChart(
-    `💰 Precios PVPC — ${TARGET_DATE}`,
+  // ── Gráfico 1: Precios ──
+  console.error('🎨 Gráfico precios...');
+  const preciosImg = drawLineChart(
+    `💰 Precio PVPC — ${TARGET_DATE}`,
     [{ name: 'PVPC (€/MWh)', color: '#2563eb', data: data.precios }],
     '€/MWh'
   );
   const preciosPath = path.join(CACHE_DIR, `chart-precios-${TARGET_DATE}.png`);
   fs.writeFileSync(preciosPath, preciosImg);
-  await sendTelegramPhoto(preciosPath, `💰 Precios PVPC — ${TARGET_DATE}\nMedia: ${fmt(pAvg)} €/MWh · Máx: ${fmt(pMax)} · Mín: ${fmt(pMin)}`);
+  await sendTelegramPhoto(preciosPath, `💰 Precio PVPC — ${TARGET_DATE}\nMedia: ${fmt(stats.pAvg)} €/MWh · Pico: ${fmt(stats.pMax)} a las ${stats.pMaxHora}:00 · Valle: ${fmt(stats.pMin)} a las ${stats.pMinHora}:00`);
 
-  // Gráfico 2: Demanda
-  console.error('🎨 Generando gráfico de demanda...');
-  const demandaImg = drawChart(
+  // ── Gráfico 2: Demanda ──
+  console.error('🎨 Gráfico demanda...');
+  const demandaImg = drawLineChart(
     `⚡ Demanda Real — ${TARGET_DATE}`,
     [{ name: 'Demanda real (MW)', color: '#f97316', data: data.demanda }],
     'MW'
   );
   const demandaPath = path.join(CACHE_DIR, `chart-demanda-${TARGET_DATE}.png`);
   fs.writeFileSync(demandaPath, demandaImg);
-  await sendTelegramPhoto(demandaPath, `⚡ Demanda Real — ${TARGET_DATE}\nMedia: ${fmt(dAvg)} MW · Máx: ${fmt(dMax)} · Mín: ${fmt(dMin)}`);
+  await sendTelegramPhoto(demandaPath, `⚡ Demanda Real — ${TARGET_DATE}\nMedia: ${fmtK(stats.dAvg)} MW · Máx: ${fmtK(stats.dMax)} a las ${stats.dMaxHora}:00`);
 
-  // Gráfico 3: Generación medida (apilado)
-  console.error('🎨 Generando gráfico de generación medida...');
-  const genImg = drawChart(
-    `🏭 Generación Medida — ${TARGET_DATE}`,
-    [
-      { name: 'Eólica', color: '#22c55e', data: data.eolica },
-      { name: 'Solar FV', color: '#eab308', data: data.solar },
-      { name: 'Hidráulica', color: '#3b82f6', data: data.hidrica },
-      { name: 'Carbón', color: '#6b7280', data: data.carbon },
-      { name: 'Cogeneración', color: '#a855f7', data: data.cogeneracion },
-      { name: 'Otras renov.', color: '#ec4899', data: data.otrasRen },
-    ],
-    'MW', true
-  );
-  const genPath = path.join(CACHE_DIR, `chart-gen-${TARGET_DATE}.png`);
-  fs.writeFileSync(genPath, genImg);
-  await sendTelegramPhoto(genPath, `🏭 Generación Medida — ${TARGET_DATE}\nTotal: ${fmt(gTotAvg)} MW`);
-
-  // Gráfico 4: Generación real tiempo (apilado)
-  console.error('🎨 Generando gráfico de generación real...');
-  const realImg = drawChart(
+  // ── Gráfico 3: Generación real tiempo (apilado) ──
+  console.error('🎨 Gráfico generación real...');
+  const realImg = drawLineChart(
     `🌿 Generación Real Tiempo — ${TARGET_DATE}`,
     [
       { name: 'Renovable', color: '#22c55e', data: data.genRenReal },
       { name: 'No renovable', color: '#ef4444', data: data.genNoRenReal },
     ],
-    'MW', true
+    'MW', { stacked: true }
   );
   const realPath = path.join(CACHE_DIR, `chart-real-${TARGET_DATE}.png`);
   fs.writeFileSync(realPath, realImg);
-  await sendTelegramPhoto(realPath, `🌿 Generación Real Tiempo — ${TARGET_DATE}\nRen: ${fmt(gRenAvg)} MW · No ren: ${fmt(gNoRenAvg)} MW`);
+  await sendTelegramPhoto(realPath, `🌿 Generación Real — ${TARGET_DATE}\nRenovable: ${fmtK(stats.gRenAvg)} MW (${stats.pctRenovable}%) · No renovable: ${fmtK(stats.gNoRenAvg)} MW`);
 
-  // Gráfico 5: Previsión D+1 (apilado)
-  console.error('🎨 Generando gráfico de previsión...');
-  const prevImg = drawChart(
-    `🔮 Previsión D+1 — ${TARGET_DATE}`,
+  // ── Gráfico 4: Solar + Demanda (comparativo) ──
+  console.error('🎨 Gráfico solar vs demanda...');
+  const solarImg = drawLineChart(
+    `☀️ Solar FV vs Demanda — ${TARGET_DATE}`,
     [
-      { name: 'Eólica prevista', color: '#22c55e', data: data.eolicaPrev },
-      { name: 'Solar prevista', color: '#eab308', data: data.solarPrev },
+      { name: 'Demanda (MW)', color: '#f97316', data: data.demanda },
+      { name: 'Solar FV (MW)', color: '#eab308', data: data.solar },
     ],
-    'MW', true
+    'MW', { showZero: true }
   );
-  const prevPath = path.join(CACHE_DIR, `chart-prev-${TARGET_DATE}.png`);
-  fs.writeFileSync(prevPath, prevImg);
-  await sendTelegramPhoto(prevPath, `🔮 Previsión D+1 — ${TARGET_DATE}\nEólica: ${fmt(ePrevAvg)} MW · Solar: ${fmt(sPrevAvg)} MW`);
+  const solarPath = path.join(CACHE_DIR, `chart-solar-${TARGET_DATE}.png`);
+  fs.writeFileSync(solarPath, solarImg);
+  await sendTelegramPhoto(solarPath, `☀️ Solar FV vs Demanda — ${TARGET_DATE}\nSolar media: ${fmtK(stats.solarAvg)} MW · Pico: ${fmtK(stats.solarMax)} a las ${stats.solarMaxHora}:00`);
 
-  // Gráfico 6: Interconexiones (apilado)
-  console.error('🎨 Generando gráfico de interconexiones...');
-  const interImg = drawChart(
+  // ── Gráfico 5: Interconexiones (con negativos) ──
+  console.error('🎨 Gráfico interconexiones...');
+  const interImg = drawLineChart(
     `🔌 Interconexiones Netas — ${TARGET_DATE}`,
     [
       { name: 'Francia', color: '#3b82f6', data: data.interFR },
       { name: 'Portugal', color: '#f97316', data: data.interPT },
     ],
-    'MW', false
+    'MW', { showZero: true }
   );
   const interPath = path.join(CACHE_DIR, `chart-inter-${TARGET_DATE}.png`);
   fs.writeFileSync(interPath, interImg);
-  await sendTelegramPhoto(interPath, `🔌 Interconexiones Netas — ${TARGET_DATE}\nFrancia: ${fmt(iFRNet)} MW · Portugal: ${fmt(iPTNet)} MW`);
+  await sendTelegramPhoto(interPath, `🔌 Interconexiones — ${TARGET_DATE}\nNeta: ${fmtK(stats.iTotalNet)} MW · FR: ${stats.iFRExport}/24h export · PT: ${stats.iPTExport}/24h export`);
 
-  // Limpiar cache
+  // ── Gráfico 6: CO2 ──
+  console.error('🎨 Gráfico CO2...');
+  const co2Img = drawLineChart(
+    `🌍 CO₂ Asociado a Generación — ${TARGET_DATE}`,
+    [{ name: 'tCO₂/MWh', color: '#8b5cf6', data: data.co2Ratio }],
+    'tCO₂/MWh'
+  );
+  const co2Path = path.join(CACHE_DIR, `chart-co2-${TARGET_DATE}.png`);
+  fs.writeFileSync(co2Path, co2Img);
+  await sendTelegramPhoto(co2Path, `🌍 Factor de emisión CO₂ — ${TARGET_DATE}\nMedia: ${fmt(stats.co2Avg)} tCO₂/MWh · Mín: ${fmt(stats.co2Min)} · Máx: ${fmt(stats.co2Max)}`);
+
   cleanCache();
-
-  console.log('✅ Resumen ESIOS enviado correctamente con gráficos');
+  console.log('✅ Informe ESIOS enviado correctamente');
 }
 
 main().catch((err) => {
