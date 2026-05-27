@@ -5,9 +5,9 @@
 
 ## Estado General
 
-- **Total repos explorados**: 0 / 49
-- **Skills creadas**: 0
-- **Última sesión**: Nunca
+- **Total repos explorados**: 5 / 49
+- **Skills creadas**: 5
+- **Última sesión**: 2026-05-27
 
 ## Categorías y Repos Prioritarios
 
@@ -84,7 +84,7 @@
 
 ## Prioridad de Exploración
 
-### ✅ Sesión Actual (2026-05-27) - COMPLETADA:
+### ✅ Sesión Actual (2026-05-27) - COMPLETADA: 5/5 repos
 - [x] microsoft/markitdown ⭐125340
 - [x] crystaldba/postgres-mcp ⭐2802
 - [x] microsoft/VibeVoice ⭐47453
