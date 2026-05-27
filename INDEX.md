@@ -148,6 +148,16 @@
 
 ---
 
+
+### Sesión 7 (2026-05-27) - 5 skills mejorados
+| # | Repo | Categoría | Stars |
+|---|------|-----------|-------|
+| 29 | microsoft/markitdown | Herramientas / File-to-Markdown | 125k |
+| 30 | Blaizzy/mlx-vlm | IA / Vision Language Models | 4.8k |
+| 31 | NangoHQ/nango | Backend / Product Integrations | 9k |
+| 32 | crystaldba/postgres-mcp | DevOps / Database MCP | 2.8k |
+| 33 | antoinelame/GazeTracking | IA / Computer Vision | 2.6k |
+
 ## Categorías de Skills
 - `ia` - Inteligencia Artificial y Machine Learning
 - `herramientas` - Tools y CLI utilities
@@ -160,7 +170,7 @@
 
 ---
 
-*Última actualización: 2026-05-26*
-*Sesiones completadas: 6*
-*Total skills creados: 28*
+*Última actualización: 2026-05-27*
+*Sesiones completadas: 7*
+*Total skills creados: 33*
 *Total repos pendientes: ~14*
