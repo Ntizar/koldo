@@ -624,21 +624,7 @@ async function main() {
   fs.writeFileSync(demandaPath, demandaImg);
   await sendTelegramPhoto(demandaPath, `⚡ Demanda Real — ${TARGET_DATE}\nMedia: ${fmtK(stats.dAvg)} MW · Máx: ${fmtK(stats.dMax)} a las ${stats.dMaxHora}:00`);
 
-  // ── Gráfico 3: Generación real tiempo (apilado) ──
-  console.error('🎨 Gráfico generación real...');
-  const realImg = drawLineChart(
-    `🌿 Generación Real Tiempo — ${TARGET_DATE}`,
-    [
-      { name: 'Renovable', color: '#22c55e', data: data.genRenReal },
-      { name: 'No renovable', color: '#ef4444', data: data.genNoRenReal },
-    ],
-    'MW', { stacked: true }
-  );
-  const realPath = path.join(CACHE_DIR, `chart-real-${TARGET_DATE}.png`);
-  fs.writeFileSync(realPath, realImg);
-  await sendTelegramPhoto(realPath, `🌿 Generación Real — ${TARGET_DATE}\nRenovable: ${fmtK(stats.gRenAvg)} MW (${stats.pctRenovable}%) · No renovable: ${fmtK(stats.gNoRenAvg)} MW`);
-
-  // ── Gráfico 4: Solar + Demanda (comparativo) ──
+  // ── Gráfico 3: Solar + Demanda (comparativo) ──
   console.error('🎨 Gráfico solar vs demanda...');
   const solarImg = drawLineChart(
     `☀️ Solar FV vs Demanda — ${TARGET_DATE}`,
@@ -652,7 +638,7 @@ async function main() {
   fs.writeFileSync(solarPath, solarImg);
   await sendTelegramPhoto(solarPath, `☀️ Solar FV vs Demanda — ${TARGET_DATE}\nSolar media: ${fmtK(stats.solarAvg)} MW · Pico: ${fmtK(stats.solarMax)} a las ${stats.solarMaxHora}:00`);
 
-  // ── Gráfico 5: Interconexiones (con negativos) ──
+  // ── Gráfico 4: Interconexiones (con negativos) ──
   console.error('🎨 Gráfico interconexiones...');
   const interImg = drawLineChart(
     `🔌 Interconexiones Netas — ${TARGET_DATE}`,
@@ -666,7 +652,7 @@ async function main() {
   fs.writeFileSync(interPath, interImg);
   await sendTelegramPhoto(interPath, `🔌 Interconexiones — ${TARGET_DATE}\nNeta: ${fmtK(stats.iTotalNet)} MW · FR: ${stats.iFRExport}/24h export · PT: ${stats.iPTExport}/24h export`);
 
-  // ── Gráfico 6: CO2 ──
+  // ── Gráfico 5: CO2 ──
   console.error('🎨 Gráfico CO2...');
   const co2Img = drawLineChart(
     `🌍 CO₂ Asociado a Generación — ${TARGET_DATE}`,
