@@ -27,8 +27,13 @@ Se han extraído 20 patrones reutilizables del proyecto [esios-dashboard](https:
 |-----------|--------|
 | 🏗️ Arquitectura | `arquitectura-dashboard-datos-api` — Flujo completo API → dashboard |
 | 🔧 Infraestructura | `api-cliente-http-robusto`, `cache-multicapa-memoria-disco`, `env-validacion-estricta`, `docker-multistage-produccion`, `health-checks-metrics`, `seguridad-helmet-cors` |
-| 🖥️ Backend | `fetch-paralelo-fallos-parciales`, `conversion-unidades-api-externa`, `servicio-resumen-consolidado`, `endpoints-dashboard-rest`, `forecast-montecarlo-escenarios` |
+| 🖥️ Backend | `fetch-paralelo-fallos-parciales`, `conversion-unidades-api-externa`, `servicio-resumen-consolidado`, `endpoints-dashboard-rest`, `forecast-montecarlo-escenarios`, `nango` (integración 800 APIs), `awesome-transit` (GTFS+GBFS) |
 | 🎨 Frontend | `frontend-estado-persistencia`, `frontend-orquestacion-carga`, `frontend-api-client-errores`, `frontend-tabs-navegacion`, `frontend-config-mapa-colores`, `frontend-fechas-timezone-local` |
 | 🧪 Testing | `testing-jest-mocks-api` — Jest + mocks HTTP + fixtures |
+| 🤖 IA/Agentes | `orca` (orquestación multi-agente), `mlx-vlm` (visión local Mac) |
+| 🗄️ Datos/BI | `metabase` — BI embebido con SQL y Metabot AI |
+| 🛠️ DevOps | `postgres-mcp` (MCP server), `vidpipe` (pipeline vídeo AI) |
+| 🗺️ GIS | `deteccion-satelite` — Sentinel-2, DRISH-X tráfico, NDVI |
+| 🔊 Audio | `voicebox` — TTS local multi-motor + clonación voz |
 
-📍 Catálogo completo con descripciones detalladas: [`skills/INDEX.md`](../skills/INDEX.md)
+📍 Catálogo completo con índices y roadmap: [`skills/INDEX.md`](../skills/INDEX.md)
