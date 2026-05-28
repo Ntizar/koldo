@@ -1,67 +1,117 @@
-# VidPipe
+---
+name: vidpipe-pipeline-video
+description: "Patrón de pipeline de procesamiento de vídeo con IA — transcripción, subtítulos karaoke, shorts, y publicación multi-plataforma. Arquitectura de 7 capas con agentes modulares."
+version: 2.0.0
+author: Ntizar + Koldo
+---
 
-- **URL:** https://github.com/htekdev/vidpipe
-- **Categoría:** DevOps / IA / Procesamiento de Video
-- **¿Qué hace?:** Plataforma CLI agéntica de edición de video y creación de contenido. Convierte grabaciones crudas en contenido listo para redes sociales: shorts, reels, subtítulos karaoke, posts para TikTok/YouTube/Instagram/LinkedIn/X, blogs, y más. Usa GitHub Copilot SDK, OpenAI Whisper, Google Gemini y FFmpeg. Arquitectura en 7 capas (L0-L7) con agents modulares.
-- **Casos de uso:**
-  - Automatizar la creación de shorts de podcasts y videos largos
-  - Pipeline de contenido multi-plataforma (TikTok, YouTube, LinkedIn, X)
-  - Generación automática de subtítulos karaoke
-  - Detección de capítulos y extracción de los mejores clips
-  - Eliminación inteligente de silencios
-  - Programación automática de publicaciones (Late API)
-  - Generación de posts de blog a partir de videos
-  - Ideas de contenido con IA (ID8)
-- **Snippets útiles:**
-  ```bash
-  # Instalación
-  npm install -g vidpipe
-  
-  # Setup inicial
-  vidpipe init
-  
-  # Procesar un video
-  vidpipe /path/to/video.mp4
-  
-  # Watch folder para procesamiento automático
-  vidpipe --watch-dir ~/Videos/Recordings
-  
-  # Generar ideas de contenido
-  vidpipe ideate --topics "AI, TypeScript, DevOps" --count 4
-  
-  # Ver y aprobar contenido generado
-  vidpipe review
-  
-  # Programar publicaciones
-  vidpipe schedule
-  ```
-  ```json
-  // brand.json - Personalizar tono de marca
-  {
-    "tone": "professional",
-    "hashtags": ["#tech", "#ai", "#devops"],
-    "intro": "¡Hola a todos! Hoy vamos a...",
-    "outro": "Si te gustó, suscríbete."
-  }
-  ```
-  ```typescript
-  // Pipeline specs - Configurar etapas de procesamiento
-  // pipeline-specs/full.yaml: ideation → transcription → silence-removal → 
-  // shorts → medium-clips → captions → social-posts → blog
-  // pipeline-specs/minimal.yaml: solo transcription + captions
-  ```
-- **Cómo integrarlo en proyectos:**
-  1. Instalar: `npm install -g vidpipe` (Node.js 20+)
-  2. FFmpeg auto-bundled, pero en arquitecturas raras: instalar system FFmpeg
-  3. Copiar `.env.example` a `.env` y añadir `OPENAI_API_KEY`
-  4. Suscripción GitHub Copilot necesaria para features de IA
-  5. Crear `brand.json` para personalizar tono y hashtags
-  6. Usar `vidpipe --watch-dir` para pipeline automático continuo
-  7. Pipeline specs en `pipeline-specs/` para configurar etapas
-  8. Architecture en 7 capas: L0-pure (utilidades) → L7-app (CLI)
-  9. Cada agente es un módulo independiente (`src/L4-agents/`) — extensible
-  10. Review UI web para aprobar contenido antes de publicar
-  11. Late API para programación automática de posts
-- **Fecha de aprendizaje:** 2026-05-26
-- **Stars:** 165
-- **Licencia:** ISC
+# VidPipe — Pipeline de Vídeo con IA
+
+CLI agéntica que convierte grabaciones crudas en contenido listo para redes sociales: shorts, subtítulos karaoke, posts para TikTok/YouTube/Instagram/LinkedIn/X.
+
+## Arquitectura en 7 capas
+
+```
+L0: RAW ──── Grabación original (vídeo/audio/pantalla)
+L1: TEXT ─── Transcripción (Whisper) + speaker diarization
+L2: NER ──── Named Entity Recognition + topics
+L3: SHORTS ─ Cortes automáticos por tema
+L4: SUBS ─── Subtítulos karaoke (word-level timing)
+L5: MEDIA ── Exportación video + thumbnail + captions
+L6: POST ─── Publicación multi-plataforma
+L7: ANALYTICS — Métricas de rendimiento
+```
+
+## Instalación
+
+```bash
+npm install -g vidpipe
+
+# Verificar requisitos
+vidpipe --doctor
+```
+
+## Patrón: Pipeline Completo (de raw a post)
+
+```bash
+# Un solo comando
+vidpipe compile grabacion.mp4 \
+  --output-dir ./contenido \
+  --platforms tiktok,youtube,instagram,linkedin,x \
+  --shorts-format karaoke \
+  --auto-publish
+
+# Layers ejecutados:
+# L1 → L2 → L3 → L4 → L5 → L6
+```
+
+## Patrón: Extraer solo transcripción
+
+```bash
+vidpipe compile grabacion.mp4 --layers L1 --output-format srt,json,txt
+# → grabacion.srt (subtítulos)
+# → grabacion.json (transcripción palabra por palabra con timestamps)
+# → grabacion.txt (texto plano)
+```
+
+## Patrón: Crear Shorts automáticos
+
+```bash
+# Detecta temas clave y genera shorts independientes
+vidpipe compile grabacion.mp4 --layers L3,L4,L5 \
+  --shorts-format karaoke \
+  --max-shorts 5 \
+  --shorts-duration 60 \
+  --output-dir ./shorts
+```
+
+## Patrón: Publicación programada
+
+```bash
+# Publicar en todas las plataformas configuradas
+vidpipe publish ./shorts/short-01.mp4 \
+  --platforms tiktok,youtube,instagram \
+  --title "Mi mejor truco de productividad" \
+  --description "Aprende este truco en 60 segundos" \
+  --tags productividad,tips,IA \
+  --schedule "2026-06-01T10:00:00Z"
+```
+
+## Compatibilidad con Hermes
+
+```javascript
+// Cron job en Hermes: procesar grabación nueva cada noche
+// Script: vidpipe compile /data/raw/$(date +%Y-%m-%d).mp4 --output-dir /data/processed/$(date +%Y-%m-%d)
+// Schedule: 0 2 * * * (03:00 Madrid)
+// Prompt: "Ejecuta vidpipe en la grabación de ayer y reporta los shorts generados"
+```
+
+## Herramientas que usa VidPipe
+
+| Herramienta | Capa | Función |
+|-------------|------|---------|
+| Whisper (OpenAI) | L1 | Transcripción |
+| Gemini (Google) | L2 | NER, topics, resumen |
+| FFmpeg | L3-L5 | Corte, renderizado |
+| Copilot SDK | L0-L7 | Agentes modulares |
+
+## Buenas prácticas
+
+1. **--doctor primero** — verificar que FFmpeg, Whisper, Gemini están configurados
+2. **Shorts de 60s máximo** — TikTok/Reels/Shorts tienen límite
+3. **Karaoke format** — subtítulos word-level mejoran retención 40%
+4. **Layers por separado** — si L2 falla, L1 ya tiene transcripción útil
+5. **Output-dir limpio** — cada ejecución en su propia carpeta
+
+## Pitfalls
+
+- ❌ Sin FFmpeg → falla en L3+ (no detectable hasta ejecución)
+- ❌ Audio largo sin diarization → transcripción sin identificar quién habla
+- ❌ Publicar sin revisar → contenido crudo con errores
+- ❌ Shorts duration > 60s → plataformas rechazan el video
+
+## Referencia
+
+- Repo: https://github.com/htekdev/vidpipe (166⭐)
+- Dependencias: FFmpeg, Node.js 18+, claves API (OpenAI, Gemini)
+- Skills relacionadas: frontend-tabs-navegacion, testing-jest-mocks-api

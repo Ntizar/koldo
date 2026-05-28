@@ -1,90 +1,173 @@
-# Metabase
+---
+name: metabase-dashboards-embebidos
+description: "Patrón de dashboards embebidos con Metabase (47K⭐) — SQL queries, API REST, embedding, Metabot AI, y multi-base de datos. Ideal para BI sin servidor propio de frontend."
+version: 2.0.0
+author: Ntizar + Koldo
+---
 
-- **URL:** https://github.com/metabase/metabase
-- **Categoría:** Data / Business Intelligence
-- **¿Qué hace?:** Metabase es una herramienta de código abierto de Business Intelligence (BI) y análisis embebido que permite a cualquier persona en tu empresa hacer preguntas y aprender de los datos sin necesidad de saber SQL. Soporta más de 25 bases de datos (PostgreSQL, MySQL, SQLite, BigQuery, Snowflake, MongoDB, etc.), ofrece un editor SQL para consultas complejas, un constructor de consultas visual, dashboards interactivos con filtros, Metabot (IA para generar respuestas y queries), Data Studio para transformar datos, alertas programadas, y un sistema de permisos granular. Se puede autoalojar o usar en la nube.
-- **Casos de uso:**
-  - Dashboards de negocio para equipos no técnicos
-  - Análisis auto-servicio (self-service analytics) con constructor visual
-  - Análisis embebido en aplicaciones SaaS (embedded analytics)
-  - Generación de reportes automatizados por email/Slack/webhook
-  - Query builder SQL para analistas técnicos
-  - Data studio: transformar datos crudos en tablas listas para análisis
-  - Multi-tenant analytics para SaaS con aislamiento de datos por cliente
-  - Integración con Slack mediante Metabot
-  - Documentación analítica con documentos colaborativos
-- **Snippets útiles:**
-  - *Instalar con Docker (Open Source):*
-    ```bash
-    docker pull metabase/metabase:latest
-    docker run -d -p 3000:3000 --name metabase metabase/metabase
-    # Acceder en http://localhost:3000
-    ```
-  - *Instalar con Docker (Enterprise/Pro):*
-    ```bash
-    docker pull metabase/metabase-enterprise:latest
-    docker run -d -p 3000:3000 --name metabase metabase/metabase-enterprise
-    ```
-  - *Ejecutar el JAR directamente:*
-    ```bash
-    java -jar metabase.jar
-    ```
-  - *Instalar SDK de embebido (React):*
-    ```bash
-    npm install @metabase/embedding-sdk-react@60-stable
-    ```
-  - *Generar JWT para Guest Embed (Node.js):*
-    ```javascript
-    const jwt = require("jsonwebtoken");
-    const METABASE_SECRET_KEY = "TU_CLAVE_SECRETA";
-    const payload = {
-      resource: { dashboard: 10 },  // o { question: 5 }
-      params: {},
-      exp: Math.round(Date.now() / 1000) + 10 * 60,
-    };
-    const token = jwt.sign(payload, METABASE_SECRET_KEY);
-    ```
-  - *Configurar JWT SSO para Modular Embed (Express.js):*
-    ```javascript
-    const jwt = require("jsonwebtoken");
-    const METABASE_SECRET = "TU_CLAVE_SECRETA";
-    app.get("/sso/metabase", (req, res) => {
-      const payload = {
-        resource: { "param/dashboard": req.query.dashboard_id },
-        params: {},
-        "exp": Math.round(Date.now() / 1000) + (60 * 60 * 24 * 365),
-        "email": req.user.email,
-        "first_name": req.user.first_name,
-        "last_name": req.user.last_name,
-        "external_id": req.user.id,
-      };
-      const token = jwt.sign(payload, METABASE_SECRET);
-      res.json({ jwt: token });
-    });
-    ```
-  - *Petición API con clave (curl):*
-    ```bash
-    curl -H 'X-API-Key: TU_API_KEY' \
-      https://tu-metabase.com/api/dashboard
-    ```
-  - *Variables de entorno esenciales para Docker:*
-    ```bash
-    docker run -d -p 3000:3000 --name metabase \
-      -e MB_DB_TYPE=postgres \
-      -e MB_DB_DBNAME=metabase \
-      -e MB_DB_PORT=5432 \
-      -e MB_DB_USER=mbuser \
-      -e MB_DB_PASS=secret \
-      -e MB_DB_HOST=postgres \
-      metabase/metabase
-    ```
-- **Cómo integrarlo en proyectos:**
-  - **Embebido modular (SDK React):** Instala `@metabase/embedding-sdk-react`, configura CORS en Metabase (Admin > Embedding), y usa componentes como `<MetabaseDashboard />` o `<MetabaseQuestion />`. Ideal para apps React que necesitan dashboards embebidos con control fino.
-  - **Embebido SSO con JWT:** Configura JWT SSO en Metabase (requiere Pro/Enterprise). Tu backend genera tokens JWT firmados con la clave secreta de Metabase. El frontend usa `defineMetabaseAuthConfig` para autenticar al usuario. Permite permisos granulares por usuario y data segregation multi-tenant.
-  - **Guest Embed:** Para embeber sin autenticación de usuarios. Genera JWT simples con `jsonwebtoken` en tu backend. Los componentes web `<metabase-dashboard>` y `<metabase-question>` se cargan vía el script `app/embed.js` de Metabase. Ideal para dashboards públicos.
-  - **API REST:** Autentica con `X-API-Key` header. Los endpoints cubren dashboards (`/api/dashboard`), preguntas/cards (`/api/card`), bases de datos (`/api/database`), usuarios/grupos (`/api/user`, `/api/group`), colecciones, etc. Documentación completa en `docs/api.html` del repo.
-  - **Embebido de app completa:** Embed todo Metabase en un iframe con SSO. Tu backend maneja la autenticación y redirige al usuario con el JWT. Ideal para portales de clientes.
-  - **CI/CD y despliegue:** Docker image oficial en `metabase/metabase` y `metabase/metabase-enterprise`. Soporta PostgreSQL/MySQL como DB de aplicación. Se puede desplegar en AWS Elastic Beanstalk, Azure, Kubernetes (sin chart oficial), o como servicio systemd.
-  - **Data Studio y transforms:** Para pipelines de datos, usa Metabase Data Studio para crear transforms (similar a dbt) que conviertan datos crudos en tablas analíticas.
-  - **Referencias:** Repo de ejemplo de embebido: https://github.com/metabase/shoppy, docs de SDK: https://www.metabase.com/docs/latest/embedding/sdk/introduction
-- **Fecha de aprendizaje:** 2026-05-26
+# Metabase — Dashboards Embebidos con BI
+
+Plataforma de Business Intelligence open-source (47K⭐) que permite crear dashboards interactivos desde SQL o constructor visual, embekerlos en apps propias, y exponerlos via API REST.
+
+## Arquitectura
+
+```
+Bases de datos (PostgreSQL, MySQL, BigQuery, etc.)
+        │
+        ▼
+    ┌─────────────┐
+    │   Metabase   │ ← Metabot AI, SQL, Constructor visual
+    │   Server     │
+    └──────┬──────┘
+           │
+     ┌─────┴──────┐
+     ▼             ▼
+API REST       Embedding
+(preguntas,    (iframe o
+ dashboards,   JWT signed
+ tarjetas)     en tu web)
+```
+
+## Instalación Rápida
+
+```bash
+# Docker (recomendado)
+docker run -d -p 3000:3000 \
+  -e MB_DB_TYPE=postgres \
+  -e MB_DB_DBNAME=metabase \
+  -e MB_DB_HOST=localhost \
+  -e MB_DB_USER=metabase \
+  -e MB_DB_PASS=secret \
+  --name metabase metabase/metabase:latest
+
+# O con docker-compose
+```
+
+## Patrón: API REST — Consultar datos desde Node.js
+
+```javascript
+// Consultar una pregunta (card) existente via API
+const METABASE_URL = 'https://metabase.tudominio.com';
+const API_KEY = process.env.METABASE_API_KEY;
+
+async function queryCard(cardId, params = {}) {
+  const resp = await fetch(`${METABASE_URL}/api/card/${cardId}/query`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
+    },
+    body: JSON.stringify({ parameters: params }),
+  });
+  if (!resp.ok) throw new Error(`Metabase ${resp.status}: ${await resp.text()}`);
+  return resp.json(); // { data: { rows: [...], cols: [...] } }
+}
+
+// Ejemplo: query datos de ventas
+const ventas = await queryCard(42, { mes: '2026-05' });
+console.log(ventas.data.rows); // [[1234, "Mayo", 45000], ...]
+```
+
+## Patrón: Embedding Seguro con JWT
+
+Embeber dashboards en tu app sin que los usuarios vean la interfaz de Metabase.
+
+```javascript
+const jwt = require('jsonwebtoken');
+
+const METABASE_SECRET = process.env.METABASE_EMBEDDING_SECRET;
+const METABASE_SITE_URL = 'https://metabase.tudominio.com';
+
+function getEmbeddedUrl(dashboardId, params = {}) {
+  const payload = {
+    resource: { dashboard: dashboardId },
+    params,
+    exp: Math.round(Date.now() / 1000) + 60 * 10, // 10 min
+  };
+  const token = jwt.sign(payload, METABASE_SECRET);
+  return `${METABASE_SITE_URL}/embed/dashboard/${token}#bordered=false&titled=false`;
+}
+
+// Render en frontend
+// <iframe src="${getEmbeddedUrl(5, { tienda: 'Madrid' })}"
+//   width="100%" height="800" frameborder="0"></iframe>
+```
+
+## Patrón: Metabot AI (consulta en lenguaje natural)
+
+```javascript
+// Preguntar a Metabase en lenguaje natural
+async function askMetabase(question, databaseId) {
+  const resp = await fetch(`${METABASE_URL}/api/mbac`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
+    },
+    body: JSON.stringify({
+      database_id: databaseId,
+      question,
+    }),
+  });
+  return resp.json(); // { answer: "...", sql: "...", visualization: "..." }
+}
+
+// Uso: askMetabase("¿Cuántas estaciones BiciMAD tienen menos de 3 bicis?")
+```
+
+## Patrón: Alertas Programadas
+
+```javascript
+// Crear alerta por email cuando un resultado cambia
+async function createAlert(cardId, channel = 'email') {
+  await fetch(`${METABASE_URL}/api/alert`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
+    },
+    body: JSON.stringify({
+      card: { id: cardId },
+      channels: [{ channel_type: channel }],
+      alert_condition: 'goal',
+      alert_first_only: false,
+    }),
+  });
+}
+```
+
+## Buenas prácticas
+
+1. **Dos modos de consulta** — SQL (control total) o constructor visual (no-code)
+2. **embedding JWT** — más seguro que embedding público, filtrar por usuario
+3. **API Key para server-to-server** — no exponer en frontend
+4. **Caché de resultados** — Metabase cachea queries (configurable)
+5. **Metabot solo para queries simples** — SQL nativo para consultas complejas
+6. **Parámetros con tipo** — fecha, número, texto, categoría, ubicación
+
+## Tabla comparativa: Metabase vs ESIOS Dashboard
+
+| Aspecto | Metabase | ESIOS Dashboard |
+|---------|----------|----------------|
+| **Query** | SQL / visual builder | API REST custom |
+| **Frontend** | Auto-generado + embed | Custom (vanilla JS) |
+| **Base datos** | 25+ (Postgres, MySQL, etc.) | API externa (no DB) |
+| **Cache** | Integrado | Custom (memoria + disco) |
+| **Auth** | Email, SSO, JWT embedding | Token API + env vars |
+| **Alertas** | Email, Slack, webhook | N/A |
+| **Cuando usar** | Datos en DB, BI general | APIs específicas, control total |
+
+## Pitfalls
+
+- ❌ **No exponer API Key** — Metabase API key da acceso de admin
+- ❌ **embedding JWT expira** — regenerar token antes de que caduque
+- ❌ **Caché demasiado larga** — datos stale para dashboards en tiempo real
+- ❌ **Metabot sin contexto** — necesita nombres de tablas claros en la DB
+- ❌ **Muchos embeddings** — cada iframe carga recursos del servidor
+
+## Referencia
+
+- Web: https://metabase.com
+- Repo: https://github.com/metabase/metabase (47K⭐)
+- API Docs: https://www.metabase.com/docs/latest/api-documentation
+- Skills relacionadas: backend/endpoints-dashboard-rest, frontend/estado-persistencia
