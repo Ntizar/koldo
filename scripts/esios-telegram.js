@@ -96,20 +96,44 @@ const TARGET_DATE = process.argv[2] || getYesterdayStr();
 // ─── Indicadores que SÍ funcionan (verificados contra debug) ─────
 // Solo usamos los que devuelven datos reales
 const INDICATORS = [
-  { name: 'precios',           id: 1001,  unit: 'price_eur_mwh', label: 'PVPC' },
-  { name: 'demanda',           id: 1293,  unit: 'power_mw', label: 'Demanda real' },
-  { name: 'demandaPrev',       id: 2052,  unit: 'power_mw', label: 'Demanda prevista' },
-  { name: 'solar',             id: 10205, unit: 'power_mw', label: 'Solar medida' },
-  { name: 'genRenReal',        id: 10351, unit: 'power_mw', label: 'Gen real renovable' },
-  { name: 'genNoRenReal',      id: 10352, unit: 'power_mw', label: 'Gen real no renovable' },
-  { name: 'co2Libre',          id: 10006, unit: 'power_mw', label: 'Gen limpia CO2' },
-  { name: 'co2Ratio',          id: 10355, unit: 'emissions_tco2_per_h', label: 'CO2 asociado' },
-  { name: 'interFR',           id: 10207, unit: 'energy_mwh', label: 'Interconexión Francia' },
-  { name: 'interPT',           id: 10208, unit: 'energy_mwh', label: 'Interconexión Portugal' },
+  { name: 'precios',           id: 1001,  label: 'PVPC' },
+  { name: 'demanda',           id: 1293,  label: 'Demanda real' },
+  { name: 'demandaPrev',       id: 2052,  label: 'Demanda prevista' },
+  { name: 'solar',             id: 10205, label: 'Solar medida' },
+  { name: 'genRenReal',        id: 10351, label: 'Gen real renovable' },
+  { name: 'genNoRenReal',      id: 10352, label: 'Gen real no renovable' },
+  { name: 'co2Libre',          id: 10006, label: 'Gen limpia CO2' },
+  { name: 'co2Ratio',          id: 10355, label: 'CO2 asociado' },
+  { name: 'interFR',           id: 10207, label: 'Interconexión Francia' },
+  { name: 'interPT',           id: 10208, label: 'Interconexión Portugal' },
 ];
 
-// Indicadores que necesitan conversión MWh → MW (/1000)
-const TO_MW_INDICATORS = new Set(['energy_mwh']);
+// ─── Conversión de unidades — MISMA LÓGICA que el dashboard ─────
+// Fuente: /root/workspace/esios-dashboard/src/shared/esios-units.js
+const DIRECT_IDS = new Set([
+  1001,       // PVPC €/MWh
+  1777, 1778, 1779, 1780,  // Previsión D+1
+  10358, 10359,  // Previsión renovable D+1
+  10355, 10356,  // CO2 ratio
+  10207, 10208, 10209,  // Interconexiones MW DIRECTOS
+]);
+
+const DIV10_IDS = new Set([
+  10206, 10006, 1293, 2052, 10232, 10351, 10352, 2198, 2199,
+]);
+
+function convertEsiosValue(indicatorId, rawValue) {
+  if (rawValue === null || rawValue === undefined) return null;
+  const num = Number(rawValue);
+  if (!Number.isFinite(num)) return null;
+
+  if (DIRECT_IDS.has(indicatorId)) return Math.round(num * 100) / 100;
+  if (indicatorId >= 1 && indicatorId <= 462) return Math.round(num / 1000 * 100) / 100;
+  if (indicatorId === 623) return Math.round(num / 1000 * 100) / 100;
+  if (indicatorId >= 2000 && indicatorId <= 2099) return Math.round(num / 10 * 100) / 100;
+  if (DIV10_IDS.has(indicatorId)) return Math.round(num / 10 * 100) / 100;
+  return Math.round(num / 10 * 100) / 100;
+}
 
 // ─── Helpers HTTP ────────────────────────────────────────────────
 function esiosFetch(p) {
@@ -144,12 +168,10 @@ function fetchIndicator(id, dateStr) {
   return esiosFetch(`/indicators/${id}?start_date=${encodeURIComponent(start)}&end_date=${encodeURIComponent(end)}&time_trunc=hour`);
 }
 
-function parseValues(resp, unit) {
+function parseValues(resp, indicatorId) {
   if (!resp || !resp.indicator || !resp.indicator.values) return [];
-  const toMw = TO_MW_INDICATORS.has(unit);
   return resp.indicator.values.map(v => {
-    let val = v.value == null ? null : Number(v.value);
-    if (val != null && toMw) val = val / 1000;
+    const val = convertEsiosValue(indicatorId, v.value);
     const dt = new Date(v.datetime || v.datetime_local || v.tz_time);
     const parts = new Intl.DateTimeFormat('en-CA', {
       timeZone: 'Europe/Madrid',
@@ -510,7 +532,7 @@ async function fetchAll() {
   INDICATORS.forEach((ind, i) => {
     const result = results[i];
     if (result.status === 'fulfilled') {
-      data[ind.name] = parseValues(result.value, ind.unit);
+      data[ind.name] = parseValues(result.value, ind.id);
     } else {
       console.error(`  ⚠️ ${ind.name} (ID ${ind.id}): ${result.reason.message}`);
       data[ind.name] = [];
