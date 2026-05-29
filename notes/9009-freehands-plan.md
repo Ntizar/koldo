@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 | **Inicio:** 29/05/2026
-|**Última actualización:** 29/05/2026 — ✅ #2 Dead zones en bordes de pantalla
+|| **Última actualización:** 29/05/2026 — ✅ #5 Clic por guiño (blink detection via EAR) |
 
 ## Mejoras
 
@@ -12,9 +12,9 @@ Control del PC sin manos: mirada + gestos + voz.
 |---|---|---|---|---|---|---|
 | 1 | Scroll por gesto con palma abierta | Gestos | baja | `fusion/fusion.py`, `state_machine.py`, `profiles/` | Probar scroll vertical al subir/bajar palma | ✅ hecha 29/05/2026 |
 || 2 | Dead zones en bordes de pantalla | Gaze | baja | `gaze/dead_zones.py`, `main.py` | El cursor no debe ir a coordenadas extremas | ✅ hecha 29/05/2026 |
-| 3 | Feedback auditivo de confirmación | UX | baja | `ui/overlay.py`, `main.py` | Beep al recibir gesto/comando de voz | ⏳ pendiente |
-| 4 | Comandos de sistema por voz (show desktop, screenshot, volume) | Voz | baja | `voice/whisper_listener.py`, `actions/dispatcher.py` | Probar "show desktop", "screenshot", "volume up" | ⏳ pendiente |
-| 5 | Clic por guiño (guiño derecho = clic izq, guiño izq = clic der) | Gaze | baja | `gaze/tracker.py`, `main.py`, `profiles/` | Probar parpadeo intencional como click | ⏳ pendiente |
+|| 3 | Feedback auditivo de confirmación | UX | baja | `ui/audio_feedback.py`, `main.py`, `profiles/store.py` | Beep alto en gesto, beep bajo en voz | ✅ hecha 29/05/2026 |
+|| 4 | Comandos de sistema por voz (show desktop, screenshot, volume) | Voz | baja | `voice/whisper_listener.py`, `actions/dispatcher.py`, `main.py` | Probar "show desktop", "screenshot", "volume up" | ✅ hecha 29/05/2026 |
+| 5 | Clic por guiño (guiño derecho = clic izq, guiño izq = clic der) | Gaze | baja | `gaze/blink_detector.py`, `gaze/tracker.py`, `fusion/fusion.py`, `main.py` | Probar parpadeo intencional como click | ✅ hecha 29/05/2026 |
 | 6 | Configuración de gestos vía JSON externo | Perfiles | baja | `profiles/store.py`, `profiles/__init__.py` | Cargar gestos desde JSON, merge con profile | ⏳ pendiente |
 | 7 | Vosk offline como backend de voz alternativo | Voz | baja | `voice/whisper_listener.py`, `config.py`, `profiles/` | Instalar Vosk, probar comando offline | ⏳ pendiente |
 | 8 | Priorización dinámica de canales (gesto vs voz) | Fusión | media | `fusion/fusion.py`, `main.py` | Si gesto y voz chocan, elegir el de mayor confianza | ⏳ pendiente |
@@ -33,8 +33,8 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-| Completadas:** 2 / 20 (10%)
-**Pendientes:** 19
+|||| **Completadas:** 5 / 20 (25%)
+**Pendientes:** 16
 
 ## Orden de implementación
 
