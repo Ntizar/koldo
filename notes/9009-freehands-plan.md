@@ -4,13 +4,13 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 **Inicio:** 29/05/2026
-**Última actualización:** 29/05/2026
+**Última actualización:** 29/05/2026 — ✅ #1 Scroll por gesto con palma abierta
 
 ## Mejoras
 
-| # | Mejora | Área | Dificultad | Archivos clave | Verificación | Estado |
+| # | Mejora | Área | Dificultad | Archivos | Verificación | Estado |
 |---|---|---|---|---|---|---|
-| 1 | Scroll por gesto con palma abierta | Gestos | baja | `fusion/fusion.py`, `fusion/state_machine.py`, `profiles/` | Probar scroll vertical al subir/bajar palma | ⏳ pendiente |
+| 1 | Scroll por gesto con palma abierta | Gestos | baja | `fusion/fusion.py`, `state_machine.py`, `profiles/` | Probar scroll vertical al subir/bajar palma | ✅ hecha 29/05/2026 |
 | 2 | Dead zones en bordes de pantalla | Gaze | baja | `gaze/tracker.py`, `main.py` | El cursor no debe ir a coordenadas extremas | ⏳ pendiente |
 | 3 | Feedback auditivo de confirmación | UX | baja | `ui/overlay.py`, `main.py` | Beep al recibir gesto/comando de voz | ⏳ pendiente |
 | 4 | Comandos de sistema por voz (show desktop, screenshot, volume) | Voz | baja | `voice/whisper_listener.py`, `actions/dispatcher.py` | Probar "show desktop", "screenshot", "volume up" | ⏳ pendiente |
@@ -33,8 +33,8 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-**Completadas:** 0 / 20 (0%)
-**Pendientes:** 20
+**Completadas:** 1 / 20 (5%)
+**Pendientes:** 19
 
 ## Orden de implementación
 
