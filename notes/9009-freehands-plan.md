@@ -3,15 +3,15 @@
 Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntizar/FreeHands).
 Control del PC sin manos: mirada + gestos + voz.
 
-**Inicio:** 29/05/2026
-**Última actualización:** 29/05/2026 — ✅ #1 Scroll por gesto con palma abierta
+| **Inicio:** 29/05/2026
+|**Última actualización:** 29/05/2026 — ✅ #2 Dead zones en bordes de pantalla
 
 ## Mejoras
 
 | # | Mejora | Área | Dificultad | Archivos | Verificación | Estado |
 |---|---|---|---|---|---|---|
 | 1 | Scroll por gesto con palma abierta | Gestos | baja | `fusion/fusion.py`, `state_machine.py`, `profiles/` | Probar scroll vertical al subir/bajar palma | ✅ hecha 29/05/2026 |
-| 2 | Dead zones en bordes de pantalla | Gaze | baja | `gaze/tracker.py`, `main.py` | El cursor no debe ir a coordenadas extremas | ⏳ pendiente |
+|| 2 | Dead zones en bordes de pantalla | Gaze | baja | `gaze/dead_zones.py`, `main.py` | El cursor no debe ir a coordenadas extremas | ✅ hecha 29/05/2026 |
 | 3 | Feedback auditivo de confirmación | UX | baja | `ui/overlay.py`, `main.py` | Beep al recibir gesto/comando de voz | ⏳ pendiente |
 | 4 | Comandos de sistema por voz (show desktop, screenshot, volume) | Voz | baja | `voice/whisper_listener.py`, `actions/dispatcher.py` | Probar "show desktop", "screenshot", "volume up" | ⏳ pendiente |
 | 5 | Clic por guiño (guiño derecho = clic izq, guiño izq = clic der) | Gaze | baja | `gaze/tracker.py`, `main.py`, `profiles/` | Probar parpadeo intencional como click | ⏳ pendiente |
@@ -33,7 +33,7 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-**Completadas:** 1 / 20 (5%)
+| Completadas:** 2 / 20 (10%)
 **Pendientes:** 19
 
 ## Orden de implementación
