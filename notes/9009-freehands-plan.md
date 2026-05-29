@@ -1,0 +1,44 @@
+# Plan 9009 — FreeHands
+
+Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntizar/FreeHands).
+Control del PC sin manos: mirada + gestos + voz.
+
+**Inicio:** 29/05/2026
+**Última actualización:** 29/05/2026
+
+## Mejoras
+
+| # | Mejora | Área | Dificultad | Archivos clave | Verificación | Estado |
+|---|---|---|---|---|---|---|
+| 1 | Scroll por gesto con palma abierta | Gestos | baja | `fusion/fusion.py`, `fusion/state_machine.py`, `profiles/` | Probar scroll vertical al subir/bajar palma | ⏳ pendiente |
+| 2 | Dead zones en bordes de pantalla | Gaze | baja | `gaze/tracker.py`, `main.py` | El cursor no debe ir a coordenadas extremas | ⏳ pendiente |
+| 3 | Feedback auditivo de confirmación | UX | baja | `ui/overlay.py`, `main.py` | Beep al recibir gesto/comando de voz | ⏳ pendiente |
+| 4 | Comandos de sistema por voz (show desktop, screenshot, volume) | Voz | baja | `voice/whisper_listener.py`, `actions/dispatcher.py` | Probar "show desktop", "screenshot", "volume up" | ⏳ pendiente |
+| 5 | Clic por guiño (guiño derecho = clic izq, guiño izq = clic der) | Gaze | baja | `gaze/tracker.py`, `main.py`, `profiles/` | Probar parpadeo intencional como click | ⏳ pendiente |
+| 6 | Configuración de gestos vía JSON externo | Perfiles | baja | `profiles/store.py`, `profiles/__init__.py` | Cargar gestos desde JSON, merge con profile | ⏳ pendiente |
+| 7 | Vosk offline como backend de voz alternativo | Voz | baja | `voice/whisper_listener.py`, `config.py`, `profiles/` | Instalar Vosk, probar comando offline | ⏳ pendiente |
+| 8 | Priorización dinámica de canales (gesto vs voz) | Fusión | media | `fusion/fusion.py`, `main.py` | Si gesto y voz chocan, elegir el de mayor confianza | ⏳ pendiente |
+| 9 | Snap-to-grid UI (pegar cursor a centro de elemento tras 300ms) | Gaze | media | `main.py`, `fusion/fusion.py` | Estabilizar cursor en elementos UI | ⏳ pendiente |
+| 10 | Menú OSD radial con acciones (mano abierta → menú circular) | UX | media | `ui/overlay.py`, `ui/__init__.py`, `main.py` | Menú circular con acciones frecuentes | ⏳ pendiente |
+| 11 | Calibración 9 puntos con regresión polinomial | Gaze | media | `gaze/calibration.py`, `gaze/tracker.py` | Reemplazar calibración actual por 9 puntos | ⏳ pendiente |
+| 12 | Overlay transparente PyQt6 sobre escritorio | UI | media | `ui/overlay.py`, `main.py` | Widget transparente full-screen | ⏳ pendiente |
+| 13 | Doble parpadeo rápido = clic, prolongado = drag | Gaze | media | `gaze/tracker.py`, `main.py` | Detectar patrones de parpadeo | ⏳ pendiente |
+| 14 | Fusión multimodal con operador AND (voz + mirada) | Fusión | media | `fusion/fusion.py`, `main.py` | Acción solo si voz y mirada coinciden | ⏳ pendiente |
+| 15 | Filtro Kalman predictivo para suavizado de cursor | Gaze | alta | `gaze/tracker.py`, `main.py` | Reemplazar filtro exponencial por Kalman | ⏳ pendiente |
+| 16 | Sistema de plugins Python (pipeline extensible) | Arquitectura | alta | `fusion/`, `main.py`, nueva carpeta `plugins/` | Pipeline Camera→Detector→Filter→Plugin→Executor | ⏳ pendiente |
+| 17 | 6DoF head pose para desplazamiento grueso | Gaze | alta | `gaze/tracker.py`, `gaze/__init__.py` | Cabeza para scroll/movimiento amplio | ⏳ pendiente |
+| 18 | Unidades de acción facial (sonrisa, ceño, sorpresa) | Gestos | alta | `gestures/face_tracker.py`, `fusion/` | AUs faciales como gestos adicionales | ⏳ pendiente |
+| 19 | Teclado virtual con selección por mirada | UX | alta | `ui/`, nuevo módulo `ui/virtual_keyboard.py` | Escribir sin manos | ⏳ pendiente |
+| 20 | Modo dictado (mirar campo + decir "escribe" + dictar) | Voz | alta | `voice/`, `ui/`, `main.py` | Dictado multimodal | ⏳ pendiente |
+
+## Progreso
+
+**Completadas:** 0 / 20 (0%)
+**Pendientes:** 20
+
+## Orden de implementación
+
+Se priorizan las de dificultad **baja** primero (victorias rápidas que dan valor inmediato).
+Luego **media**, y finalmente **alta** (requieren cambios arquitectónicos).
+
+Cada ejecución del cron 9009-FreeHands coge la siguiente mejora ⏳ con menor nº.
