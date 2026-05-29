@@ -99,7 +99,7 @@ const INDICATORS = [
   { name: 'precios',           id: 1001,  label: 'PVPC' },
   { name: 'demanda',           id: 1293,  label: 'Demanda real' },
   { name: 'demandaPrev',       id: 2052,  label: 'Demanda prevista' },
-  { name: 'solar',             id: 10205, label: 'Solar medida' },
+  { name: 'solar',             id: 10206, label: 'Solar real' },
   { name: 'genRenReal',        id: 10351, label: 'Gen real renovable' },
   { name: 'genNoRenReal',      id: 10352, label: 'Gen real no renovable' },
   { name: 'co2Libre',          id: 10006, label: 'Gen limpia CO2' },
