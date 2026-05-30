@@ -24,7 +24,7 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 |---|--------|-------------|-------------------|------------|--------------|
 || 1 | Crear package.json + scripts | Incluir dependencias (vue, plotly), scripts de dev y build | package.json | 🔵 Baja | `npm install` funciona, `npm run dev` levanta servidor | ✅ hecha (30/05/2026) |
 | 2 | Exportación de resultados CSV | Botón en dashboard para descargar resultados en CSV | app.js, charts.js | 🔵 Baja | Se descarga un CSV con columnas: hora, demanda, nuclear, solar, eólica, gas, precio, emisiones | ✅ hecha (30/05/2026) |
-| 3 | Indicador de intensidad de carbono | KPI nuevo: gCO2/kWh en el dashboard hero | simulator.js, app.js, app.css | 🔵 Baja | Aparece nuevo KPI en hero con valor gCO2/kWh, color cambia según nivel |
+|| 3 | Indicador de intensidad de carbono | KPI nuevo: gCO2/kWh en el dashboard hero | simulator.js, app.js, app.css | 🔵 Baja | Aparece nuevo KPI en hero con valor gCO2/kWh, color cambia según nivel | ✅ hecha (30/05/2026) |
 | 4 | Tooltips mejorados en gráficos | Añadir más información contextual en hover de gráficos Plotly | charts.js | 🔵 Baja | Al pasar el ratón sobre gráficos aparecen tooltips con datos adicionales |
 | 5 | Modo presentación | Pantalla completa con KPIs grandes para presentaciones | index.html, app.js, app.css | 🟡 Media | Tecla P activa modo presentación con KPIs grandes y gráficos centrados |
 | 6 | Mini sparklines en KPIs | Mostrar mini gráfico de tendencia en cada tarjeta KPI del dashboard | app.js, charts.js, app.css | 🟡 Media | Cada KPI card muestra un mini gráfico de líneas de las últimas 7 horas |
@@ -81,21 +81,25 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ---
 
-### Mejora 3: Indicador de intensidad de carbono
+### Mejora 3: Indicador de intensidad de carbono ✅
 **Dificultad:** 🔵 Baja  
-**Archivos afectados:** simulator.js, app.js, app.css  
-**Descripción:** Calcular e mostrar intensidad de carbono horaria (gCO2/kWh) como nuevo KPI en el dashboard hero. Se calcula como: (emisiones_totales * 1000000) / (demanda_total * 1000). Color dinámico: verde < 100, amarillo 100-200, naranja 200-300, rojo > 300.
+**Archivos afectados:** simulator.js, app.js  
+**Descripción:** Calcular e mostrar intensidad de carbono horaria (gCO2/kWh) como nuevo KPI en el dashboard hero. Se calcula como: (emisiones_totales * 10^12) / (demanda_total_GWh * 10^6). Color dinámico: verde < 100, neutral 100-200, naranja 200-300, rojo > 300.
+**Completada:** 30 de mayo de 2026
 
 **Pasos:**
-1. Calcular intensidadCarbona en simulator.js
-2. Añadir a RESULT_KEYS
-3. Mostrar como nuevo KPI card en summaryStats
-4. Añadir estilo de color dinámico en app.css
+1. Calcular intensidadCarbona en simulator.js tras el cálculo de coberturaRenovable
+2. Añadir 'intensidadCarbona' a RESULT_KEYS en app.js
+3. Añadir intensidadCarbona: 0 a emptyResults()
+4. Crear función intensidadCarbonaTone(value) con umbrales <100/200/300
+5. Añadir nuevo KPI en summaryStats computed
+6. Verificar valor razonable (~145 gCO2/kWh para España)
 
 **Verificación:**
 - Nuevo KPI "Intensidad CO2" en hero con valor gCO2/kWh
-- Color cambia según nivel (verde/amarillo/naranja/rojo)
-- Valor razonable (~150-250 gCO2/kWh para España)
+- Color cambia según nivel (verde/neutral/naranja/rojo)
+- Valor razonable (~145 gCO2/kWh para España con 36 Mt / 248 TWh)
+- Commit fdd0a58 pushado a main
 
 ---
 
