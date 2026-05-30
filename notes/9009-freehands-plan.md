@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 | **Inicio:** 29/05/2026 |
-| **Última actualización:** 30/05/2026 — #25 Air scroll vertical con mano (gesto de barrido) |
+| **Última actualización:** 30/05/2026 — #17 Head pose 6DoF para desplazamiento grueso |
 
 ## Mejoras
 
@@ -26,7 +26,7 @@ Control del PC sin manos: mirada + gestos + voz.
 | 14 | Fusión multimodal con operador AND (voz + mirada) | Fusión | media | `fusion/fusion.py`, `main.py` | Acción solo si voz y mirada coinciden | ✅ hecha 30/05/2026 — 17 tests unitarios pasando |
 | 15 | Filtro Kalman predictivo para suavizado de cursor | Gaze | alta | `gaze/kalman_filter.py`, `gaze/calibration.py`, `gaze/__init__.py` | 18 tests unitarios pasando, reemplaza EMA por Kalman 2-D con modelo de velocidad constante | ✅ hecha 30/05/2026 — 18 tests unitarios pasando, 81 tests totales |
 | 16 | Sistema de plugins Python (pipeline extensible) | Arquitectura | alta | `fusion/`, `main.py`, nueva carpeta `plugins/` | Pipeline Camera→Detector→Filter→Plugin→Executor | ✅ hecha 30/05/2026 — 24 tests unitarios pasando, 105 tests totales |
-| 17 | 6DoF head pose para desplazamiento grueso | Gaze | alta | `gaze/tracker.py`, `gaze/__init__.py` | Cabeza para scroll/movimiento amplio | ⏳ pendiente |
+| 17 | Head pose 6DoF para desplazamiento grueso | Gaze | alta | `gaze/head_pose.py`, `gaze/tracker.py`, `gaze/__init__.py`, `fusion/fusion.py`, `main.py` | 15 tests unitarios pasando, 131 tests totales | ✅ hecha 30/05/2026 |
 | 18 | Unidades de acción facial (sonrisa, ceño, sorpresa) | Gestos | alta | `gestures/face_tracker.py`, `fusion/` | AUs faciales como gestos adicionales | ⏳ pendiente |
 | 19 | Teclado virtual con selección por mirada | UX | alta | `ui/`, nuevo módulo `ui/virtual_keyboard.py` | Escribir sin manos | ⏳ pendiente |
 | 20 | Modo dictado (mirar campo + decir "escribe" + dictar) | Voz | alta | `voice/`, `ui/`, `main.py` | Dictado multimodal | ⏳ pendiente |
@@ -43,8 +43,8 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-| **Completadas:** 17 / 30 (57%) |
-| **Pendientes:** 13 |
+| **Completadas:** 18 / 30 (60%) |
+| **Pendientes:** 12 |
 
 ## Orden de implementación
 
