@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 | **Inicio:** 29/05/2026
-| **Última actualización:** 30/05/2026 — ✅ #8 Priorización dinámica de canales (gesto vs voz) |
+| **Última actualización:** 30/05/2026 — ✅ #9 Snap-to-grid UI (pegar cursor a centro de elemento) |
 
 ## Mejoras
 
@@ -18,7 +18,7 @@ Control del PC sin manos: mirada + gestos + voz.
 | 6 | Configuración de gestos vía JSON externo | Perfiles | baja | `profiles/store.py`, `profiles/__init__.py`, `gesture_profiles/`, `tests/test_gesture_profiles.py` | 12 tests unitarios pasando, ejemplos gaming.json y accessibility.json | ✅ hecha 29/05/2026 |
 || 7 | Vosk offline como backend de voz alternativo | Voz | baja | `voice/whisper_listener.py`, `config.py`, `profiles/store.py` | Instalar Vosk, probar comando offline | ✅ hecha 30/05/2026 |
 || 8 | Priorización dinámica de canales (gesto vs voz) | Fusión | media | `fusion/channel_priority.py`, `fusion/__init__.py`, `main.py` | 20 tests unitarios pasando | ✅ hecha 30/05/2026 |
-|| 9 | Snap-to-grid UI (pegar cursor a centro de elemento tras 300ms) | Gaze | media | `main.py`, `fusion/fusion.py` | Estabilizar cursor en elementos UI | ⏳ pendiente |
+|| 9 | Snap-to-grid UI (pegar cursor a centro de elemento tras 300ms) | Gaze | media | `main.py`, `fusion/fusion.py` | Estabilizar cursor en elementos UI | ✅ hecha 30/05/2026 |
 | 10 | Menú OSD radial con acciones (mano abierta → menú circular) | UX | media | `ui/overlay.py`, `ui/__init__.py`, `main.py` | Menú circular con acciones frecuentes | ⏳ pendiente |
 | 11 | Calibración 9 puntos con regresión polinomial | Gaze | media | `gaze/calibration.py`, `gaze/tracker.py` | Reemplazar calibración actual por 9 puntos | ⏳ pendiente |
 | 12 | Overlay transparente PyQt6 sobre escritorio | UI | media | `ui/overlay.py`, `main.py` | Widget transparente full-screen | ⏳ pendiente |
@@ -33,7 +33,7 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-||||||| **Completadas:** 8 / 20 (40%)
+|||||||| **Completadas:** 9 / 20 (45%)
 **Pendientes:** 12
 
 ## Orden de implementación
