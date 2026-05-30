@@ -11,7 +11,7 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | # | Mejora | Dificultad | Archivo(s) afectado(s) | Impacto |
 |---|--------|-----------|----------------------|---------|
 | 1 | Focus ring universal | ⭐ Baja | `ntizar.css` | Accesibilidad visual | ✅ hecha 2026-05-30 |
-| 2 | CSS Nesting nativo (prueba) | ⭐ Baja | `ntizar.motion.css` | Mantenibilidad |
+| 2 | CSS Nesting nativo (prueba) | ⭐ Baja | `ntizar.motion.css` | Mantenibilidad | ✅ hecha 2026-05-30 |
 | 3 | Expandir `:has()` a accordion | ⭐ Baja | `ntizar.ui.css` | Interactividad sin JS |
 | 4 | Container Queries para `.nz-card` | ⭐ Baja | `ntizar.css` | Responsividad contextual |
 | 5 | Bento Grid pattern | ⭐ Baja | `ntizar.patterns.css` | Layout moderno |
@@ -331,7 +331,7 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | # | Mejora | Tiempo estimado |
 |---|--------|----------------|
 | 1 | Focus ring universal | 30 min |
-| 2 | CSS Nesting nativo | 1 hora |
+| 2 | CSS Nesting nativo | 1 hora | ✅ hecha 2026-05-30 |
 | 3 | `:has()` accordion | 30 min |
 | 4 | Container Queries cards | 1 hora |
 | 5 | Bento grid pattern | 1 hora |

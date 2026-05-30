@@ -22,8 +22,8 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 | # | Mejora | Descripción | Archivos afectados | Dificultad | Verificación |
 |---|--------|-------------|-------------------|------------|--------------|
-| 1 | Crear package.json + scripts | Incluir dependencias (vue, plotly), scripts de dev y build | package.json | 🔵 Baja | `npm install` funciona, `npm run dev` levanta servidor |
-| 2 | Exportación de resultados CSV | Botón en dashboard para descargar resultados en CSV | app.js, charts.js | 🔵 Baja | Se descarga un CSV con columnas: hora, demanda, nuclear, solar, eólica, gas, precio, emisiones |
+|| 1 | Crear package.json + scripts | Incluir dependencias (vue, plotly), scripts de dev y build | package.json | 🔵 Baja | `npm install` funciona, `npm run dev` levanta servidor | ✅ hecha (30/05/2026) |
+| 2 | Exportación de resultados CSV | Botón en dashboard para descargar resultados en CSV | app.js, charts.js | 🔵 Baja | Se descarga un CSV con columnas: hora, demanda, nuclear, solar, eólica, gas, precio, emisiones | ✅ hecha (30/05/2026) |
 | 3 | Indicador de intensidad de carbono | KPI nuevo: gCO2/kWh en el dashboard hero | simulator.js, app.js, app.css | 🔵 Baja | Aparece nuevo KPI en hero con valor gCO2/kWh, color cambia según nivel |
 | 4 | Tooltips mejorados en gráficos | Añadir más información contextual en hover de gráficos Plotly | charts.js | 🔵 Baja | Al pasar el ratón sobre gráficos aparecen tooltips con datos adicionales |
 | 5 | Modo presentación | Pantalla completa con KPIs grandes para presentaciones | index.html, app.js, app.css | 🟡 Media | Tecla P activa modo presentación con KPIs grandes y gráficos centrados |
@@ -42,10 +42,11 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ## Detalle de cada mejora
 
-### Mejora 1: Crear package.json + scripts
+### Mejora 1: Crear package.json + scripts ✅
 **Dificultad:** 🔵 Baja  
-**Archivos afectados:** package.json (nuevo)  
+**Archivos afectados:** package.json (nuevo), vite.config.js (nuevo)  
 **Descripción:** Crear package.json con dependencias de desarrollo (vite, vitest) y producción (vue, plotly). Incluir scripts: dev, build, test, preview. Esto permite instalar dependencias, ejecutar tests y hacer build sin necesidad de CDN.
+**Completada:** 30 de mayo de 2026
 
 **Pasos:**
 1. Crear package.json con scripts dev/preview/build
@@ -62,16 +63,18 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ### Mejora 2: Exportación de resultados CSV
 **Dificultad:** 🔵 Baja  
-**Archivos afectados:** app.js, charts.js  
-**Descripción:** Añadir botón "Exportar CSV" en el dashboard que descarga un archivo con los datos horarios de la simulación actual: hora, demanda, nuclear, solar, eólica, offshore, hidráulica, gas, baterías, bombeo, importaciones, exportaciones, precio, emisiones CO2.
+**Archivos afectados:** index.html, app.js  
+**Descripción:** Añadir botón "Exportar CSV" en la barra de acciones del dashboard que descarga un archivo con los datos horarios de la simulación actual: hora, demanda, nuclear, solar, eólica, offshore, hidráulica, baterías, bombeo, V2G, carga baterías, carga bombeo, importación, exportación, gas, vertido, h2Flex, flexDown, precio.
+**Completada:** 30 de mayo de 2026
 
 **Pasos:**
-1. Añadir botón en la zona de acciones del dashboard
-2. Implementar función que genere CSV desde mixSimulado y resultados
+1. Añadir botón "Exportar CSV" en app-main__actions del index.html
+2. Implementar función exportarCSV() en app.js que genera CSV desde mixSimulado + preciosSimulados
 3. Disparar descarga con Blob + URL.createObjectURL
+4. Botón deshabilitado si no hay simulación ejecutada
 
 **Verificación:**
-- Botón visible en dashboard
+- Botón visible en dashboard junto a "Vista semanal/anual"
 - Archivo descargado con nombre `simulacion_YYYY-MM-DD.csv`
 - CSV con 8760 filas y columnas correctas
 - Se abre correctamente en Excel/Sheets

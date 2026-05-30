@@ -16,11 +16,11 @@
 
 | # | Mejora | Área | Dificultad | Archivos | Verificación | Estado |
 |---|---|---|---|---|---|---|
-| 1 | Arreglar tests fallidos (summary + time) — valores mock desactualizados tras eliminar time_trunc | Tests | baja | tests/summary.test.js, tests/time.test.js | npm test → 33/33 passing | ✅ completado |
-| 2 | Exportar datos a CSV por tab — botón "Descargar CSV" en cada tab | Frontend | baja | render.js, render-charts.js, styles.css | Botón visible, descarga funcional | ✅ completado |
-| 3 | Heatmap de precios semanal — visualización de 7 días con colores por precio | Precio | media | render.js, render-charts.js, data.js, styles.css, index.html | Heatmap visible, tooltips funcionales | ⏳ pendiente |
-| 4 | Modo oscuro/claro con toggle — CSS variables + localStorage | Global | baja | styles.css, index.html, config.js | Toggle visible, tema persiste | ⏳ pendiente |
-| 5 | Indicadores de tendencia (↑↓ %) — comparar con día anterior en métricas principales | Resumen | baja | render.js, data.js, api.js | Flechas visibles con % de cambio | ⏳ pendiente |
+| 1 | Arreglar tests fallidos (summary + time) — valores mock desactualizados tras eliminar time_trunc | Tests | baja | tests/summary.test.js, tests/time.test.js | npm test → 33/33 passing | ✅ completado 2026-05-30 |
+| 2 | Exportar datos a CSV por tab — botón "Descargar CSV" en cada tab | Frontend | baja | render.js, render-charts.js, styles.css | Botón visible, descarga funcional | ✅ completado 2026-05-30 |
+| 3 | Heatmap de precios semanal — visualización de 7 días con colores por precio | Precio | media | render.js, render-charts.js, data.js, styles.css, index.html | Heatmap visible, tooltips funcionales | ✅ completado 2026-05-30 (ya existente, datos reales ESIOS) |
+| 4 | Modo oscuro/claro con toggle — CSS variables + localStorage | Global | baja | styles.css, index.html, theme.js | Toggle visible, tema persiste | ✅ completado 2026-05-30 |
+| 5 | Indicadores de tendencia (↑↓ %) — comparar con día anterior en métricas principales | Resumen | baja | render.js, data.js, api.js | Flechas visibles con % de cambio | ✅ completado 2026-05-30 |
 | 6 | Estimación de ahorro económico — calcular €/día ahorrado por renovables | Resumen | baja | render.js, summary.service.js | Métrica de ahorro visible | ⏳ pendiente |
 | 7 | Zoom y panning en gráficos — integrar chartjs-plugin-zoom | Global | media | index.html, render.js, styles.css | Zoom funcional con rueda/mouse | ⏳ pendiente |
 | 8 | Timestamp de datos + enlace a fuente ESIOS — mostrar fecha/hora y enlace | Global | baja | render.js, index.html | Timestamp visible en footer/header | ⏳ pendiente |
