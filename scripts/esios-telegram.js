@@ -111,15 +111,18 @@ const INDICATORS = [
 // ─── Conversión de unidades — MISMA LÓGICA que el dashboard ─────
 // Fuente: /root/workspace/esios-dashboard/src/shared/esios-units.js
 const DIRECT_IDS = new Set([
-  1001,       // PVPC €/MWh
-  1777, 1778, 1779, 1780,  // Previsión D+1
-  10358, 10359,  // Previsión renovable D+1
-  10355, 10356,  // CO2 ratio
-  10207, 10208, 10209,  // Interconexiones MW DIRECTOS
-]);
-
-const DIV10_IDS = new Set([
-  10206, 10006, 1293, 2052, 10232, 10351, 10352, 2198, 2199,
+  1001,        // PVPC €/MWh
+  1777, 1778, 1779, 1780,  // Previsión D+1 (MW)
+  10358, 10359,  // Previsión renovable D+1 (MW)
+  10355, 10356,  // CO2 ratio (tCO₂/MWh, tCO₂/h)
+  10207, 10208, 10209,  // Interconexiones (MW) directos
+  10351, 10352,  // Gen real renovable/no renovable (MW)
+  10206,         // Gen real Solar (MW)
+  1293,          // Demanda real (MW)
+  2052,          // Demanda prevista (MW)
+  10006,         // Gen libre CO2 (MW)
+  10232,         // Potencia disponible (MW)
+  2198, 2199,    // Batería entrega/carga (MW)
 ]);
 
 function convertEsiosValue(indicatorId, rawValue) {
@@ -127,12 +130,15 @@ function convertEsiosValue(indicatorId, rawValue) {
   const num = Number(rawValue);
   if (!Number.isFinite(num)) return null;
 
+  // MW directos (sin conversión)
   if (DIRECT_IDS.has(indicatorId)) return Math.round(num * 100) / 100;
+
+  // PBF programados: MWh/periodo → MW (dividir entre 1000)
   if (indicatorId >= 1 && indicatorId <= 462) return Math.round(num / 1000 * 100) / 100;
   if (indicatorId === 623) return Math.round(num / 1000 * 100) / 100;
-  if (indicatorId >= 2000 && indicatorId <= 2099) return Math.round(num / 10 * 100) / 100;
-  if (DIV10_IDS.has(indicatorId)) return Math.round(num / 10 * 100) / 100;
-  return Math.round(num / 10 * 100) / 100;
+
+  // Fallback: sin multiplicador
+  return Math.round(num * 100) / 100;
 }
 
 // ─── Helpers HTTP ────────────────────────────────────────────────
@@ -165,12 +171,15 @@ function esiosFetch(p) {
 function fetchIndicator(id, dateStr) {
   const start = `${dateStr}T00:00:00+02:00`;
   const end = `${dateStr}T23:59:59+02:00`;
-  return esiosFetch(`/indicators/${id}?start_date=${encodeURIComponent(start)}&end_date=${encodeURIComponent(end)}&time_trunc=hour`);
+  return esiosFetch(`/indicators/${id}?start_date=${encodeURIComponent(start)}&end_date=${encodeURIComponent(end)}`);
 }
 
 function parseValues(resp, indicatorId) {
   if (!resp || !resp.indicator || !resp.indicator.values) return [];
-  return resp.indicator.values.map(v => {
+
+  // Agrupar valores por hora y promediar (12 valores de 5 min → 1 valor horario)
+  const hourlyMap = new Map();
+  for (const v of resp.indicator.values) {
     const val = convertEsiosValue(indicatorId, v.value);
     const dt = new Date(v.datetime || v.datetime_local || v.tz_time);
     const parts = new Intl.DateTimeFormat('en-CA', {
@@ -179,8 +188,23 @@ function parseValues(resp, indicatorId) {
       hour: '2-digit', hourCycle: 'h23',
     }).formatToParts(dt);
     const obj = Object.fromEntries(parts.map(p => [p.type, p.value]));
-    return { hora: parseInt(obj.hour), valor: val };
-  }).sort((a, b) => a.hora - b.hora);
+    const hora = parseInt(obj.hour);
+    if (!hourlyMap.has(hora)) hourlyMap.set(hora, []);
+    if (val != null) hourlyMap.get(hora).push(val);
+  }
+
+  // Promediar los valores de 5 min por hora
+  const result = [];
+  for (let h = 0; h < 24; h++) {
+    const vals = hourlyMap.get(h);
+    if (vals && vals.length > 0) {
+      const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+      result.push({ hora: h, valor: Math.round(avg * 100) / 100 });
+    } else {
+      result.push({ hora: h, valor: null });
+    }
+  }
+  return result;
 }
 
 function avg(values) {

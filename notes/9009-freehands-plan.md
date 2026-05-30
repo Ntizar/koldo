@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 | **Inicio:** 29/05/2026 |
-| **Última actualización:** 30/05/2026 — ✅ #11 Calibración 9 puntos con regresión polinomial |
+| **Última actualización:** 30/05/2026 — ✅ #12 Overlay transparente PyQt6 sobre escritorio |
 
 ## Mejoras
 
@@ -21,8 +21,8 @@ Control del PC sin manos: mirada + gestos + voz.
 || 9 | Snap-to-grid UI (pegar cursor a centro de elemento tras 300ms) | Gaze | media | `main.py`, `fusion/fusion.py` | Estabilizar cursor en elementos UI | ✅ hecha 30/05/2026 |
 | 10 | Menú OSD radial con acciones (mano abierta → menú circular) | UX | media | `ui/radial_menu.py`, `ui/__init__.py`, `main.py` | Menú circular con acciones frecuentes | ✅ hecha 30/05/2026 |
 | 11 | Calibración 9 puntos con regresión polinomial | Gaze | media | `gaze/calibration.py`, `gaze/tracker.py`, `config.py` | 15 tests unitarios pasando, modelo polinomial v5 con 27 features | ✅ hecha 30/05/2026 |
-| 12 | Overlay transparente PyQt6 sobre escritorio | UI | media | `ui/overlay.py`, `main.py` | Widget transparente full-screen | ⏳ pendiente |
-| 13 | Doble parpadeo rápido = clic, prolongado = drag | Gaze | media | `gaze/tracker.py`, `main.py` | Detectar patrones de parpadeo | ⏳ pendiente |
+|| 12 | Overlay transparente PyQt6 sobre escritorio | UI | media | `ui/overlay.py`, `ui/__init__.py` | Widget transparente full-screen con halo radial, anillo de posición y soporte multi-monitor | ✅ hecha 30/05/2026 |
+|| 13 | Doble parpadeo rápido = clic, prolongado = drag | Gaze | media | `gaze/tracker.py`, `main.py` | Detectar patrones de parpadeo | ⏳ pendiente |
 | 14 | Fusión multimodal con operador AND (voz + mirada) | Fusión | media | `fusion/fusion.py`, `main.py` | Acción solo si voz y mirada coinciden | ⏳ pendiente |
 | 15 | Filtro Kalman predictivo para suavizado de cursor | Gaze | alta | `gaze/tracker.py`, `main.py` | Reemplazar filtro exponencial por Kalman | ⏳ pendiente |
 | 16 | Sistema de plugins Python (pipeline extensible) | Arquitectura | alta | `fusion/`, `main.py`, nueva carpeta `plugins/` | Pipeline Camera→Detector→Filter→Plugin→Executor | ⏳ pendiente |
@@ -33,8 +33,8 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-|||||||| **Completadas:** 11 / 20 (55%)
-**Pendientes:** 11
+||||||||| **Completadas:** 12 / 20 (60%)
+**Pendientes:** 8
 
 ## Orden de implementación
 
