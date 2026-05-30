@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 | **Inicio:** 29/05/2026
-|| **Última actualización:** 29/05/2026 — ✅ #5 Clic por guiño (blink detection via EAR) |
+||| **Última actualización:** 30/05/2026 — ✅ #7 Backend Vosk offline para reconocimiento de voz |
 
 ## Mejoras
 
@@ -15,8 +15,8 @@ Control del PC sin manos: mirada + gestos + voz.
 || 3 | Feedback auditivo de confirmación | UX | baja | `ui/audio_feedback.py`, `main.py`, `profiles/store.py` | Beep alto en gesto, beep bajo en voz | ✅ hecha 29/05/2026 |
 || 4 | Comandos de sistema por voz (show desktop, screenshot, volume) | Voz | baja | `voice/whisper_listener.py`, `actions/dispatcher.py`, `main.py` | Probar "show desktop", "screenshot", "volume up" | ✅ hecha 29/05/2026 |
 | 5 | Clic por guiño (guiño derecho = clic izq, guiño izq = clic der) | Gaze | baja | `gaze/blink_detector.py`, `gaze/tracker.py`, `fusion/fusion.py`, `main.py` | Probar parpadeo intencional como click | ✅ hecha 29/05/2026 |
-| 6 | Configuración de gestos vía JSON externo | Perfiles | baja | `profiles/store.py`, `profiles/__init__.py` | Cargar gestos desde JSON, merge con profile | ⏳ pendiente |
-| 7 | Vosk offline como backend de voz alternativo | Voz | baja | `voice/whisper_listener.py`, `config.py`, `profiles/` | Instalar Vosk, probar comando offline | ⏳ pendiente |
+| 6 | Configuración de gestos vía JSON externo | Perfiles | baja | `profiles/store.py`, `profiles/__init__.py`, `gesture_profiles/`, `tests/test_gesture_profiles.py` | 12 tests unitarios pasando, ejemplos gaming.json y accessibility.json | ✅ hecha 29/05/2026 |
+|| 7 | Vosk offline como backend de voz alternativo | Voz | baja | `voice/whisper_listener.py`, `config.py`, `profiles/store.py` | Instalar Vosk, probar comando offline | ✅ hecha 30/05/2026 |
 | 8 | Priorización dinámica de canales (gesto vs voz) | Fusión | media | `fusion/fusion.py`, `main.py` | Si gesto y voz chocan, elegir el de mayor confianza | ⏳ pendiente |
 | 9 | Snap-to-grid UI (pegar cursor a centro de elemento tras 300ms) | Gaze | media | `main.py`, `fusion/fusion.py` | Estabilizar cursor en elementos UI | ⏳ pendiente |
 | 10 | Menú OSD radial con acciones (mano abierta → menú circular) | UX | media | `ui/overlay.py`, `ui/__init__.py`, `main.py` | Menú circular con acciones frecuentes | ⏳ pendiente |
@@ -33,8 +33,8 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-|||| **Completadas:** 5 / 20 (25%)
-**Pendientes:** 16
+|||||| **Completadas:** 7 / 20 (35%)
+**Pendientes:** 13
 
 ## Orden de implementación
 
