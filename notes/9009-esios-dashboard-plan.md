@@ -1,0 +1,30 @@
+# Plan 9009 — ESIOS Dashboard
+
+> **Fecha de creación:** 2026-05-30
+> **Estado:** En ejecución
+> **Proyecto:** /root/workspace/esios-dashboard
+
+## Resumen del análisis
+
+- **62 archivos** en el repo
+- **33 tests** — 30 pasan, 3 fallan (tests con valores mock desactualizados tras cambio time_trunc)
+- **Deploy activo** en NaN.builders
+- **Stack:** Express + Chart.js + vanilla JS
+- **Últimos cambios:** time_trunc eliminado, pool OMIE añadido, summary-5min añadido
+
+## Plan de mejoras priorizadas
+
+| # | Mejora | Área | Dificultad | Archivos | Verificación | Estado |
+|---|---|---|---|---|---|---|
+| 1 | Arreglar tests fallidos (summary + time) — valores mock desactualizados tras eliminar time_trunc | Tests | baja | tests/summary.test.js, tests/time.test.js | npm test → 33/33 passing | ✅ completado |
+| 2 | Exportar datos a CSV por tab — botón "Descargar CSV" en cada tab | Frontend | baja | render.js, render-charts.js, styles.css | Botón visible, descarga funcional | ✅ completado |
+| 3 | Heatmap de precios semanal — visualización de 7 días con colores por precio | Precio | media | render.js, render-charts.js, data.js, styles.css, index.html | Heatmap visible, tooltips funcionales | ⏳ pendiente |
+| 4 | Modo oscuro/claro con toggle — CSS variables + localStorage | Global | baja | styles.css, index.html, config.js | Toggle visible, tema persiste | ⏳ pendiente |
+| 5 | Indicadores de tendencia (↑↓ %) — comparar con día anterior en métricas principales | Resumen | baja | render.js, data.js, api.js | Flechas visibles con % de cambio | ⏳ pendiente |
+| 6 | Estimación de ahorro económico — calcular €/día ahorrado por renovables | Resumen | baja | render.js, summary.service.js | Métrica de ahorro visible | ⏳ pendiente |
+| 7 | Zoom y panning en gráficos — integrar chartjs-plugin-zoom | Global | media | index.html, render.js, styles.css | Zoom funcional con rueda/mouse | ⏳ pendiente |
+| 8 | Timestamp de datos + enlace a fuente ESIOS — mostrar fecha/hora y enlace | Global | baja | render.js, index.html | Timestamp visible en footer/header | ⏳ pendiente |
+| 9 | Curva de carga comparativa — superponer día seleccionado vs media 7 días | Demanda | media | render-charts.js, data.js, api.js, index.html, styles.css | Gráfico con 2 líneas superpuestas | ⏳ pendiente |
+| 10 | Performance ratio renovable — comparar gen real vs prevista eólica/solar | Mix | media | render-charts.js, summary.service.js | Métrica de % acierto visible | ⏳ pendiente |
+| 11 | Panel de Balancing/Reservas — mostrar balance del sistema | Resumen | media | render.js, summary.service.js, index.html | Gráfico de balance visible | ⏳ pendiente |
+| 12 | Mapa de interconexiones con SVG — visualización geográfica simplificada | Interconexiones | media | render-charts.js, index.html, styles.css | SVG con flujos animados | ⏳ pendiente |

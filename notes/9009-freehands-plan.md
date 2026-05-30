@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 | **Inicio:** 29/05/2026 |
-| **Última actualización:** 30/05/2026 — 🎯 #16 Sistema de plugins completado (24 tests) |
+| **Última actualización:** 30/05/2026 — #25 Air scroll vertical con mano (gesto de barrido) |
 
 ## Mejoras
 
@@ -34,7 +34,7 @@ Control del PC sin manos: mirada + gestos + voz.
 | 22 | Teclado virtual dual layout por ojos (Keyboard-Typing-with-Eyes) | UX | baja | `ui/virtual_keyboard.py` | Layout izq/der dinámico, audio feedback, blink para seleccionar | ⏳ pendiente |
 | 23 | Calibración con Gaussian Process (auto-calibración continua) | Gaze | alta | `gaze/calibration.py`, `gaze/tracker.py` | Reemplazar regresión polinomial por GP, auto-ajuste durante uso | ⏳ pendiente |
 | 24 | Control bimanual (mano derecha cursor, izquierda scroll/zoom) | Gestos | media | `gestures/hand_fusion.py`, `main.py` | Dos manos independientes: cursor+clic + scroll+zoom | ⏳ pendiente |
-| 25 | Air scroll vertical con mano (gesto de barrido) | Gestos | baja | `gestures/air_scroll.py`, `fusion/fusion.py` | Barrido vertical de mano → scroll en ventana activa | ⏳ pendiente |
+| 25 | Air scroll vertical con mano (gesto de barrido) | Gestos | baja | `gestures/hand_tracker.py`, `fusion/fusion.py`, `profiles/store.py`, `tests/` | 11 tests unitarios pasando, scroll con cualquier pose de mano | ✅ hecha 30/05/2026 |
 | 26 | Control de volumen con posición Y de mano | Gestos | baja | `gestures/volume_control.py`, `actions/dispatcher.py` | Mano arriba → volumen sube, abajo → baja | ⏳ pendiente |
 | 27 | Dictado continuo con Whisper/Vosk (no solo comandos discretos) | Voz | media | `voice/continuous_dictation.py`, `main.py` | Dictado libre que escribe en campo de texto enfocado | ⏳ pendiente |
 | 28 | Overlay de emojis navegables con gaze + voz | UX | baja | `ui/emoji_overlay.py`, `voice/` | Navegar emojis con mirada, confirmar con voz o blink | ⏳ pendiente |
@@ -43,8 +43,8 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-| **Completadas:** 16 / 30 (53%) |
-| **Pendientes:** 14 |
+| **Completadas:** 17 / 30 (57%) |
+| **Pendientes:** 13 |
 
 ## Orden de implementación
 
