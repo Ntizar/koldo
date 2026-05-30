@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 | **Inicio:** 29/05/2026 |
-| **Última actualización:** 30/05/2026 — ✅ #13 Doble parpadeo = clic, prolongado = drag |
+| **Última actualización:** 30/05/2026 — ✅ #14 Fusión multimodal con operador AND (voz + mirada) |
 
 ## Mejoras
 
@@ -23,7 +23,7 @@ Control del PC sin manos: mirada + gestos + voz.
 | 11 | Calibración 9 puntos con regresión polinomial | Gaze | media | `gaze/calibration.py`, `gaze/tracker.py`, `config.py` | 15 tests unitarios pasando, modelo polinomial v5 con 27 features | ✅ hecha 30/05/2026 |
 || 12 | Overlay transparente PyQt6 sobre escritorio | UI | media | `ui/overlay.py`, `ui/__init__.py` | Widget transparente full-screen con halo radial, anillo de posición y soporte multi-monitor | ✅ hecha 30/05/2026 |
 || 13 | Doble parpadeo rápido = clic, prolongado = drag | Gaze | media | `gaze/blink_detector.py`, `gaze/tracker.py`, `fusion/fusion.py`, `actions/dispatcher.py`, `main.py` | 17 tests unitarios + 6 tests fusión | ✅ hecha 30/05/2026 |
-| 14 | Fusión multimodal con operador AND (voz + mirada) | Fusión | media | `fusion/fusion.py`, `main.py` | Acción solo si voz y mirada coinciden | ⏳ pendiente |
+|| 14 | Fusión multimodal con operador AND (voz + mirada) | Fusión | media | `fusion/fusion.py`, `main.py` | Acción solo si voz y mirada coinciden | ✅ hecha 30/05/2026 — 17 tests unitarios pasando |
 | 15 | Filtro Kalman predictivo para suavizado de cursor | Gaze | alta | `gaze/tracker.py`, `main.py` | Reemplazar filtro exponencial por Kalman | ⏳ pendiente |
 | 16 | Sistema de plugins Python (pipeline extensible) | Arquitectura | alta | `fusion/`, `main.py`, nueva carpeta `plugins/` | Pipeline Camera→Detector→Filter→Plugin→Executor | ⏳ pendiente |
 | 17 | 6DoF head pose para desplazamiento grueso | Gaze | alta | `gaze/tracker.py`, `gaze/__init__.py` | Cabeza para scroll/movimiento amplio | ⏳ pendiente |
@@ -33,8 +33,8 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-|||||||||| **Completadas:** 13 / 20 (65%)
-**Pendientes:** 7
+||||||||||| **Completadas:** 14 / 20 (70%)
+**Pendientes:** 6
 
 ## Orden de implementación
 
