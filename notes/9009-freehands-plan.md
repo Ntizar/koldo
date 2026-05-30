@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 | **Inicio:** 29/05/2026 |
-| **Última actualización:** 30/05/2026 — 🎯 #15 Filtro Kalman completado (18 tests) |
+| **Última actualización:** 30/05/2026 — 🎯 #16 Sistema de plugins completado (24 tests) |
 
 ## Mejoras
 
@@ -25,7 +25,7 @@ Control del PC sin manos: mirada + gestos + voz.
 | 13 | Doble parpadeo rápido = clic, prolongado = drag | Gaze | media | `gaze/blink_detector.py`, `gaze/tracker.py`, `fusion/fusion.py`, `actions/dispatcher.py`, `main.py` | 17 tests unitarios + 6 tests fusión | ✅ hecha 30/05/2026 |
 | 14 | Fusión multimodal con operador AND (voz + mirada) | Fusión | media | `fusion/fusion.py`, `main.py` | Acción solo si voz y mirada coinciden | ✅ hecha 30/05/2026 — 17 tests unitarios pasando |
 | 15 | Filtro Kalman predictivo para suavizado de cursor | Gaze | alta | `gaze/kalman_filter.py`, `gaze/calibration.py`, `gaze/__init__.py` | 18 tests unitarios pasando, reemplaza EMA por Kalman 2-D con modelo de velocidad constante | ✅ hecha 30/05/2026 — 18 tests unitarios pasando, 81 tests totales |
-| 16 | Sistema de plugins Python (pipeline extensible) | Arquitectura | alta | `fusion/`, `main.py`, nueva carpeta `plugins/` | Pipeline Camera→Detector→Filter→Plugin→Executor | ⏳ pendiente |
+| 16 | Sistema de plugins Python (pipeline extensible) | Arquitectura | alta | `fusion/`, `main.py`, nueva carpeta `plugins/` | Pipeline Camera→Detector→Filter→Plugin→Executor | ✅ hecha 30/05/2026 — 24 tests unitarios pasando, 105 tests totales |
 | 17 | 6DoF head pose para desplazamiento grueso | Gaze | alta | `gaze/tracker.py`, `gaze/__init__.py` | Cabeza para scroll/movimiento amplio | ⏳ pendiente |
 | 18 | Unidades de acción facial (sonrisa, ceño, sorpresa) | Gestos | alta | `gestures/face_tracker.py`, `fusion/` | AUs faciales como gestos adicionales | ⏳ pendiente |
 | 19 | Teclado virtual con selección por mirada | UX | alta | `ui/`, nuevo módulo `ui/virtual_keyboard.py` | Escribir sin manos | ⏳ pendiente |
@@ -43,8 +43,8 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-| **Completadas:** 15 / 30 (50%) |
-| **Pendientes:** 15 |
+| **Completadas:** 16 / 30 (53%) |
+| **Pendientes:** 14 |
 
 ## Orden de implementación
 
