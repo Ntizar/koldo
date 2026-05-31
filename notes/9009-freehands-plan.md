@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 || **Inicio:** 29/05/2026 |
-|| **Última actualización:** 31/05/2026 — #30 Fusión multimodal OR |
+| | **Última actualización:** 31/05/2026 — #20 Dictado multimodal mirada+voz |
 
 ## Mejoras
 
@@ -29,7 +29,7 @@ Control del PC sin manos: mirada + gestos + voz.
 | 17 | Head pose 6DoF para desplazamiento grueso | Gaze | alta | `gaze/head_pose.py`, `gaze/tracker.py`, `gaze/__init__.py`, `fusion/fusion.py`, `main.py` | 15 tests unitarios pasando, 131 tests totales | ✅ hecha 30/05/2026 |
 | 18 | Unidades de acción facial (sonrisa, ceño, sorpresa) | Gestos | alta | `gestures/face_tracker.py`, `fusion/fusion.py`, `main.py`, `ui/overlay.py`, `profiles/store.py` | Integración completa: FaceTracker instanciado en main.py, detect() en loop tick(), stabilizer facial, UI face_info, GESTURE_LABELS extendidos | ✅ hecha 31/05/2026 |
 | 19 | Teclado virtual con selección por mirada | UX | alta | `ui/virtual_keyboard.py`, `main.py`, `actions/dispatcher.py`, `voice/whisper_listener.py` | Widget PyQt6 translúcido con layout QWERTY, dwell en teclas, shift/espacio/enter/backspace, apertura/cierre por voz | ✅ hecha 31/05/2026 |
-| 20 | Modo dictado (mirar campo + decir "escribe" + dictar) | Voz | alta | `voice/`, `ui/`, `main.py` | Dictado multimodal | ⏳ pendiente |
+| 20 | Modo dictado (mirar campo + decir "escribe" + dictar) | Voz | alta | `voice/dictation_intent.py`, `voice/__init__.py`, `ui/overlay.py`, `main.py` | Detector de intención multimodal (mirada en región de texto + comando voz), indicador pulsante en overlay, 15 tests unitarios pasando | ✅ hecha 31/05/2026 |
 | 21 | OCR integrado + gaze typing (talon-gaze-ocr) | Nuevos | media | `ocr/`, `ui/gaze_text_selector.py`, `main.py`, `voice/whisper_listener.py` | Detector de regiones de texto con OpenCV, widget overlay con dwell/blink selection, 18 tests unitarios pasando | ✅ hecha 31/05/2026 |
 | 22 | Teclado virtual dual layout por ojos (Keyboard-Typing-with-Eyes) | UX | baja | `ui/virtual_keyboard.py`, `main.py` | Layout izq/der dinámico, audio feedback, blink para seleccionar | ✅ hecha 31/05/2026 |
 | 23 | Calibración con Gaussian Process (auto-calibración continua) | Gaze | alta | `gaze/calibration.py`, `gaze/tracker.py` | Reemplazar regresión polinomial por GP, auto-ajuste durante uso | ⏳ pendiente |
@@ -43,8 +43,8 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-| **Completadas:** 27 / 30 (90%) |
-| **Pendientes:** 3 |
+| **Completadas:** 28 / 30 (93%) |
+| **Pendientes:** 2 |
 
 ## Orden de implementación
 
