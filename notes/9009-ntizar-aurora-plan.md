@@ -15,8 +15,8 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | 3 | Expandir `:has()` a accordion | ⭐ Baja | `ntizar.ui.css` | Interactividad sin JS | ✅ hecha 2026-05-30 |
 | 4 | Container Queries cards | ⭐ Baja | `ntizar.css` | Responsividad contextual | ✅ hecha 2026-05-31 |
 | 5 | Bento Grid pattern | ⭐ Baja | `ntizar.patterns.css` | Layout moderno | ✅ hecha 2026-05-31 |
-| 6 | Expandir `:has()` a tabs | ⭐ Baja | `ntizar.ui.css` | Interactividad sin JS |
-| 7 | Glass inputs | ⭐⭐ Media | `ntizar.forms.css` | Coherencia visual |
+| 6 | Expandir `:has()` a tabs | ⭐ Baja | `ntizar.ui.css` | Interactividad sin JS | ✅ hecha 2026-05-31 |
+| 7 | Glass inputs | ⭐⭐ Media | `ntizar.forms.css` | Coherencia visual | ✅ hecha 2026-05-31 |
 | 8 | Glass tablas | ⭐⭐ Media | `ntizar.css` | Coherencia visual |
 | 9 | Expandir `:has()` a dropdown | ⭐⭐ Media | `ntizar.ui.css` | Interactividad sin JS |
 | 10 | View transitions tema/skin | ⭐⭐ Media | `ntizar.next.css` | Experiencia visual |
@@ -335,13 +335,13 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | 3 | `:has()` accordion | 30 min | ✅ hecha 2026-05-30 |
 | 4 | Container Queries cards | 1 hora | ✅ hecha 2026-05-31 |
 | 5 | Bento grid pattern | 1 hora | ✅ hecha 2026-05-31 |
-| 6 | `:has()` tabs | 30 min |
+| 6 | `:has()` tabs | 30 min | ✅ hecha 2026-05-31 |
 | **Total** | | **~4 horas** |
 
 ### Sprint 2 (Semana 2) — Mejoras Medias (7-13)
 | # | Mejora | Tiempo estimado |
 |---|--------|----------------|
-| 7 | Glass inputs | 1 hora |
+| 7 | Glass inputs | 1 hora | ✅ hecha 2026-05-31 |
 | 8 | Glass tablas | 1 hora |
 | 9 | `:has()` dropdown | 1.5 horas |
 | 10 | View transitions skin | 1.5 horas |
@@ -362,8 +362,8 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | Métrica | Actual | Objetivo v5.2 |
 |---------|--------|--------------|
 | Componentes con container-queries | 0 | 1 (.nz-card) |
-| Componentes glass | 3 (card, surface, btn) | 6 (+ input, table, nav) |
-| Features CSS 2026 usadas | 4 (:has, scroll-driven, content-visibility, oklch) | 8 (+ container-queries ✅, nesting ✅, subgrid, view-transitions, @property) |
+| Componentes con glass | 3 (card, surface, btn) | 7 (+ input, input--glass-strong, input--glass-brand, input--glass-accent, table, nav) |
+| Componentes con :has() reactivo | 1 (.nz-accordion) | 4 (accordion ✅, tabs ✅, dropdown, dropdown avanzado) |
 | Skins con focus ring universal | 1 (contrast) | 6 (todos) |
 | Patrones de layout | 8 | 9 (+ bento grid) |
 | Breaking changes | 0 | 0 |
