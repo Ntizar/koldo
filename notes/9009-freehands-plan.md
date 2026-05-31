@@ -3,8 +3,8 @@
 Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntizar/FreeHands).
 Control del PC sin manos: mirada + gestos + voz.
 
-| **Inicio:** 29/05/2026 |
-| **Última actualización:** 31/05/2026 — #28 Overlay de emojis navegables con gaze + voz |
+|| **Inicio:** 29/05/2026 |
+|| **Última actualización:** 31/05/2026 — #24 Control bimanual |
 
 ## Mejoras
 
@@ -30,21 +30,21 @@ Control del PC sin manos: mirada + gestos + voz.
 | 18 | Unidades de acción facial (sonrisa, ceño, sorpresa) | Gestos | alta | `gestures/face_tracker.py`, `fusion/fusion.py`, `main.py`, `ui/overlay.py`, `profiles/store.py` | Integración completa: FaceTracker instanciado en main.py, detect() en loop tick(), stabilizer facial, UI face_info, GESTURE_LABELS extendidos | ✅ hecha 31/05/2026 |
 | 19 | Teclado virtual con selección por mirada | UX | alta | `ui/virtual_keyboard.py`, `main.py`, `actions/dispatcher.py`, `voice/whisper_listener.py` | Widget PyQt6 translúcido con layout QWERTY, dwell en teclas, shift/espacio/enter/backspace, apertura/cierre por voz | ✅ hecha 31/05/2026 |
 | 20 | Modo dictado (mirar campo + decir "escribe" + dictar) | Voz | alta | `voice/`, `ui/`, `main.py` | Dictado multimodal | ⏳ pendiente |
-| 21 | OCR integrado + gaze typing (talon-gaze-ocr) | Nuevos | media | `ocr/`, `gaze/`, `ui/virtual_keyboard.py` | Detectar texto en pantalla, seleccionar palabras con mirada | ⏳ pendiente |
+| 21 | OCR integrado + gaze typing (talon-gaze-ocr) | Nuevos | media | `ocr/`, `ui/gaze_text_selector.py`, `main.py`, `voice/whisper_listener.py` | Detector de regiones de texto con OpenCV, widget overlay con dwell/blink selection, 18 tests unitarios pasando | ✅ hecha 31/05/2026 |
 | 22 | Teclado virtual dual layout por ojos (Keyboard-Typing-with-Eyes) | UX | baja | `ui/virtual_keyboard.py`, `main.py` | Layout izq/der dinámico, audio feedback, blink para seleccionar | ✅ hecha 31/05/2026 |
 | 23 | Calibración con Gaussian Process (auto-calibración continua) | Gaze | alta | `gaze/calibration.py`, `gaze/tracker.py` | Reemplazar regresión polinomial por GP, auto-ajuste durante uso | ⏳ pendiente |
-| 24 | Control bimanual (mano derecha cursor, izquierda scroll/zoom) | Gestos | media | `gestures/hand_fusion.py`, `main.py` | Dos manos independientes: cursor+clic + scroll+zoom | ⏳ pendiente |
+| 24 | Control bimanual (mano derecha cursor, izquierda scroll/zoom) | Gestos | media | `gestures/hand_fusion.py`, `main.py`, `tests/` | Dos manos independientes: cursor+clic + scroll+zoom | ✅ hecha 31/05/2026 |
 | 25 | Air scroll vertical con mano (gesto de barrido) | Gestos | baja | `gestures/hand_tracker.py`, `fusion/fusion.py`, `profiles/store.py`, `tests/` | 11 tests unitarios pasando, scroll con cualquier pose de mano | ✅ hecha 30/05/2026 |
 | 26 | Control de volumen con posición Y de mano | Gestos | baja | `gestures/volume_control.py`, `main.py`, `profiles/store.py` | Mano arriba → volumen sube, mano abajo → baja | ✅ hecha 31/05/2026 |
 | 27 | Dictado continuo con Whisper/Vosk (no solo comandos discretos) | Voz | media | `voice/continuous_dictation.py`, `main.py` | Dictado libre que escribe en campo de texto enfocado | ⏳ pendiente |
-|| 28 | Overlay de emojis navegables con gaze + voz | UX | baja | `ui/emoji_overlay.py`, `voice/` | Navegar emojis con mirada, confirmar con voz o blink | ✅ hecha 31/05/2026 |
+| 28 | Overlay de emojis navegables con gaze + voz | UX | baja | `ui/emoji_overlay.py`, `voice/` | Navegar emojis con mirada, confirmar con voz o blink | ✅ hecha 31/05/2026 |
 | 29 | App switcher con gaze dwell + pinch para cerrar | UX | alta | `ui/app_switcher.py`, `actions/dispatcher.py` | Dwell en iconos taskbar, pinch para cerrar, swipe para cambiar | ⏳ pendiente |
 | 30 | Fusión multimodal con modo OR + intención prioritaria | Fusión | media | `fusion/fusion.py`, `fusion/channel_priority.py` | Añadir modo OR (cualquier canal activa) + priorización por confianza | ⏳ pendiente |
 
 ## Progreso
 
-| **Completadas:** 23 / 30 (77%) |
-| **Pendientes:** 7 |
+| **Completadas:** 25 / 30 (83%) |
+| **Pendientes:** 5 |
 
 ## Orden de implementación
 
