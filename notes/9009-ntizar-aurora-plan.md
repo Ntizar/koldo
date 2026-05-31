@@ -19,8 +19,8 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | 7 | Glass inputs | ⭐⭐ Media | `ntizar.forms.css` | Coherencia visual | ✅ hecha 2026-05-31 |
 | 8 | Glass tablas | ⭐⭐ Media | `ntizar.css` | Coherencia visual | ✅ hecha 2026-05-31 |
 | 9 | Expandir `:has()` a dropdown | ⭐⭐ Media | `ntizar.ui.css` | Interactividad sin JS | ✅ hecha 2026-05-31 |
-| 10 | View transitions tema/skin | ⭐⭐ Media | `ntizar.next.css` | Experiencia visual |
-| 11 | Subgrid para layouts anidados | ⭐⭐ Media | `ntizar.css` | Layout preciso |
+| 10 | View transitions tema/skin | ⭐⭐ Media | `ntizar.next.css` | Experiencia visual | ✅ hecha 2026-05-31 |
+| 11 | Subgrid para layouts anidados | ⭐⭐ Media | `ntizar.css` | Layout preciso | ✅ hecha 2026-05-31 |
 | 12 | CSS Houdini gradientes | ⭐⭐ Media | `ntizar.next.css` | Rendimiento visual |
 | 13 | Nav glass pattern | ⭐⭐ Media | `ntizar.patterns.css` | Coherencia visual |
 | 14 | Sistema de tonalidad superficies | ⭐⭐⭐ Alta | `ntizar.next.css` + `ntizar.css` | Profundidad visual |
@@ -345,7 +345,7 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | 8 | Glass tablas | 1 hora |
 | 9 | `:has()` dropdown | 1.5 horas | ✅ hecha 2026-05-31 |
 | 10 | View transitions skin | 1.5 horas |
-| 11 | Subgrid layouts | 1 hora |
+| 11 | Subgrid layouts | 1 hora | ✅ hecha 2026-05-31 |
 | 12 | CSS Houdini gradientes | 1.5 horas |
 | 13 | Nav glass pattern | 1 hora |
 | **Total** | | **~8 horas** |
@@ -366,6 +366,7 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | Componentes con :has() reactivo | 1 (.nz-accordion) | 5 (accordion ✅, tabs ✅, dropdown ✅, dropdown avanzado) |
 | Skins con focus ring universal | 1 (contrast) | 6 (todos) |
 | Patrones de layout | 8 | 9 (+ bento grid) |
+| Componentes con subgrid | 0 | 1 (.nz-grid--subgrid) |
 | Breaking changes | 0 | 0 |
 | Tokens nuevos | 0 | ~12 |
 | Líneas CSS nuevas | 0 | ~300-400 |

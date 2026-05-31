@@ -32,7 +32,7 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 || 7 | Comparación lado a lado | Dos paneles simultáneos para comparar escenarios | app.js, simulator.js, charts.js, app.css | 🟡 Media | Activando modo comparación, aparecen dos dashboards lado a lado | ✅ hecha (31/05/2026) |
 || 8 | Selector de fecha REE | Permitir elegir cualquier fecha de 2025 para datos REE | ree-data.js, app.js, ree-data.css | 🟡 Media | Selector de fecha muestra datos REE correspondientes a esa fecha | ✅ hecha (31/05/2026) |
 || 9 | Gráfico de sankey | Flujos de energía entre tecnologías y sectores | charts.js, simulator.js | 🟡 Media | Nueva sección con gráfico sankey mostrando flujos | ✅ hecha (31/05/2026) |
-|| 11 | Service Worker offline | Caché de la aplicación para funcionamiento sin conexión | sw.js, index.html | 🔴 Alta | La app funciona sin conexión, datos de última simulación se mantienen | ⏳ pendiente |
+|| 11 | Service Worker offline | Caché de la aplicación para funcionamiento sin conexión | sw.js, index.html, app.css | 🔴 Alta | La app funciona sin conexión, datos de última simulación se mantienen | ✅ hecha (31/05/2026) |
 || 12 | API REE en tiempo real | Fetch a datos reales de Esios/REE con caché | ree-data.js, app.js, app.css | 🔴 Alta | Datos REE se actualizan automáticamente, con indicador de última actualización | ⏳ pendiente |
 || 13 | Motor headless ESM | Ejecutable en Node.js para tests y análisis | simulator.js, constants.js, weather.js, demand.js, storage.js, policy.js, nuclear.js, trajectory.js, montecarlo.js | 🔴 Alta | Se puede hacer `node motor.mjs --scenario=1` y obtener resultados JSON | ⏳ pendiente |
 || 14 | Tests automatizados Vitest | Validación de calibración 2025 + tests unitarios | package.json, vitest.config.js, tests/ | 🔴 Alta | `npm test` pasa todos los tests, cobertura > 80% | ⏳ pendiente |
@@ -285,22 +285,34 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ---
 
-### Mejora 11: Service Worker offline
+### Mejora 11: Service Worker offline ✅
 **Dificultad:** 🔴 Alta  
-**Archivos afectados:** sw.js, index.html, app.css  
-**Descripción:** Implementar service worker para cachear la aplicación y permitir funcionamiento sin conexión. Los datos de la última simulación se mantienen en localStorage.
+**Archivos afectados:** sw.js (nuevo), index.html, app.js, app.css  
+**Descripción:** Implementar service worker para cachear la aplicación y permitir funcionamiento sin conexión. Los datos de la última simulación se mantienen en localStorage. Incluye: caché de assets estáticos (HTML, CSS, JS), estrategia "cache first, network fallback", guardado de simulación en localStorage, indicador visual de estado online/offline, restauración automática de última simulación al recargar.  
+**Completada:** 31 de mayo de 2026
 
 **Pasos:**
-1. Crear sw.js con caché de assets estáticos
-2. Registrar service worker en index.html
-3. Implementar estrategia de caché primero
-4. Guardar última simulación en localStorage
-5. Mostrar indicador de modo offline
+1. Crear sw.js con caché de assets estáticos (20+ archivos)
+2. Estrategia: cache-first para assets, network-first con fallback para HTML
+3. Registrar service worker en index.html con navigator.serviceWorker.register()
+4. Añadir estado de conexión (isOnline, connectionVisible, simulationSavedVisible) en app.js
+5. Función guardarSimulacionLocal() — serializa params + resultados + mix + precios a localStorage
+6. Función cargarSimulacionLocal() — restaura desde localStorage al iniciar
+7. Función actualizarEstadoConexion() — escucha eventos online/offline
+8. Indicador visual de estado (badge superior derecho con punto verde/naranja)
+9. Indicador de simulación guardada (badge inferior derecho con icono 💾)
+10. CSS con estilo Aurora (glassmorphism, backdrop-filter, animaciones)
+11. En modo presentación, ocultar indicadores de conexión
 
 **Verificación:**
-- App funciona sin conexión tras primera carga
-- Última simulación se mantiene al recargar offline
-- Indicador visual de modo online/offline
+- sw.js registrado sin errores en consola ✅
+- Assets estáticos cacheados al primer acceso ✅
+- Indicador "En línea" / "Sin conexión" visible al cambiar estado ✅
+- Simulación guardada en localStorage al cargar ✅
+- Simulación restaurada automáticamente al recargar sin conexión ✅
+- Badge "Simulación guardada localmente" aparece 3 segundos tras guardado ✅
+- No se rompe el modo presentación ✅
+- Commit 6b06c01 pushado a main ✅
 
 ---
 
