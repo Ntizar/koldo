@@ -23,7 +23,7 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | 11 | Subgrid para layouts anidados | ⭐⭐ Media | `ntizar.css` | Layout preciso | ✅ hecha 2026-05-31 |
 | 12 | CSS Houdini gradientes | ⭐⭐ Media | `ntizar.next.css` | Rendimiento visual | ✅ hecha 2026-05-31 |
 | 13 | Nav glass pattern | ⭐⭐ Media | `ntizar.patterns.css` | Coherencia visual | ✅ hecha 2026-05-31 |
-| 14 | Sistema de tonalidad superficies | ⭐⭐⭐ Alta | `ntizar.next.css` + `ntizar.css` | Profundidad visual |
+| 14 | Sistema de tonalidad superficies | ⭐⭐⭐ Alta | `ntizar.next.css` + `ntizar.css` | Profundidad visual | ✅ hecha 2026-05-31 |
 | 15 | CSS-only dropdown avanzado | ⭐⭐⭐ Alta | `ntizar.ui.css` | Cero JS |
 
 ---
@@ -353,7 +353,7 @@ Ordenadas por dificultad creciente (baja → media → alta).
 ### Sprint 3 (Semana 3) — Mejoras Altas (14-15)
 | # | Mejora | Tiempo estimado |
 |---|--------|----------------|
-| 14 | Sistema tonalidad superficies | 3-4 horas |
+| 14 | Sistema tonalidad superficies | 3-4 horas | ✅ hecha 2026-05-31 |
 | 15 | CSS-only dropdown avanzado | 3-4 horas |
 | **Total** | | **~7 horas** |
 
@@ -368,8 +368,8 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | Patrones de layout | 8 | 9 (+ bento grid) |
 | Componentes con subgrid | 0 | 1 (.nz-grid--subgrid) |
 | Breaking changes | 0 | 0 |
-| Tokens nuevos | 0 | ~12 |
-| Líneas CSS nuevas | ~160 | ~460-560 |
+| Tokens nuevos | ~12 | ~48 |
+| Líneas CSS nuevas | ~160 | ~890-990 |
 
 ## Riesgos y Mitigación
 
