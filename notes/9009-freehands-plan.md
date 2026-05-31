@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 | **Inicio:** 29/05/2026 |
-| **Última actualización:** 31/05/2026 — #18 Integración completa de unidades de acción facial |
+| **Última actualización:** 31/05/2026 — #19 Teclado virtual con selección por mirada |
 
 ## Mejoras
 
@@ -28,7 +28,7 @@ Control del PC sin manos: mirada + gestos + voz.
 | 16 | Sistema de plugins Python (pipeline extensible) | Arquitectura | alta | `fusion/`, `main.py`, nueva carpeta `plugins/` | Pipeline Camera→Detector→Filter→Plugin→Executor | ✅ hecha 30/05/2026 — 24 tests unitarios pasando, 105 tests totales |
 | 17 | Head pose 6DoF para desplazamiento grueso | Gaze | alta | `gaze/head_pose.py`, `gaze/tracker.py`, `gaze/__init__.py`, `fusion/fusion.py`, `main.py` | 15 tests unitarios pasando, 131 tests totales | ✅ hecha 30/05/2026 |
 | 18 | Unidades de acción facial (sonrisa, ceño, sorpresa) | Gestos | alta | `gestures/face_tracker.py`, `fusion/fusion.py`, `main.py`, `ui/overlay.py`, `profiles/store.py` | Integración completa: FaceTracker instanciado en main.py, detect() en loop tick(), stabilizer facial, UI face_info, GESTURE_LABELS extendidos | ✅ hecha 31/05/2026 |
-| 19 | Teclado virtual con selección por mirada | UX | alta | `ui/`, nuevo módulo `ui/virtual_keyboard.py` | Escribir sin manos | ⏳ pendiente |
+| 19 | Teclado virtual con selección por mirada | UX | alta | `ui/virtual_keyboard.py`, `main.py`, `actions/dispatcher.py`, `voice/whisper_listener.py` | Widget PyQt6 translúcido con layout QWERTY, dwell en teclas, shift/espacio/enter/backspace, apertura/cierre por voz | ✅ hecha 31/05/2026 |
 | 20 | Modo dictado (mirar campo + decir "escribe" + dictar) | Voz | alta | `voice/`, `ui/`, `main.py` | Dictado multimodal | ⏳ pendiente |
 | 21 | OCR integrado + gaze typing (talon-gaze-ocr) | Nuevos | media | `ocr/`, `gaze/`, `ui/virtual_keyboard.py` | Detectar texto en pantalla, seleccionar palabras con mirada | ⏳ pendiente |
 | 22 | Teclado virtual dual layout por ojos (Keyboard-Typing-with-Eyes) | UX | baja | `ui/virtual_keyboard.py` | Layout izq/der dinámico, audio feedback, blink para seleccionar | ⏳ pendiente |
@@ -43,8 +43,8 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-| **Completadas:** 19 / 30 (63%) |
-| **Pendientes:** 11 |
+| **Completadas:** 20 / 30 (67%) |
+| **Pendientes:** 10 |
 
 ## Orden de implementación
 

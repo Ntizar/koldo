@@ -4,9 +4,9 @@
 
 ## Estado
 
-- **Total skills**: 10
-- **Categorías activas**: 6
-- **Última actualización**: 2026-05-27
+- **Total skills**: 12
+- **Categorías activas**: 7
+- **Última actualización**: 2026-05-31
 
 ---
 
@@ -80,6 +80,24 @@
 
 ## 🧪 IA
 
+### [monte-carlo-stock-simulator](skills/data-science/monte-carlo-stock-simulator.md) ⭐N/A
+- **Descripción**: Simulador de riesgos bursátiles con 5 modelos estocásticos (GBM, Heston, Jump-Diffusion, GARCH, Bootstrap) en Web Workers
+- **Métricas**: VaR/CVaR, Sharpe/Sortino, señal BUY/HOLD/SELL, fan chart con bandas 95%/99%
+- **Stack**: Vanilla JS + Chart.js + Web Workers
+
+---
+
+## 🚌 Transit y Datos
+
+### [nap-dashboard-gtfs-parser](skills/backend/nap-dashboard-gtfs-parser.md)
+- **Descripción**: Dashboard de transportes públicos de España con parser GTFS completo en browser
+- **Features**: 2,594 operadores, 10,000+ datasets, selector de semana GTFS, lazy loading
+- **Stack**: React 19 + TypeScript + fflate + React Query + Leaflet
+
+---
+
+## 🗺 GeoEspacial y Maps
+
 ### [K-Dense-AI/scientific-agent-skills](skills/ia/scientific-agent-skills.md) ⭐26143
 - **Descripción**: 138 skills listas para transformar agentes de IA en asistentes científicos completos
 - **Cobertura**: Genómica, drug discovery, ciencia de materiales, análisis clínico, visualización, automatización de laboratorio
@@ -91,7 +109,6 @@
 _Ninguna skill aún_
 
 ## 🗺 GeoEspacial y Maps
-_Ninguna skill aún_
 
 ## 🎨 Frontend y Diseño
 _Ninguna skill aún_

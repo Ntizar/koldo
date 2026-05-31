@@ -13,8 +13,8 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | 1 | Focus ring universal | ⭐ Baja | `ntizar.css` | Accesibilidad visual | ✅ hecha 2026-05-30 |
 | 2 | CSS Nesting nativo (prueba) | ⭐ Baja | `ntizar.motion.css` | Mantenibilidad | ✅ hecha 2026-05-30 |
 | 3 | Expandir `:has()` a accordion | ⭐ Baja | `ntizar.ui.css` | Interactividad sin JS | ✅ hecha 2026-05-30 |
-| 4 | Container Queries para `.nz-card` | ⭐ Baja | `ntizar.css` | Responsividad contextual |
-| 5 | Bento Grid pattern | ⭐ Baja | `ntizar.patterns.css` | Layout moderno |
+| 4 | Container Queries cards | ⭐ Baja | `ntizar.css` | Responsividad contextual | ✅ hecha 2026-05-31 |
+| 5 | Bento Grid pattern | ⭐ Baja | `ntizar.patterns.css` | Layout moderno | ✅ hecha 2026-05-31 |
 | 6 | Expandir `:has()` a tabs | ⭐ Baja | `ntizar.ui.css` | Interactividad sin JS |
 | 7 | Glass inputs | ⭐⭐ Media | `ntizar.forms.css` | Coherencia visual |
 | 8 | Glass tablas | ⭐⭐ Media | `ntizar.css` | Coherencia visual |
@@ -333,8 +333,8 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | 1 | Focus ring universal | 30 min |
 | 2 | CSS Nesting nativo | 1 hora | ✅ hecha 2026-05-30 |
 | 3 | `:has()` accordion | 30 min | ✅ hecha 2026-05-30 |
-| 4 | Container Queries cards | 1 hora |
-| 5 | Bento grid pattern | 1 hora |
+| 4 | Container Queries cards | 1 hora | ✅ hecha 2026-05-31 |
+| 5 | Bento grid pattern | 1 hora | ✅ hecha 2026-05-31 |
 | 6 | `:has()` tabs | 30 min |
 | **Total** | | **~4 horas** |
 
@@ -361,9 +361,9 @@ Ordenadas por dificultad creciente (baja → media → alta).
 
 | Métrica | Actual | Objetivo v5.2 |
 |---------|--------|--------------|
-| Componentes con `:has()` | 1 (cards) | 3 (cards, accordion, tabs) |
+| Componentes con container-queries | 0 | 1 (.nz-card) |
 | Componentes glass | 3 (card, surface, btn) | 6 (+ input, table, nav) |
-| Features CSS 2026 usadas | 4 (:has, scroll-driven, content-visibility, oklch) | 8 (+ container-queries, nesting, subgrid, view-transitions, @property) |
+| Features CSS 2026 usadas | 4 (:has, scroll-driven, content-visibility, oklch) | 8 (+ container-queries ✅, nesting ✅, subgrid, view-transitions, @property) |
 | Skins con focus ring universal | 1 (contrast) | 6 (todos) |
 | Patrones de layout | 8 | 9 (+ bento grid) |
 | Breaking changes | 0 | 0 |

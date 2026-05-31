@@ -6,11 +6,11 @@
 
 ## Resumen del análisis
 
-- **62 archivos** en el repo
+- **63 archivos** en el repo
 - **33 tests** — 30 pasan, 3 fallan (tests con valores mock desactualizados tras cambio time_trunc)
 - **Deploy activo** en NaN.builders
 - **Stack:** Express + Chart.js + vanilla JS
-- **Últimos cambios:** time_trunc eliminado, pool OMIE añadido, summary-5min añadido
+- **Últimos cambios:** chartjs-plugin-zoom integrado, zoom/panning en todos los gráficos
 
 ## Plan de mejoras priorizadas
 
@@ -22,7 +22,7 @@
 | 4 | Modo oscuro/claro con toggle — CSS variables + localStorage | Global | baja | styles.css, index.html, theme.js | Toggle visible, tema persiste | ✅ completado 2026-05-30 |
 | 5 | Indicadores de tendencia (↑↓ %) — comparar con día anterior en métricas principales | Resumen | baja | render.js, data.js, api.js | Flechas visibles con % de cambio | ✅ completado 2026-05-30 |
 | 6 | Estimación de ahorro económico — calcular €/día ahorrado por renovables | Resumen | baja | render.js, summary.service.js | Métrica de ahorro visible | ✅ completado 2026-05-31 |
-| 7 | Zoom y panning en gráficos — integrar chartjs-plugin-zoom | Global | media | index.html, render.js, styles.css | Zoom funcional con rueda/mouse | ⏳ pendiente |
+| 7 | Zoom y panning en gráficos — integrar chartjs-plugin-zoom | Global | media | index.html, render.js, data.js, styles.css, render-zoom.js | Zoom con rueda, pan con drag, botón reset | ✅ completado 2026-05-31 |
 | 8 | Timestamp de datos + enlace a fuente ESIOS — mostrar fecha/hora y enlace | Global | baja | render.js, index.html | Timestamp visible en footer/header | ⏳ pendiente |
 | 9 | Curva de carga comparativa — superponer día seleccionado vs media 7 días | Demanda | media | render-charts.js, data.js, api.js, index.html, styles.css | Gráfico con 2 líneas superpuestas | ⏳ pendiente |
 | 10 | Performance ratio renovable — comparar gen real vs prevista eólica/solar | Mix | media | render-charts.js, summary.service.js | Métrica de % acierto visible | ⏳ pendiente |

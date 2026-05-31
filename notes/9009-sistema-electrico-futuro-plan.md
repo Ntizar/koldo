@@ -25,7 +25,7 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 || 1 | Crear package.json + scripts | Incluir dependencias (vue, plotly), scripts de dev y build | package.json | 🔵 Baja | `npm install` funciona, `npm run dev` levanta servidor | ✅ hecha (30/05/2026) |
 | 2 | Exportación de resultados CSV | Botón en dashboard para descargar resultados en CSV | app.js, charts.js | 🔵 Baja | Se descarga un CSV con columnas: hora, demanda, nuclear, solar, eólica, gas, precio, emisiones | ✅ hecha (30/05/2026) |
 || 3 | Indicador de intensidad de carbono | KPI nuevo: gCO2/kWh en el dashboard hero | simulator.js, app.js, app.css | 🔵 Baja | Aparece nuevo KPI en hero con valor gCO2/kWh, color cambia según nivel | ✅ hecha (30/05/2026) |
-| 4 | Tooltips mejorados en gráficos | Añadir más información contextual en hover de gráficos Plotly | charts.js | 🔵 Baja | Al pasar el ratón sobre gráficos aparecen tooltips con datos adicionales |
+|| 4 | Tooltips mejorados en gráficos | Añadir más información contextual en hover de gráficos Plotly | charts.js | 🔵 Baja | Al pasar el ratón sobre gráficos aparecen tooltips con datos adicionales | ✅ hecha (31/05/2026) |
 | 5 | Modo presentación | Pantalla completa con KPIs grandes para presentaciones | index.html, app.js, app.css | 🟡 Media | Tecla P activa modo presentación con KPIs grandes y gráficos centrados |
 | 6 | Mini sparklines en KPIs | Mostrar mini gráfico de tendencia en cada tarjeta KPI del dashboard | app.js, charts.js, app.css | 🟡 Media | Cada KPI card muestra un mini gráfico de líneas de las últimas 7 horas |
 | 7 | Comparación lado a lado | Dos paneles simultáneos para comparar escenarios | app.js, simulator.js, charts.js, app.css | 🟡 Media | Activando modo comparación, aparecen dos dashboards lado a lado |
@@ -103,19 +103,28 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ---
 
-### Mejora 4: Tooltips mejorados en gráficos
+### Mejora 4: Tooltips mejorados en gráficos ✅
 **Dificultad:** 🔵 Baja  
 **Archivos afectados:** charts.js  
-**Descripción:** Mejorar los tooltips de Plotly añadiendo información contextual: porcentaje de cada tecnología sobre el total, precio ponderado por demanda, horas acumuladas por rango de precio.
+**Descripción:** Mejorar los tooltips de Plotly añadiendo información contextual: porcentaje de cada tecnología sobre el total en gráficos de mix, precio medio semanal y horas de precio negativo/alto en gráficos de precios, porcentaje de cada tecnología sobre demanda en gráficos mensuales, objetivos PNIEC en el heatmap.  
+**Completada:** 31 de mayo de 2026
 
 **Pasos:**
-1. Personalizar hovertemplate en cada trace de Plotly
-2. Añadir hoverinfo con datos adicionales
-3. Mostrar leyenda contextual en los gráficos
+1. Crear función totalStackY() para calcular totales de pila
+2. Crear función pctTrace() con hovertemplate que incluye %{customdata:.1f}% del total
+3. Actualizar plotMixSemanal para usar pctTrace con porcentajes
+4. Mejorar plotPreciosSemana: añadir media semanal, horas negativas, horas alto precio
+5. Mejorar plotPreciosDuracion: añadir precio ponderado, horas negativas, horas alto
+6. Mejorar plotPreciosHistograma: añadir % del total por rango
+7. Mejorar plotMensual: añadir % de cada tecnología sobre demanda
+8. Mejorar plotTrajectoryPNIEC: añadir objetivos PNIEC 2030 en tooltip del heatmap
 
 **Verificación:**
-- Tooltips muestran más información que antes
-- Leyenda contextual visible
+- Tooltips muestran porcentaje de cada tecnología sobre total en gráficos de mix
+- Tooltips de precios muestran media, horas negativas y horas alto precio
+- Histograma muestra % del total por rango
+- Gráfico mensual muestra % de cada tecnología sobre demanda
+- Heatmap PNIEC muestra objetivos 2030 de referencia
 - No se rompe el layout
 
 ---
@@ -212,20 +221,31 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ---
 
-### Mejora 10: Microanimaciones de transición
+### Mejora 10: Microanimaciones de transición ✅
 **Dificultad:** 🔵 Baja  
-**Archivos afectados:** app.css, ntizar.css  
-**Descripción:** Añadir transiciones suaves (220ms) al cambiar entre escenarios, tabs y vistas. Mejorar la sensación de fluidez de la aplicación.
+**Archivos afectados:** app.css, js/app.js  
+**Descripción:** Añadir transiciones suaves (220ms) al cambiar entre escenarios, tabs y vistas. Mejorar la sensación de fluidez de la aplicación. Incluye: transiciones en cards, tabs, botones, KPIs, métricas, tablas, selects, inputs, toggles, gráficos, loading. Animación de pulso en KPIs al cambiar valores.
+**Completada:** 31 de mayo de 2026
 
 **Pasos:**
-1. Añadir transiciones CSS a cards, tabs y gráficos
-2. Animar cambios de estado en KPIs
-3. Suavizar transiciones entre vistas semanal/anual
+1. Añadir 130+ líneas de CSS transitions en app.css (cards, tabs, botones, KPIs, métricas, tablas, selects, inputs, toggles, gráficos, loading, trajectory)
+2. Añadir watcher en app.js para detectar cambios en resultados y aplicar clase kpi-animate
+3. Animación de pulso (scale 1.03) en KPIs al cambiar valor
+4. Hover effects en scenario-cards y metric-pills
+5. Focus rings en inputs y selects
 
 **Verificación:**
-- Cambio de escenario tiene transición suave
-- Tabs tienen efecto de activación animado
-- KPIs animan su cambio de valor
+- Cambio de escenario tiene transición suave (220ms ease)
+- Tabs tienen efecto de activación animado con hover lift
+- KPIs animan su cambio de valor con efecto pulse
+- Botones tienen efecto press (scale 0.98)
+- Scenario cards tienen hover lift
+- Métricas tienen hover lift
+- Tablas tienen hover row highlight
+- Inputs y selects tienen focus ring brand
+- Toggles tienen scale al activarse
+- No se rompe el layout existente
+- Commit 0661f8e pushado a main
 
 ---
 
