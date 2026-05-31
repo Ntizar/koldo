@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 || **Inicio:** 29/05/2026 |
-|| **Última actualización:** 31/05/2026 — #24 Control bimanual |
+|| **Última actualización:** 31/05/2026 — #30 Fusión multimodal OR |
 
 ## Mejoras
 
@@ -36,15 +36,15 @@ Control del PC sin manos: mirada + gestos + voz.
 | 24 | Control bimanual (mano derecha cursor, izquierda scroll/zoom) | Gestos | media | `gestures/hand_fusion.py`, `main.py`, `tests/` | Dos manos independientes: cursor+clic + scroll+zoom | ✅ hecha 31/05/2026 |
 | 25 | Air scroll vertical con mano (gesto de barrido) | Gestos | baja | `gestures/hand_tracker.py`, `fusion/fusion.py`, `profiles/store.py`, `tests/` | 11 tests unitarios pasando, scroll con cualquier pose de mano | ✅ hecha 30/05/2026 |
 | 26 | Control de volumen con posición Y de mano | Gestos | baja | `gestures/volume_control.py`, `main.py`, `profiles/store.py` | Mano arriba → volumen sube, mano abajo → baja | ✅ hecha 31/05/2026 |
-| 27 | Dictado continuo con Whisper/Vosk (no solo comandos discretos) | Voz | media | `voice/continuous_dictation.py`, `main.py` | Dictado libre que escribe en campo de texto enfocado | ⏳ pendiente |
+| 27 | Dictado continuo con Whisper/Vosk (no solo comandos discretos) | Voz | media | `voice/continuous_dictation.py`, `main.py`, `voice/whisper_listener.py`, `profiles/store.py` | Motor de dictado libre con detección de silencio, puntuación automática (coma, punto, nueva linea), buffers de texto, 25 tests unitarios pasando | ✅ hecha 31/05/2026 |
 | 28 | Overlay de emojis navegables con gaze + voz | UX | baja | `ui/emoji_overlay.py`, `voice/` | Navegar emojis con mirada, confirmar con voz o blink | ✅ hecha 31/05/2026 |
 | 29 | App switcher con gaze dwell + pinch para cerrar | UX | alta | `ui/app_switcher.py`, `actions/dispatcher.py` | Dwell en iconos taskbar, pinch para cerrar, swipe para cambiar | ⏳ pendiente |
-| 30 | Fusión multimodal con modo OR + intención prioritaria | Fusión | media | `fusion/fusion.py`, `fusion/channel_priority.py` | Añadir modo OR (cualquier canal activa) + priorización por confianza | ⏳ pendiente |
+| 30 | Fusión multimodal con modo OR + intención prioritaria | Fusión | media | `fusion/fusion.py`, `fusion/channel_priority.py`, `tests/test_or_fusion.py` | 26 tests unitarios pasando, 157 tests totales | ✅ hecha 31/05/2026 — 26 tests unitarios pasando |
 
 ## Progreso
 
-| **Completadas:** 25 / 30 (83%) |
-| **Pendientes:** 5 |
+| **Completadas:** 27 / 30 (90%) |
+| **Pendientes:** 3 |
 
 ## Orden de implementación
 
