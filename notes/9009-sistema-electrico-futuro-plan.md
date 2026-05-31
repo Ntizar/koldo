@@ -31,7 +31,7 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 || 10 | Microanimaciones de transición | Transiciones suaves al cambiar entre escenarios y tabs | app.css, ntizar.css | 🔵 Baja | Al cambiar de escenario o tab, las transiciones son suaves (220ms) | ✅ hecha (31/05/2026) |
 || 7 | Comparación lado a lado | Dos paneles simultáneos para comparar escenarios | app.js, simulator.js, charts.js, app.css | 🟡 Media | Activando modo comparación, aparecen dos dashboards lado a lado | ✅ hecha (31/05/2026) |
 || 8 | Selector de fecha REE | Permitir elegir cualquier fecha de 2025 para datos REE | ree-data.js, app.js, ree-data.css | 🟡 Media | Selector de fecha muestra datos REE correspondientes a esa fecha | ✅ hecha (31/05/2026) |
-|| 9 | Gráfico de sankey | Flujos de energía entre tecnologías y sectores | charts.js, simulator.js | 🟡 Media | Nueva pestaña o sección con gráfico de sankey mostrando flujos | ⏳ pendiente |
+|| 9 | Gráfico de sankey | Flujos de energía entre tecnologías y sectores | charts.js, simulator.js | 🟡 Media | Nueva sección con gráfico sankey mostrando flujos | ✅ hecha (31/05/2026) |
 || 11 | Service Worker offline | Caché de la aplicación para funcionamiento sin conexión | sw.js, index.html | 🔴 Alta | La app funciona sin conexión, datos de última simulación se mantienen | ⏳ pendiente |
 || 12 | API REE en tiempo real | Fetch a datos reales de Esios/REE con caché | ree-data.js, app.js, app.css | 🔴 Alta | Datos REE se actualizan automáticamente, con indicador de última actualización | ⏳ pendiente |
 || 13 | Motor headless ESM | Ejecutable en Node.js para tests y análisis | simulator.js, constants.js, weather.js, demand.js, storage.js, policy.js, nuclear.js, trajectory.js, montecarlo.js | 🔴 Alta | Se puede hacer `node motor.mjs --scenario=1` y obtener resultados JSON | ⏳ pendiente |
@@ -262,21 +262,26 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ---
 
-### Mejora 9: Gráfico de sankey
+### Mejora 9: Gráfico de sankey ✅
 **Dificultad:** 🟡 Media  
-**Archivos afectados:** charts.js, simulator.js  
-**Descripción:** Añadir un gráfico de sankey que muestre los flujos de energía entre tecnologías de generación y sectores de demanda. Visualiza cómo la energía fluye desde las fuentes hasta los consumidores.
+**Archivos afectados:** charts.js, simulator.js, index.html, app.js  
+**Descripción:** Añadir un gráfico de sankey que muestre los flujos de energía entre tecnologías de generación y sectores de demanda. Visualiza cómo la energía fluye desde las fuentes hasta los consumidores.  
+**Completada:** 31 de mayo de 2026
 
 **Pasos:**
-1. Calcular flujos de generación por tecnología
-2. Calcular demanda por sector
-3. Implementar gráfico sankey con Plotly
-4. Añadir en la pestaña Análisis o como nueva sección
+1. Añadir método `calcularFlujosSankey()` en simulator.js que suma generación por tecnología y demanda por sector
+2. Almacenar `_ultimoMix` y `_ultimoDetalleDemanda` en el simulador tras la simulación
+3. Implementar `plotSankey()` en charts.js con Plotly sankey (orientación horizontal, colores por tecnología)
+4. Añadir sección en index.html dentro de la tab "Análisis" con canvas `plot-sankey`
+5. Añadir variable `sankeyData` en app.js y calcularla en `setResults()`
+6. Llamar a `SEF.Charts.plotSankey()` en `renderizarGraficos()`
+7. Colores: tecnologías con colores del proyecto, sectores en gris suave
 
 **Verificación:**
-- Gráfico sankey visible en la interfaz
-- Flujos muestran proporciones correctas
-- Leyenda clara con tecnologías y sectores
+- Gráfico sankey visible en la tab "Análisis" ✅
+- Flujos muestran proporciones correctas ✅
+- Nodos: Nuclear, Solar FV, Eólica terrestre, Eólica marina, Hidráulica, Gas CCGT, Importaciones, Baterías, Bombeo, V2G → Residencial, Servicios, Industria, VE, Bombas de calor, H₂ flexible ✅
+- Commit 1b70b8c pushado a main ✅
 
 ---
 
