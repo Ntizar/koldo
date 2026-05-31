@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 | **Inicio:** 29/05/2026 |
-| **Última actualización:** 31/05/2026 — #19 Teclado virtual con selección por mirada |
+| **Última actualización:** 31/05/2026 — #22 Teclado virtual dual layout por ojos |
 
 ## Mejoras
 
@@ -31,7 +31,7 @@ Control del PC sin manos: mirada + gestos + voz.
 | 19 | Teclado virtual con selección por mirada | UX | alta | `ui/virtual_keyboard.py`, `main.py`, `actions/dispatcher.py`, `voice/whisper_listener.py` | Widget PyQt6 translúcido con layout QWERTY, dwell en teclas, shift/espacio/enter/backspace, apertura/cierre por voz | ✅ hecha 31/05/2026 |
 | 20 | Modo dictado (mirar campo + decir "escribe" + dictar) | Voz | alta | `voice/`, `ui/`, `main.py` | Dictado multimodal | ⏳ pendiente |
 | 21 | OCR integrado + gaze typing (talon-gaze-ocr) | Nuevos | media | `ocr/`, `gaze/`, `ui/virtual_keyboard.py` | Detectar texto en pantalla, seleccionar palabras con mirada | ⏳ pendiente |
-| 22 | Teclado virtual dual layout por ojos (Keyboard-Typing-with-Eyes) | UX | baja | `ui/virtual_keyboard.py` | Layout izq/der dinámico, audio feedback, blink para seleccionar | ⏳ pendiente |
+| 22 | Teclado virtual dual layout por ojos (Keyboard-Typing-with-Eyes) | UX | baja | `ui/virtual_keyboard.py`, `main.py` | Layout izq/der dinámico, audio feedback, blink para seleccionar | ✅ hecha 31/05/2026 |
 | 23 | Calibración con Gaussian Process (auto-calibración continua) | Gaze | alta | `gaze/calibration.py`, `gaze/tracker.py` | Reemplazar regresión polinomial por GP, auto-ajuste durante uso | ⏳ pendiente |
 | 24 | Control bimanual (mano derecha cursor, izquierda scroll/zoom) | Gestos | media | `gestures/hand_fusion.py`, `main.py` | Dos manos independientes: cursor+clic + scroll+zoom | ⏳ pendiente |
 | 25 | Air scroll vertical con mano (gesto de barrido) | Gestos | baja | `gestures/hand_tracker.py`, `fusion/fusion.py`, `profiles/store.py`, `tests/` | 11 tests unitarios pasando, scroll con cualquier pose de mano | ✅ hecha 30/05/2026 |
@@ -43,8 +43,8 @@ Control del PC sin manos: mirada + gestos + voz.
 
 ## Progreso
 
-| **Completadas:** 20 / 30 (67%) |
-| **Pendientes:** 10 |
+| **Completadas:** 21 / 30 (70%) |
+| **Pendientes:** 9 |
 
 ## Orden de implementación
 
