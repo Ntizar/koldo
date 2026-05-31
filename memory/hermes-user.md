@@ -4,6 +4,6 @@ User name: David Antizar (alias Ntizar en GitHub). Agente se llama Koldo. TTS co
 §
 Siempre hacer resumen chulo al terminar tareas: formato bonito, claro, con lo que se ha hecho. NUNCA responder con una frase seca o simple confirmación. El usuario quiere ver un resumen visualmente atractivo de cada tarea completada.
 §
-Prefiere ejecución directa sin sobre-planificación. Cuando trabajo en el proyecto SistemaElectricoFuturo (o cualquier proyecto suyo), debo hacer los cambios directamente sobre los archivos, no delegar en subagentes ni planificar excesivamente. Le frustra esperar mientras "pienso" o delego tareas que puedo hacer directamente.
+Prefiere ejecución directa sin sobre-planificación. Cuando pide algo, hacerlo directamente — no hacer múltiples búsquedas, snapshots o reflexiones antes de responder. Le frustra esperar mientras "pienso" o delego tareas que puedo hacer directamente.
 §
 Frutonano = novia de David Antizar. Se llama Frutonano. David va a Andalucía con ella.

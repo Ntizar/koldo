@@ -2,12 +2,14 @@ Aurora Nightly: 4 jobs nocturnos (01-04 UTC). Jobs: 47211a1f (#1 investigación)
 §
 nan-dashboard: /root/workspace/nan-dashboard. Puerto 4000. Esios-style (azul #2563eb + naranja #f97316 + liquid glass, tema claro, Inter). Express + cookie-parser. Admin password via env ADMIN_PASSWORD. Repo: github.com/Ntizar/nan-dashboard.
 §
-esios-dashboard: /root/workspace/esios-dashboard. Puerto 4000. ID 600 (Pool OMIE) añadido. Deploy: push a git → NaN auto-rebuild. Tras cambios locales, SIEMPRE git push + verificar healthz (uptime bajo). Previsión hidden (comentada).
+Esios-dashboard: NO night mode, NO CSV export, NO overlays de error, NO skeleton screens, NO animaciones complejas. El usuario quiere la app simple y rápida, sin 'ruido'. La mejora es hacer la app mejor, no añadir más funcionalidades innecesarias.
 §
-ESIOS: convertEsiosValue() en /root/workspace/esios-dashboard/src/shared/esios-units.js es fuente de verdad. DIRECT_IDS: 1001, 1777-1780, 10358-10359, 10355-10356, 10207-10209, TODOS los 2038-2067, 1293, 2052, 10232, 10351, 10352, 10206, 10006, 2198, 2199. NO hay DIV10_IDS. Solo PBF 1-462 y 10035-10049: /1000. Script verificación: /hermes-home/skills/esios-api/scripts/verify-esios-units.js. NUNCA asumir unidades por nombre.
+ESIOS: convertEsiosValue() en esios-units.js es fuente de verdad. IDs clave: 1001 (PVPC directo), 600 (pool OMIE directo), 1293 (demanda directo). PBF 1-462 y 10035-10049: /1000. time_trunc=hour = SUMA en API, no promedio. **CRÍTICO**: NO llamar buildSummary() recursivamente desde sí misma (causa OOM en NaN).
 §
-Koldo system: SOUL.md en /hermes-home/SOUL.md (actualizado 2026-05-26, ~1480 bytes). Repo Koldo: /root/workspace/Koldo, synced a /hermes-home/skills/koldo/. Cron autoconfig diario 09:00 UTC. gh CLI no instalado, git auth via token HTTPS. Stack: qwen3.6 vía NaN, Telegram, 1vCPU/2GB/20GB. Script de recovery SOUL.md en koldo-setup/scripts/restore-soul.sh.
+ESIOS Dashboard NaN: Token real en ESIOS_API env var (no .env). API tarda 5s+ en NaN por cache disk perdido entre reinicios — memory cache + batching paralelo. Frontend: carga progresiva (summary primero, prediccion en bg). CDN cache HTML viejo — meta no-cache + cache-bust.js.
 §
-ESIOS API: time_trunc=hour SUMA (no promedia). Quitado del cliente. Datos cada 5 min (288 slots/día). normalizeHourlyValues promedia los 5 min en horario. Nuevo endpoint /api/esios/summary-5min. IDs 2038-2067, 1293, 10351, 10352, 10206, 2052, 10006, 10232, 2198, 2199, 1001, 10207-10209: directos MW. Solo IDs PBF (1-462) necesitan /1000. Verificado vs REE ✅.
+Koldo system: SOUL.md en /hermes-home/SOUL.md. Repo Koldo: /root/workspace/Koldo, synced a /hermes-home/skills/koldo/. gh CLI no instalado, git auth via token HTTPS. Stack: qwen3.6 vía NaN, Telegram, 1vCPU/2GB/20GB.
 §
 Skill design: class-level skills only. No project-specific deploy skills. SistemaElectricoFuturo: Ntizar/SistemaElectricoFuturo, v3.5 Vue 3+Plotly, puerto 6000. Pestaña Datos REE (normativa, CNMC, indicadores). Módulo ree-data.js.
+§
+9009 multi-iteration: Cuando el usuario pide 20 procesos 9009 o múltiples iteraciones de mejora, implementar directamente con patch/write_file. Los subagentes fallan con timeout en tareas de código extenso. Patrón: explorar → analizar → planificar → implementar directo → commit+push. Skill: 9009-multi-iteration.

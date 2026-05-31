@@ -20,23 +20,23 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ## Tabla de mejoras priorizadas
 
-| # | Mejora | Descripción | Archivos afectados | Dificultad | Verificación |
-|---|--------|-------------|-------------------|------------|--------------|
+|| # | Mejora | Descripción | Archivos afectados | Dificultad | Verificación |
+||---|--------|-------------|-------------------|------------|--------------|
 || 1 | Crear package.json + scripts | Incluir dependencias (vue, plotly), scripts de dev y build | package.json | 🔵 Baja | `npm install` funciona, `npm run dev` levanta servidor | ✅ hecha (30/05/2026) |
-| 2 | Exportación de resultados CSV | Botón en dashboard para descargar resultados en CSV | app.js, charts.js | 🔵 Baja | Se descarga un CSV con columnas: hora, demanda, nuclear, solar, eólica, gas, precio, emisiones | ✅ hecha (30/05/2026) |
+|| 2 | Exportación de resultados CSV | Botón en dashboard para descargar resultados en CSV | app.js, charts.js | 🔵 Baja | Se descarga un CSV con columnas: hora, demanda, nuclear, solar, eólica, gas, precio, emisiones | ✅ hecha (30/05/2026) |
 || 3 | Indicador de intensidad de carbono | KPI nuevo: gCO2/kWh en el dashboard hero | simulator.js, app.js, app.css | 🔵 Baja | Aparece nuevo KPI en hero con valor gCO2/kWh, color cambia según nivel | ✅ hecha (30/05/2026) |
 || 4 | Tooltips mejorados en gráficos | Añadir más información contextual en hover de gráficos Plotly | charts.js | 🔵 Baja | Al pasar el ratón sobre gráficos aparecen tooltips con datos adicionales | ✅ hecha (31/05/2026) |
-| 5 | Modo presentación | Pantalla completa con KPIs grandes para presentaciones | index.html, app.js, app.css | 🟡 Media | Tecla P activa modo presentación con KPIs grandes y gráficos centrados | ✅ hecha (31/05/2026)
+|| 5 | Modo presentación | Pantalla completa con KPIs grandes para presentaciones | index.html, app.js, app.css | 🟡 Media | Tecla P activa modo presentación con KPIs grandes y gráficos centrados | ✅ hecha (31/05/2026) |
 || 6 | Mini sparklines en KPIs | Mostrar mini gráfico de tendencia en cada tarjeta KPI del dashboard | app.js, charts.js, app.css | 🟡 Media | Cada KPI card muestra un mini gráfico de líneas de las últimas 7 horas | ✅ hecha (31/05/2026) |
-| 7 | Comparación lado a lado | Dos paneles simultáneos para comparar escenarios | app.js, simulator.js, charts.js, app.css | 🟡 Media | Activando modo comparación, aparecen dos dashboards lado a lado |
-| 8 | Selector de fecha REE | Permitir elegir cualquier fecha de 2025 para datos REE | ree-data.js, app.js, ree-data.css | 🟡 Media | Selector de fecha muestra datos REE correspondientes a esa fecha |
-| 9 | Gráfico de sankey | Flujos de energía entre tecnologías y sectores | charts.js, simulator.js | 🟡 Media | Nueva pestaña o sección con gráfico de sankey mostrando flujos |
-| 10 | Microanimaciones de transición | Transiciones suaves al cambiar entre escenarios y tabs | app.css, ntizar.css | 🔵 Baja | Al cambiar de escenario o tab, las transiciones son suaves (220ms) |
-| 11 | Service Worker offline | Caché de la aplicación para funcionamiento sin conexión | sw.js, index.html | 🔴 Alta | La app funciona sin conexión, datos de última simulación se mantienen |
-| 12 | API REE en tiempo real | Fetch a datos reales de Esios/REE con caché | ree-data.js, app.js, app.css | 🔴 Alta | Datos REE se actualizan automáticamente, con indicador de última actualización |
-| 13 | Motor headless ESM | Ejecutable en Node.js para tests y análisis | simulator.js, constants.js, weather.js, demand.js, storage.js, policy.js, nuclear.js, trajectory.js, montecarlo.js | 🔴 Alta | Se puede hacer `node motor.mjs --scenario=1` y obtener resultados JSON |
-| 14 | Tests automatizados Vitest | Validación de calibración 2025 + tests unitarios | package.json, vitest.config.js, tests/ | 🔴 Alta | `npm test` pasa todos los tests, cobertura > 80% |
-| 15 | GitHub Actions CI | Lint + tests + deploy automático a Pages | .github/workflows/ | 🔴 Alta | Cada push a main ejecuta lint, tests y despliega a GitHub Pages |
+|| 10 | Microanimaciones de transición | Transiciones suaves al cambiar entre escenarios y tabs | app.css, ntizar.css | 🔵 Baja | Al cambiar de escenario o tab, las transiciones son suaves (220ms) | ✅ hecha (31/05/2026) |
+|| 7 | Comparación lado a lado | Dos paneles simultáneos para comparar escenarios | app.js, simulator.js, charts.js, app.css | 🟡 Media | Activando modo comparación, aparecen dos dashboards lado a lado | ✅ hecha (31/05/2026) |
+|| 8 | Selector de fecha REE | Permitir elegir cualquier fecha de 2025 para datos REE | ree-data.js, app.js, ree-data.css | 🟡 Media | Selector de fecha muestra datos REE correspondientes a esa fecha | ⏳ pendiente |
+|| 9 | Gráfico de sankey | Flujos de energía entre tecnologías y sectores | charts.js, simulator.js | 🟡 Media | Nueva pestaña o sección con gráfico de sankey mostrando flujos | ⏳ pendiente |
+|| 11 | Service Worker offline | Caché de la aplicación para funcionamiento sin conexión | sw.js, index.html | 🔴 Alta | La app funciona sin conexión, datos de última simulación se mantienen | ⏳ pendiente |
+|| 12 | API REE en tiempo real | Fetch a datos reales de Esios/REE con caché | ree-data.js, app.js, app.css | 🔴 Alta | Datos REE se actualizan automáticamente, con indicador de última actualización | ⏳ pendiente |
+|| 13 | Motor headless ESM | Ejecutable en Node.js para tests y análisis | simulator.js, constants.js, weather.js, demand.js, storage.js, policy.js, nuclear.js, trajectory.js, montecarlo.js | 🔴 Alta | Se puede hacer `node motor.mjs --scenario=1` y obtener resultados JSON | ⏳ pendiente |
+|| 14 | Tests automatizados Vitest | Validación de calibración 2025 + tests unitarios | package.json, vitest.config.js, tests/ | 🔴 Alta | `npm test` pasa todos los tests, cobertura > 80% | ⏳ pendiente |
+|| 15 | GitHub Actions CI | Lint + tests + deploy automático a Pages | .github/workflows/ | 🔴 Alta | Cada push a main ejecuta lint, tests y despliega a GitHub Pages | ⏳ pendiente |
 
 ---
 
@@ -64,7 +64,7 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 ### Mejora 2: Exportación de resultados CSV
 **Dificultad:** 🔵 Baja  
 **Archivos afectados:** index.html, app.js  
-**Descripción:** Añadir botón "Exportar CSV" en la barra de acciones del dashboard que descarga un archivo con los datos horarios de la simulación actual: hora, demanda, nuclear, solar, eólica, offshore, hidráulica, baterías, bombeo, V2G, carga baterías, carga bombeo, importación, exportación, gas, vertido, h2Flex, flexDown, precio.
+**Descripción:** Añadir botón "Exportar CSV" en la barra de acciones del dashboard que descarga un archivo con los datos horarios de la simulación actual: hora, demanda, nuclear, solar, eólica, gas, precio, emisiones.
 **Completada:** 30 de mayo de 2026
 
 **Pasos:**
@@ -183,22 +183,58 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ---
 
-### Mejora 7: Comparación lado a lado
+### Mejora 10: Microanimaciones de transición ✅
+**Dificultad:** 🔵 Baja  
+**Archivos afectados:** app.css, js/app.js  
+**Descripción:** Añadir transiciones suaves (220ms) al cambiar entre escenarios, tabs y vistas. Mejorar la sensación de fluidez de la aplicación. Incluye: transiciones en cards, tabs, botones, KPIs, métricas, tablas, selects, inputs, toggles, gráficos, loading. Animación de pulso en KPIs al cambiar valores.
+**Completada:** 31 de mayo de 2026
+
+**Pasos:**
+1. Añadir 130+ líneas de CSS transitions en app.css (cards, tabs, botones, KPIs, métricas, tablas, selects, inputs, toggles, gráficos, loading, trajectory)
+2. Añadir watcher en app.js para detectar cambios en resultados y aplicar clase kpi-animate
+3. Animación de pulso (scale 1.03) en KPIs al cambiar valor
+4. Hover effects en scenario-cards y metric-pills
+5. Focus rings en inputs y selects
+
+**Verificación:**
+- Cambio de escenario tiene transición suave (220ms ease)
+- Tabs tienen efecto de activación animado con hover lift
+- KPIs animan su cambio de valor con efecto pulse
+- Botones tienen efecto press (scale 0.98)
+- Scenario cards tienen hover lift
+- Métricas tienen hover lift
+- Tablas tienen hover row highlight
+- Inputs y selects tienen focus ring brand
+- Toggles tienen scale al activarse
+- No se rompe el layout existente
+- Commit 0661f8e pushado a main
+
+---
+
+### Mejora 7: Comparación lado a lado ✅
 **Dificultad:** 🟡 Media  
 **Archivos afectados:** app.js, simulator.js, charts.js, app.css  
 **Descripción:** Activar modo comparación donde se muestran dos escenarios simultáneamente lado a lado, con los mismos gráficos y KPIs, para comparar directamente.
+**Completada:** 31 de mayo de 2026
 
 **Pasos:**
-1. Añadir estado de comparación en app.js
-2. Duplicar la estructura de gráficos en el template
-3. Permitir seleccionar segundo escenario
-4. CSS para layout de dos columnas
+1. Añadir estado de comparación en app.js (modoComparacion, escenarioComparacion, mixComparacion, preciosComparacion)
+2. Añadir funciones toggleComparacion(), seleccionarEscenarioComparacion(), cancelarComparacion()
+3. Añadir propiedades computadas nombreEscenarioComparacion y comparacionResultados
+4. Añadir función simularComparacion() que simula sin sobrescribir resultados principales
+5. Envolver dashboard en condicional v-if/v-else para renderizar dos paneles
+6. Añadir botón "Comparar" en barra de herramientas y selector de escenario secundario
+7. CSS para layout de dos columnas con comparison-layout, comparison-panel
+8. Cada panel usa las mismas plantillas Vue pero con datos diferentes (resultados vs comparacionResultados)
 
 **Verificación:**
 - Botón "Comparar" activa modo lado a lado
-- Dos paneles con escenarios diferentes
+- Selector de escenario secundario permite elegir escenario a comparar
+- Dos paneles con escenarios diferentes visibles simultáneamente
 - Mismos gráficos y KPIs en ambos paneles
 - Botón "Cancelar comparación" cierra el modo
+- Template balance: 7 open, 7 close ✅
+- Commit bf67945 pushado a main
 
 ---
 
@@ -235,34 +271,6 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 - Gráfico sankey visible en la interfaz
 - Flujos muestran proporciones correctas
 - Leyenda clara con tecnologías y sectores
-
----
-
-### Mejora 10: Microanimaciones de transición ✅
-**Dificultad:** 🔵 Baja  
-**Archivos afectados:** app.css, js/app.js  
-**Descripción:** Añadir transiciones suaves (220ms) al cambiar entre escenarios, tabs y vistas. Mejorar la sensación de fluidez de la aplicación. Incluye: transiciones en cards, tabs, botones, KPIs, métricas, tablas, selects, inputs, toggles, gráficos, loading. Animación de pulso en KPIs al cambiar valores.
-**Completada:** 31 de mayo de 2026
-
-**Pasos:**
-1. Añadir 130+ líneas de CSS transitions en app.css (cards, tabs, botones, KPIs, métricas, tablas, selects, inputs, toggles, gráficos, loading, trajectory)
-2. Añadir watcher en app.js para detectar cambios en resultados y aplicar clase kpi-animate
-3. Animación de pulso (scale 1.03) en KPIs al cambiar valor
-4. Hover effects en scenario-cards y metric-pills
-5. Focus rings en inputs y selects
-
-**Verificación:**
-- Cambio de escenario tiene transición suave (220ms ease)
-- Tabs tienen efecto de activación animado con hover lift
-- KPIs animan su cambio de valor con efecto pulse
-- Botones tienen efecto press (scale 0.98)
-- Scenario cards tienen hover lift
-- Métricas tienen hover lift
-- Tablas tienen hover row highlight
-- Inputs y selects tienen focus ring brand
-- Toggles tienen scale al activarse
-- No se rompe el layout existente
-- Commit 0661f8e pushado a main
 
 ---
 
