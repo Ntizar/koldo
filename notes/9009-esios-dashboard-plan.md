@@ -23,7 +23,7 @@
 | 5 | Indicadores de tendencia (↑↓ %) — comparar con día anterior en métricas principales | Resumen | baja | render.js, data.js, api.js | Flechas visibles con % de cambio | ✅ completado 2026-05-30 |
 | 6 | Estimación de ahorro económico — calcular €/día ahorrado por renovables | Resumen | baja | render.js, summary.service.js | Métrica de ahorro visible | ✅ completado 2026-05-31 |
 | 7 | Zoom y panning en gráficos — integrar chartjs-plugin-zoom | Global | media | index.html, render.js, data.js, styles.css, render-zoom.js | Zoom con rueda, pan con drag, botón reset | ✅ completado 2026-05-31 |
-| 8 | Timestamp de datos + enlace a fuente ESIOS — mostrar fecha/hora y enlace | Global | baja | render.js, index.html | Timestamp visible en footer/header | ⏳ pendiente |
+| 8 | Timestamp de datos + enlace a fuente ESIOS — mostrar fecha/hora y enlace | Global | baja | render.js, index.html, styles.css | Timestamp visible con fecha, enlace a ESIOS y REE | ✅ completado 2026-05-31 |
 | 9 | Curva de carga comparativa — superponer día seleccionado vs media 7 días | Demanda | media | render-charts.js, data.js, api.js, index.html, styles.css | Gráfico con 2 líneas superpuestas | ⏳ pendiente |
 | 10 | Performance ratio renovable — comparar gen real vs prevista eólica/solar | Mix | media | render-charts.js, summary.service.js | Métrica de % acierto visible | ⏳ pendiente |
 | 11 | Panel de Balancing/Reservas — mostrar balance del sistema | Resumen | media | render.js, summary.service.js, index.html | Gráfico de balance visible | ⏳ pendiente |
