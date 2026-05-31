@@ -230,10 +230,10 @@ function fmt(n) {
   return n.toFixed(2);
 }
 
-function fmtK(n) {
+function fmtMW(n) {
   if (n == null) return '—';
-  if (Math.abs(n) >= 1000) return (n / 1000).toFixed(1) + 'k';
-  return n.toFixed(0);
+  if (Math.abs(n) >= 1000) return (n / 1000).toFixed(1) + ' GW';
+  return n.toFixed(0) + ' MW';
 }
 
 function pct(n, d) {
@@ -327,7 +327,7 @@ function drawLineChart(title, datasets, unit, opts = {}) {
     ctx.moveTo(PAD.left, y);
     ctx.lineTo(W - PAD.right, y);
     ctx.stroke();
-    ctx.fillText(fmtK(val), PAD.left - 8, y + 4);
+    ctx.fillText(fmtMW(val), PAD.left - 8, y + 4);
   }
 
   // Línea cero si hay negativos
@@ -627,11 +627,11 @@ function analyzeDay(data) {
 
   // Demanda
   analisis += `\n\n`;
-  analisis += `La demanda media fue de ${fmtK(dAvg)} MW, con un máximo de ${fmtK(dMax)} MW a las ${dMaxHora}:00 y mínimo de ${fmtK(dMin)} MW a las ${dMinHora}:00.`;
+  analisis += `La demanda media fue de ${fmtMW(dAvg)}, con un máximo de ${fmtMW(dMax)} a las ${dMaxHora}:00 y mínimo de ${fmtMW(dMin)} a las ${dMinHora}:00.`;
 
   // Renovables
   analisis += `\n\n`;
-  analisis += `La generación renovable media fue de ${fmtK(gRenAvg)} MW, un ${pctRenovable}% sobre la generación total (${fmtK(gTotalAvg)} MW).`;
+  analisis += `La generación renovable media fue de ${fmtMW(gRenAvg)}, un ${pctRenovable}% sobre la generación total (${fmtMW(gTotalAvg)}).`;
 
   if (pctRenovable > 60) {
     analisis += ` ¡Alta penetración renovable!`;
@@ -643,7 +643,7 @@ function analyzeDay(data) {
 
   // Solar
   if (solarAvg > 0) {
-    analisis += `\nLa solar FV media fue de ${fmtK(solarAvg)} MW, con un pico de ${fmtK(solarMax)} MW a las ${solarMaxHora}:00.`;
+    analisis += `\nLa solar FV media fue de ${fmtMW(solarAvg)}, con un pico de ${fmtMW(solarMax)} a las ${solarMaxHora}:00.`;
   }
 
   // CO2
@@ -652,9 +652,9 @@ function analyzeDay(data) {
   // Interconexiones
   analisis += `\n\n`;
   if (iTotalNet > 0) {
-    analisis += `España fue exportador neto con ${fmtK(iTotalNet)} MW. `;
+    analisis += `España fue exportador neto con ${fmtMW(iTotalNet)}. `;
   } else {
-    analisis += `España fue importador neto con ${fmtK(Math.abs(iTotalNet))} MW. `;
+    analisis += `España fue importador neto con ${fmtMW(Math.abs(iTotalNet))}. `;
   }
   analisis += `Francia: ${iFRExport}/24h exportando. Portugal: ${iPTExport}/24h exportando.`;
 
@@ -685,14 +685,14 @@ async function main() {
     `  Pico: ${fmt(stats.pMax)} a las ${stats.pMaxHora}:00\n` +
     `  Valle: ${fmt(stats.pMin)} a las ${stats.pMinHora}:00\n` +
     `  Diferencia pico-valle: ${fmt(stats.pMax - stats.pMin)} €/MWh\n\n` +
-    `⚡ Demanda: ${fmtK(stats.dAvg)} MW media\n` +
-    `  Máx: ${fmtK(stats.dMax)} a las ${stats.dMaxHora}:00\n` +
-    `  Mín: ${fmtK(stats.dMin)} a las ${stats.dMinHora}:00\n\n` +
-    `🌿 Renovables: ${fmtK(stats.gRenAvg)} MW (${stats.pctRenovable}%)\n` +
-    `  No renovables: ${fmtK(stats.gNoRenAvg)} MW\n` +
-    `  Solar FV: ${fmtK(stats.solarAvg)} MW media\n\n` +
+    `⚡ Demanda: ${fmtMW(stats.dAvg)} media\n` +
+    `  Máx: ${fmtMW(stats.dMax)} a las ${stats.dMaxHora}:00\n` +
+    `  Mín: ${fmtMW(stats.dMin)} a las ${stats.dMinHora}:00\n\n` +
+    `🌿 Renovables: ${fmtMW(stats.gRenAvg)} (${stats.pctRenovable}%)\n` +
+    `  No renovables: ${fmtMW(stats.gNoRenAvg)}\n` +
+    `  Solar FV: ${fmtMW(stats.solarAvg)} media\n\n` +
     `🌍 CO₂: ${fmt(stats.co2Avg)} tCO₂/MWh\n\n` +
-    `🔌 Exportación neta: ${fmtK(stats.iTotalNet)} MW\n` +
+    `🔌 Exportación neta: ${fmtMW(stats.iTotalNet)}\n` +
     `  Francia: ${stats.iFRExport}/24h exportando\n` +
     `  Portugal: ${stats.iPTExport}/24h exportando\n\n` +
     `📝 *Análisis:*\n${analisis}\n\n` +
@@ -721,7 +721,7 @@ async function main() {
   );
   const demandaPath = path.join(CACHE_DIR, `chart-demanda-${TARGET_DATE}.png`);
   fs.writeFileSync(demandaPath, demandaImg);
-  await sendTelegramPhoto(demandaPath, `⚡ Demanda Real — ${TARGET_DATE}\nMedia: ${fmtK(stats.dAvg)} MW · Máx: ${fmtK(stats.dMax)} a las ${stats.dMaxHora}:00`);
+  await sendTelegramPhoto(demandaPath, `⚡ Demanda Real — ${TARGET_DATE}\nMedia: ${fmtMW(stats.dAvg)} · Máx: ${fmtMW(stats.dMax)} a las ${stats.dMaxHora}:00`);
 
   // ── Gráfico 3: Solar + Demanda (comparativo) ──
   console.error('🎨 Gráfico solar vs demanda...');
@@ -735,7 +735,7 @@ async function main() {
   );
   const solarPath = path.join(CACHE_DIR, `chart-solar-${TARGET_DATE}.png`);
   fs.writeFileSync(solarPath, solarImg);
-  await sendTelegramPhoto(solarPath, `☀️ Solar FV vs Demanda — ${TARGET_DATE}\nSolar media: ${fmtK(stats.solarAvg)} MW · Pico: ${fmtK(stats.solarMax)} a las ${stats.solarMaxHora}:00`);
+  await sendTelegramPhoto(solarPath, `☀️ Solar FV vs Demanda — ${TARGET_DATE}\nSolar media: ${fmtMW(stats.solarAvg)} · Pico: ${fmtMW(stats.solarMax)} a las ${stats.solarMaxHora}:00`);
 
   // ── Gráfico 4: Interconexiones (con negativos) ──
   console.error('🎨 Gráfico interconexiones...');
@@ -749,7 +749,7 @@ async function main() {
   );
   const interPath = path.join(CACHE_DIR, `chart-inter-${TARGET_DATE}.png`);
   fs.writeFileSync(interPath, interImg);
-  await sendTelegramPhoto(interPath, `🔌 Interconexiones — ${TARGET_DATE}\nNeta: ${fmtK(stats.iTotalNet)} MW · FR: ${stats.iFRExport}/24h export · PT: ${stats.iPTExport}/24h export`);
+  await sendTelegramPhoto(interPath, `🔌 Interconexiones — ${TARGET_DATE}\nNeta: ${fmtMW(stats.iTotalNet)} · FR: ${stats.iFRExport}/24h export · PT: ${stats.iPTExport}/24h export`);
 
   // ── Gráfico 5: CO2 ──
   console.error('🎨 Gráfico CO2...');
