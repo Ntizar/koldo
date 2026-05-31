@@ -21,8 +21,8 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | 9 | Expandir `:has()` a dropdown | ⭐⭐ Media | `ntizar.ui.css` | Interactividad sin JS | ✅ hecha 2026-05-31 |
 | 10 | View transitions tema/skin | ⭐⭐ Media | `ntizar.next.css` | Experiencia visual | ✅ hecha 2026-05-31 |
 | 11 | Subgrid para layouts anidados | ⭐⭐ Media | `ntizar.css` | Layout preciso | ✅ hecha 2026-05-31 |
-| 12 | CSS Houdini gradientes | ⭐⭐ Media | `ntizar.next.css` | Rendimiento visual |
-| 13 | Nav glass pattern | ⭐⭐ Media | `ntizar.patterns.css` | Coherencia visual |
+| 12 | CSS Houdini gradientes | ⭐⭐ Media | `ntizar.next.css` | Rendimiento visual | ✅ hecha 2026-05-31 |
+| 13 | Nav glass pattern | ⭐⭐ Media | `ntizar.patterns.css` | Coherencia visual | ✅ hecha 2026-05-31 |
 | 14 | Sistema de tonalidad superficies | ⭐⭐⭐ Alta | `ntizar.next.css` + `ntizar.css` | Profundidad visual |
 | 15 | CSS-only dropdown avanzado | ⭐⭐⭐ Alta | `ntizar.ui.css` | Cero JS |
 
@@ -250,7 +250,7 @@ Ordenadas por dificultad creciente (baja → media → alta).
 **Verificación:**
 - [ ] `@property --nz-gradient-angle` permite animar el ángulo del gradiente
 - [ ] `@property --nz-gradient-pos` permite animar la posición de los stops
-- - El Aurora Mesh se anima más suavemente
+- [ ] El Aurora Mesh se anima más suavemente
 - [ ] Degradación grácil: si `@property` no es soportado, el gradiente funciona normalmente
 - [ ] No afecta al rendimiento (medir con Lighthouse)
 
@@ -344,10 +344,10 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | 7 | Glass inputs | 1 hora | ✅ hecha 2026-05-31 |
 | 8 | Glass tablas | 1 hora |
 | 9 | `:has()` dropdown | 1.5 horas | ✅ hecha 2026-05-31 |
-| 10 | View transitions skin | 1.5 horas |
+| 10 | View transitions skin | 1.5 horas | ✅ hecha 2026-05-31 |
 | 11 | Subgrid layouts | 1 hora | ✅ hecha 2026-05-31 |
-| 12 | CSS Houdini gradientes | 1.5 horas |
-| 13 | Nav glass pattern | 1 hora |
+| 12 | CSS Houdini gradientes | 1.5 horas | ✅ hecha 2026-05-31 |
+| 13 | Nav glass pattern | 1 hora | ✅ hecha 2026-05-31 |
 | **Total** | | **~8 horas** |
 
 ### Sprint 3 (Semana 3) — Mejoras Altas (14-15)
@@ -362,14 +362,14 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | Métrica | Actual | Objetivo v5.2 |
 |---------|--------|--------------|
 | Componentes con container-queries | 0 | 1 (.nz-card) |
-| Componentes con glass | 3 (card, surface, btn) | 7 (+ input, input--glass-strong, input--glass-brand, input--glass-accent, table, nav) |
+| Componentes con glass | 7 (card, surface, btn, input, input--glass-strong, input--glass-brand, input--glass-accent, table) | 8 (+ nav) |
 | Componentes con :has() reactivo | 1 (.nz-accordion) | 5 (accordion ✅, tabs ✅, dropdown ✅, dropdown avanzado) |
 | Skins con focus ring universal | 1 (contrast) | 6 (todos) |
 | Patrones de layout | 8 | 9 (+ bento grid) |
 | Componentes con subgrid | 0 | 1 (.nz-grid--subgrid) |
 | Breaking changes | 0 | 0 |
 | Tokens nuevos | 0 | ~12 |
-| Líneas CSS nuevas | 0 | ~300-400 |
+| Líneas CSS nuevas | ~160 | ~460-560 |
 
 ## Riesgos y Mitigación
 
