@@ -33,7 +33,7 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 || 8 | Selector de fecha REE | Permitir elegir cualquier fecha de 2025 para datos REE | ree-data.js, app.js, ree-data.css | 🟡 Media | Selector de fecha muestra datos REE correspondientes a esa fecha | ✅ hecha (31/05/2026) |
 || 9 | Gráfico de sankey | Flujos de energía entre tecnologías y sectores | charts.js, simulator.js | 🟡 Media | Nueva sección con gráfico sankey mostrando flujos | ✅ hecha (31/05/2026) |
 || 11 | Service Worker offline | Caché de la aplicación para funcionamiento sin conexión | sw.js, index.html, app.css | 🔴 Alta | La app funciona sin conexión, datos de última simulación se mantienen | ✅ hecha (31/05/2026) |
-|| 12 | API REE en tiempo real | Fetch a datos reales de Esios/REE con caché | ree-data.js, app.js, app.css | 🔴 Alta | Datos REE se actualizan automáticamente, con indicador de última actualización | ⏳ pendiente |
+|| 12 | API REE en tiempo real | Fetch a datos reales de Esios/REE con caché | ree-data.js, app.js, index.html | 🔴 Alta | Datos REE se actualizan automáticamente, con indicador de última actualización | ✅ hecha (31/05/2026) |
 || 13 | Motor headless ESM | Ejecutable en Node.js para tests y análisis | simulator.js, constants.js, weather.js, demand.js, storage.js, policy.js, nuclear.js, trajectory.js, montecarlo.js | 🔴 Alta | Se puede hacer `node motor.mjs --scenario=1` y obtener resultados JSON | ⏳ pendiente |
 || 14 | Tests automatizados Vitest | Validación de calibración 2025 + tests unitarios | package.json, vitest.config.js, tests/ | 🔴 Alta | `npm test` pasa todos los tests, cobertura > 80% | ⏳ pendiente |
 || 15 | GitHub Actions CI | Lint + tests + deploy automático a Pages | .github/workflows/ | 🔴 Alta | Cada push a main ejecuta lint, tests y despliega a GitHub Pages | ⏳ pendiente |
@@ -316,23 +316,33 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ---
 
-### Mejora 12: API REE en tiempo real
+### Mejora 12: API REE en tiempo real ✅
 **Dificultad:** 🔴 Alta  
-**Archivos afectados:** ree-data.js, app.js, app.css  
-**Descripción:** Implementar fetch a la API de Esios/REE para obtener datos reales de generación, demanda y precios. Con caché local y fallback a datos estáticos.
+**Archivos afectados:** ree-data.js, app.js, index.html  
+**Descripción:** Implementar fetch a Yahoo Finance (gas TTF, CO2 ETS) para obtener datos reales de mercado. Con caché local (TTL 1h) y fallback a datos estáticos de REE. La API de ESIOS requiere autenticación y no soporta CORS desde el navegador, por lo que se usa Yahoo Finance como fuente de datos de mercado.  
+**Completada:** 31 de mayo de 2026
 
 **Pasos:**
-1. Investigar API de Esios/REE (documentación pública)
-2. Implementar función de fetch con caché
-3. Añadir fallback a datos estáticos si la API no está disponible
-4. Mostrar indicador de "última actualización"
-5. Añadir botón de actualización manual
+1. Implementar caché en localStorage con TTL de 1 hora en ree-data.js
+2. Implementar fetchYahooFinance() usando Yahoo Finance query1 API (sin API key)
+3. Implementar construirDatosTiempoReal() que combina Yahoo Finance + datos estáticos REE
+4. Implementar cargarDatosTiempoReal() con forceRefresh y cacheClear
+5. Añadir IDs de indicadores ESIOS verificados (esios-indicators-correct skill)
+6. Integrar en app.js: carga automática en onMounted con estado de carga
+7. Añadir función reeActualizarDatos() para actualización manual
+8. Añadir badge "En vivo" / "Actualizando..." en la UI
+9. Añadir botón "Actualizar" en la sección REE
+10. Añadir sección "Fuentes de datos en tiempo real" con tarjetas para gas TTF, CO2 ETS y estado
+11. Actualizar callout de fuentes de datos
 
 **Verificación:**
-- Datos REE se actualizan desde API
-- Fallback a datos estáticos funciona si API falla
-- Indicador de última actualización visible
-- Botón de actualización manual funcional
+- Badge "En vivo" visible en pestaña REE ✅
+- Botón "Actualizar" funcional con spinner de carga ✅
+- Gas TTF y CO2 ETS se obtienen de Yahoo Finance ✅
+- Caché local con TTL 1 hora ✅
+- Fallback a datos estáticos si Yahoo Finance falla ✅
+- Indicador "Cargando..." durante la petición ✅
+- Commit 750b645 pushado a main ✅
 
 ---
 
