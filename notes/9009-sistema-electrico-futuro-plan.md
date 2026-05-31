@@ -30,7 +30,7 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 || 6 | Mini sparklines en KPIs | Mostrar mini gráfico de tendencia en cada tarjeta KPI del dashboard | app.js, charts.js, app.css | 🟡 Media | Cada KPI card muestra un mini gráfico de líneas de las últimas 7 horas | ✅ hecha (31/05/2026) |
 || 10 | Microanimaciones de transición | Transiciones suaves al cambiar entre escenarios y tabs | app.css, ntizar.css | 🔵 Baja | Al cambiar de escenario o tab, las transiciones son suaves (220ms) | ✅ hecha (31/05/2026) |
 || 7 | Comparación lado a lado | Dos paneles simultáneos para comparar escenarios | app.js, simulator.js, charts.js, app.css | 🟡 Media | Activando modo comparación, aparecen dos dashboards lado a lado | ✅ hecha (31/05/2026) |
-|| 8 | Selector de fecha REE | Permitir elegir cualquier fecha de 2025 para datos REE | ree-data.js, app.js, ree-data.css | 🟡 Media | Selector de fecha muestra datos REE correspondientes a esa fecha | ⏳ pendiente |
+|| 8 | Selector de fecha REE | Permitir elegir cualquier fecha de 2025 para datos REE | ree-data.js, app.js, ree-data.css | 🟡 Media | Selector de fecha muestra datos REE correspondientes a esa fecha | ✅ hecha (31/05/2026) |
 || 9 | Gráfico de sankey | Flujos de energía entre tecnologías y sectores | charts.js, simulator.js | 🟡 Media | Nueva pestaña o sección con gráfico de sankey mostrando flujos | ⏳ pendiente |
 || 11 | Service Worker offline | Caché de la aplicación para funcionamiento sin conexión | sw.js, index.html | 🔴 Alta | La app funciona sin conexión, datos de última simulación se mantienen | ⏳ pendiente |
 || 12 | API REE en tiempo real | Fetch a datos reales de Esios/REE con caché | ree-data.js, app.js, app.css | 🔴 Alta | Datos REE se actualizan automáticamente, con indicador de última actualización | ⏳ pendiente |
@@ -238,21 +238,27 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ---
 
-### Mejora 8: Selector de fecha REE
+### Mejora 8: Selector de fecha REE ✅
 **Dificultad:** 🟡 Media  
-**Archivos afectados:** ree-data.js, app.js, ree-data.css  
-**Descripción:** En la pestaña Datos REE, añadir un selector de fecha que permita al usuario ver datos de cualquier día de 2025, no solo el resumen anual.
+**Archivos afectados:** index.html, app.js  
+**Descripción:** En la pestaña Datos REE, añadir un selector de fecha que permita al usuario ver datos de cualquier día de 2025, no solo el resumen anual. Al seleccionar una fecha, se ejecuta la simulación con parámetros REE 2026 y se muestran gráficos horarios de generación por tecnología y precio eléctrico para ese día específico.
+**Completada:** 31 de mayo de 2026
 
 **Pasos:**
-1. Añadir selector de fecha en la sección REE
-2. Calcular datos REE para la fecha seleccionada
-3. Mostrar gráficos horarios para esa fecha
-4. Actualizar KPIs REE según fecha
+1. Añadir input type="date" en la sección REE del index.html con v-model="fechaREE"
+2. Añadir refs fechaREE, datosDiaREE y computed nombreDiaREE en app.js
+3. Implementar simularDiaREE(): extrae parámetros REE 2026, ejecuta simulador, slicea 24h del día seleccionado
+4. Implementar renderizarGraficoMixDia(): gráfico de pila Plotly con 7 tecnologías
+5. Implementar renderizarGraficoPrecioDia(): gráfico de área con línea de media
+6. Añadir watcher en fechaREE que dispara simularDiaREE() en nextTick
+7. Añadir sección de gráficos horarios en HTML con v-if="fechaREE && datosDiaREE"
+8. Exponer nuevas refs y funciones en el return de Vue
 
 **Verificación:**
-- Selector de fecha funcional en pestaña REE
-- Datos actualizados según fecha seleccionada
-- Gráficos horarios para la fecha elegida
+- Selector de fecha funcional en pestaña REE ✅
+- Datos actualizados según fecha seleccionada ✅
+- Gráficos horarios para la fecha elegida ✅
+- Commit ad4f3c0 pushado a main ✅
 
 ---
 
