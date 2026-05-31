@@ -4,7 +4,7 @@ Pipeline de mejora continua para el proyecto [FreeHands](https://github.com/Ntiz
 Control del PC sin manos: mirada + gestos + voz.
 
 | **Inicio:** 29/05/2026 |
-| **Última actualización:** 31/05/2026 — #22 Teclado virtual dual layout por ojos |
+| **Última actualización:** 31/05/2026 — #28 Overlay de emojis navegables con gaze + voz |
 
 ## Mejoras
 
@@ -35,16 +35,16 @@ Control del PC sin manos: mirada + gestos + voz.
 | 23 | Calibración con Gaussian Process (auto-calibración continua) | Gaze | alta | `gaze/calibration.py`, `gaze/tracker.py` | Reemplazar regresión polinomial por GP, auto-ajuste durante uso | ⏳ pendiente |
 | 24 | Control bimanual (mano derecha cursor, izquierda scroll/zoom) | Gestos | media | `gestures/hand_fusion.py`, `main.py` | Dos manos independientes: cursor+clic + scroll+zoom | ⏳ pendiente |
 | 25 | Air scroll vertical con mano (gesto de barrido) | Gestos | baja | `gestures/hand_tracker.py`, `fusion/fusion.py`, `profiles/store.py`, `tests/` | 11 tests unitarios pasando, scroll con cualquier pose de mano | ✅ hecha 30/05/2026 |
-| 26 | Control de volumen con posición Y de mano | Gestos | baja | `gestures/volume_control.py`, `actions/dispatcher.py` | Mano arriba → volumen sube, abajo → baja | ⏳ pendiente |
+| 26 | Control de volumen con posición Y de mano | Gestos | baja | `gestures/volume_control.py`, `main.py`, `profiles/store.py` | Mano arriba → volumen sube, mano abajo → baja | ✅ hecha 31/05/2026 |
 | 27 | Dictado continuo con Whisper/Vosk (no solo comandos discretos) | Voz | media | `voice/continuous_dictation.py`, `main.py` | Dictado libre que escribe en campo de texto enfocado | ⏳ pendiente |
-| 28 | Overlay de emojis navegables con gaze + voz | UX | baja | `ui/emoji_overlay.py`, `voice/` | Navegar emojis con mirada, confirmar con voz o blink | ⏳ pendiente |
+|| 28 | Overlay de emojis navegables con gaze + voz | UX | baja | `ui/emoji_overlay.py`, `voice/` | Navegar emojis con mirada, confirmar con voz o blink | ✅ hecha 31/05/2026 |
 | 29 | App switcher con gaze dwell + pinch para cerrar | UX | alta | `ui/app_switcher.py`, `actions/dispatcher.py` | Dwell en iconos taskbar, pinch para cerrar, swipe para cambiar | ⏳ pendiente |
 | 30 | Fusión multimodal con modo OR + intención prioritaria | Fusión | media | `fusion/fusion.py`, `fusion/channel_priority.py` | Añadir modo OR (cualquier canal activa) + priorización por confianza | ⏳ pendiente |
 
 ## Progreso
 
-| **Completadas:** 21 / 30 (70%) |
-| **Pendientes:** 9 |
+| **Completadas:** 23 / 30 (77%) |
+| **Pendientes:** 7 |
 
 ## Orden de implementación
 
