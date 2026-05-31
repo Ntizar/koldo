@@ -26,5 +26,5 @@
 | 8 | Timestamp de datos + enlace a fuente ESIOS — mostrar fecha/hora y enlace | Global | baja | render.js, index.html, styles.css | Timestamp visible con fecha, enlace a ESIOS y REE | ✅ completado 2026-05-31 |
 | 9 | Curva de carga comparativa — superponer día seleccionado vs media 7 días | Demanda | media | render-charts.js, data.js, render-zoom.js, index.html | Gráfico con 2 líneas superpuestas, tabla comparativa, stats | ✅ completado 2026-05-31 |
 | 10 | Performance ratio renovable — comparar gen real vs prevista eólica/solar | Mix | media | render-charts.js, summary.service.js | Métrica de % acierto visible | ✅ completado 2026-05-31 |
-| 11 | Panel de Balancing/Reservas — mostrar balance del sistema | Resumen | media | render.js, summary.service.js, index.html | Gráfico de balance visible | ⏳ pendiente |
+| 11 | Panel de Balancing/Reservas — mostrar balance del sistema | Resumen | media | render.js, summary.service.js, index.html | Gráfico de balance visible | ✅ completado 2026-05-31 |
 | 12 | Mapa de interconexiones con SVG — visualización geográfica simplificada | Interconexiones | media | render-charts.js, index.html, styles.css | SVG con flujos animados | ⏳ pendiente |
