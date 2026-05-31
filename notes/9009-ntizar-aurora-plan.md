@@ -26,6 +26,8 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | 14 | Sistema de tonalidad superficies | ⭐⭐⭐ Alta | `ntizar.next.css` + `ntizar.css` | Profundidad visual | ✅ hecha 2026-05-31 |
 | 15 | CSS-only dropdown avanzado | ⭐⭐⭐ Alta | `ntizar.ui.css` | Cero JS |
 
+| 16 | Gradientes OKLCH para success/danger/warning | ⭐ Baja | `ntizar.next.css` | Coherencia con brand/accent | ⏳ pendiente |
+| 17 | Modificador `.nz-btn--tonal-*` | ⭐ Media | `ntizar.css` | Botones con superficies tonales | ⏳ pendiente |
 ---
 
 ## Detalle de Cada Mejora
