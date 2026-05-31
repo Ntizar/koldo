@@ -17,7 +17,7 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | 5 | Bento Grid pattern | ⭐ Baja | `ntizar.patterns.css` | Layout moderno | ✅ hecha 2026-05-31 |
 | 6 | Expandir `:has()` a tabs | ⭐ Baja | `ntizar.ui.css` | Interactividad sin JS | ✅ hecha 2026-05-31 |
 | 7 | Glass inputs | ⭐⭐ Media | `ntizar.forms.css` | Coherencia visual | ✅ hecha 2026-05-31 |
-| 8 | Glass tablas | ⭐⭐ Media | `ntizar.css` | Coherencia visual |
+| 8 | Glass tablas | ⭐⭐ Media | `ntizar.css` | Coherencia visual | ✅ hecha 2026-05-31 |
 | 9 | Expandir `:has()` a dropdown | ⭐⭐ Media | `ntizar.ui.css` | Interactividad sin JS |
 | 10 | View transitions tema/skin | ⭐⭐ Media | `ntizar.next.css` | Experiencia visual |
 | 11 | Subgrid para layouts anidados | ⭐⭐ Media | `ntizar.css` | Layout preciso |
