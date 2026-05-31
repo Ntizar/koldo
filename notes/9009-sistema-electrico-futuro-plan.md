@@ -26,8 +26,8 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 | 2 | Exportación de resultados CSV | Botón en dashboard para descargar resultados en CSV | app.js, charts.js | 🔵 Baja | Se descarga un CSV con columnas: hora, demanda, nuclear, solar, eólica, gas, precio, emisiones | ✅ hecha (30/05/2026) |
 || 3 | Indicador de intensidad de carbono | KPI nuevo: gCO2/kWh en el dashboard hero | simulator.js, app.js, app.css | 🔵 Baja | Aparece nuevo KPI en hero con valor gCO2/kWh, color cambia según nivel | ✅ hecha (30/05/2026) |
 || 4 | Tooltips mejorados en gráficos | Añadir más información contextual en hover de gráficos Plotly | charts.js | 🔵 Baja | Al pasar el ratón sobre gráficos aparecen tooltips con datos adicionales | ✅ hecha (31/05/2026) |
-| 5 | Modo presentación | Pantalla completa con KPIs grandes para presentaciones | index.html, app.js, app.css | 🟡 Media | Tecla P activa modo presentación con KPIs grandes y gráficos centrados |
-| 6 | Mini sparklines en KPIs | Mostrar mini gráfico de tendencia en cada tarjeta KPI del dashboard | app.js, charts.js, app.css | 🟡 Media | Cada KPI card muestra un mini gráfico de líneas de las últimas 7 horas |
+| 5 | Modo presentación | Pantalla completa con KPIs grandes para presentaciones | index.html, app.js, app.css | 🟡 Media | Tecla P activa modo presentación con KPIs grandes y gráficos centrados | ✅ hecha (31/05/2026)
+|| 6 | Mini sparklines en KPIs | Mostrar mini gráfico de tendencia en cada tarjeta KPI del dashboard | app.js, charts.js, app.css | 🟡 Media | Cada KPI card muestra un mini gráfico de líneas de las últimas 7 horas | ✅ hecha (31/05/2026) |
 | 7 | Comparación lado a lado | Dos paneles simultáneos para comparar escenarios | app.js, simulator.js, charts.js, app.css | 🟡 Media | Activando modo comparación, aparecen dos dashboards lado a lado |
 | 8 | Selector de fecha REE | Permitir elegir cualquier fecha de 2025 para datos REE | ree-data.js, app.js, ree-data.css | 🟡 Media | Selector de fecha muestra datos REE correspondientes a esa fecha |
 | 9 | Gráfico de sankey | Flujos de energía entre tecnologías y sectores | charts.js, simulator.js | 🟡 Media | Nueva pestaña o sección con gráfico de sankey mostrando flujos |
@@ -129,40 +129,57 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ---
 
-### Mejora 5: Modo presentación
+### Mejora 5: Modo presentación ✅
 **Dificultad:** 🟡 Media  
 **Archivos afectados:** index.html, app.js, app.css  
 **Descripción:** Añadir modo presentación (tecla P) que muestra los KPIs principales en grande, centrados, con gráficos en ancho completo. Ideal para presentaciones y reuniones.
+**Completada:** 31 de mayo de 2026
 
 **Pasos:**
-1. Añadir clase .presentation-mode en body
-2. CSS con KPIs grandes, gráficos centrados, sidebar oculto
-3. Event listener para tecla P
-4. Botón de activación en la barra de acciones
+1. Añadir 137 líneas de CSS en app.css para .presentation-mode (KPIs 2.8rem, sidebar oculto, hero expandido, indicadores fijos)
+2. Añadir estado modoPresentacion en app.js (ref boolean)
+3. Añadir función togglePresentacion() que alterna clase presentation-mode en body
+4. Añadir event listener keydown para P (toggle) y Escape (salir) en onMounted
+5. Añadir botón "Modo presentación" en app-main__actions con clase dinámica
+6. Añadir indicadores fijos (badge superior derecho + hint inferior central)
+7. Botón cambia a nz-btn--brand-mix cuando está activo
 
 **Verificación:**
-- Tecla P activa/desactiva modo presentación
-- KPIs se muestran grandes y centrados
-- Sidebar se oculta
-- Tecla Escape sale del modo
+- Tecla P activa/desactiva modo presentación (ignora inputs/textarea/selects)
+- KPIs se muestran a 2.8rem con peso 900
+- Sidebar se oculta completamente con !important
+- Hero se expande a 3.5rem, grid a una columna
+- Gráficos crecen (xl: 520px, lg: 440px, md: 360px)
+- Badge "MODO PRESENTACIÓN" aparece arriba derecha con gradiente brand
+- Hint "Pulsa ESC para salir" aparece abajo centro
+- Tecla Escape cierra modo presentación
+- Botón cambia a brand-mix cuando está activo
+- Commit fd0665a pushado a main
 
 ---
 
-### Mejora 6: Mini sparklines en KPIs
+### Mejora 6: Mini sparklines en KPIs ✅
 **Dificultad:** 🟡 Media  
 **Archivos afectados:** app.js, charts.js, app.css  
-**Descripción:** Añadir mini gráficos de líneas (sparklines) en cada tarjeta KPI del dashboard que muestren la evolución de la métrica durante las últimas 7 horas de simulación.
+**Descripción:** Añadir mini gráficos de líneas (sparklines) en cada tarjeta KPI del dashboard que muestren la evolución de la métrica durante las últimas 7 horas de simulación.  
+**Completada:** 31 de mayo de 2026
 
 **Pasos:**
-1. Extraer últimas 7 horas de datos del mix simulado
-2. Crear mini gráfico Plotly para cada KPI
-3. Estilizar como sparkline (sin ejes, pequeño)
-4. Añadir en cada tarjeta KPI del dashboard
+1. Crear función renderSparkline() en charts.js con Plotly mini-gráfico (sin ejes, spline suave, fill tozeroy)
+2. Crear función extraerSparklineData() en app.js que calcula las últimas 7 horas para cada métrica
+3. Crear función renderizarSparklines() en app.js que renderiza sparklines en hero KPIs y critical cards
+4. Añadir contenedores .sparkline-container en index.html (hero KPIs + critical cards)
+5. Añadir CSS para sparkline-container con altura 28px, opacidad 0.85, hover a 1.0
+6. Integrar en renderizarGraficos() para refrescar tras cada simulación
+7. Funciones getSparklineId() y getCriticalSparklineId() para mapeo labels → IDs
 
 **Verificación:**
-- Cada KPI card muestra un mini gráfico de líneas
-- Sparkline muestra evolución de las últimas 7 horas
+- Cada KPI card muestra un mini gráfico de líneas de las últimas 7 horas
+- Sparklines con spline suave, fill semitransparente, sin ejes visibles
+- Hero KPIs: precio (azul), renovable (verde), emisiones (rojo), CO2 (naranja), coste (azul)
+- Critical cards: gas, vertidos, ENS, sin gas, importaciones, estrés, LOLE
 - No interfiere con el diseño existente
+- Commit a6cee8b pushado a main
 
 ---
 
