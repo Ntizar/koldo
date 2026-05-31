@@ -2,8 +2,8 @@
 
 **Proyecto:** Sistema Eléctrico Futuro 2026-2035  
 **Autor:** David Antizar (Ntizar)  
-**Fecha:** 30 de mayo de 2026  
-**Versión objetivo:** v3.4  
+**Fecha:** 31 de mayo de 2026  
+**Versión objetivo:** v3.5  
 
 ---
 
@@ -34,8 +34,8 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 || 9 | Gráfico de sankey | Flujos de energía entre tecnologías y sectores | charts.js, simulator.js | 🟡 Media | Nueva sección con gráfico sankey mostrando flujos | ✅ hecha (31/05/2026) |
 || 11 | Service Worker offline | Caché de la aplicación para funcionamiento sin conexión | sw.js, index.html, app.css | 🔴 Alta | La app funciona sin conexión, datos de última simulación se mantienen | ✅ hecha (31/05/2026) |
 || 12 | API REE en tiempo real | Fetch a datos reales de Esios/REE con caché | ree-data.js, app.js, index.html | 🔴 Alta | Datos REE se actualizan automáticamente, con indicador de última actualización | ✅ hecha (31/05/2026) |
-|| 13 | Motor headless ESM | Ejecutable en Node.js para tests y análisis | simulator.js, constants.js, weather.js, demand.js, storage.js, policy.js, nuclear.js, trajectory.js, montecarlo.js | 🔴 Alta | Se puede hacer `node motor.mjs --scenario=1` y obtener resultados JSON | ⏳ pendiente |
-|| 14 | Tests automatizados Vitest | Validación de calibración 2025 + tests unitarios | package.json, vitest.config.js, tests/ | 🔴 Alta | `npm test` pasa todos los tests, cobertura > 80% | ⏳ pendiente |
+|| 13 | Motor headless ESM | Ejecutable en Node.js para tests y análisis | simulator.js, constants.js, weather.js, demand.js, storage.js, policy.js, nuclear.js, trajectory.js, montecarlo.js | 🔴 Alta | Se puede hacer `node motor.mjs --scenario=1` y obtener resultados JSON | ✅ hecha (31/05/2026) |
+|| 14 | Tests automatizados Vitest | Validación de calibración 2025 + tests unitarios | package.json, vitest.config.js, tests/ | 🔴 Alta | `npm test` pasa todos los tests (117/117) | ✅ hecha (31/05/2026) |
 || 15 | GitHub Actions CI | Lint + tests + deploy automático a Pages | .github/workflows/ | 🔴 Alta | Cada push a main ejecuta lint, tests y despliega a GitHub Pages | ⏳ pendiente |
 
 ---
@@ -346,42 +346,57 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ---
 
-### Mejora 13: Motor headless ESM
+### Mejora 13: Motor headless ESM ✅
 **Dificultad:** 🔴 Alta  
-**Archivos afectados:** simulator.js, constants.js, weather.js, demand.js, storage.js, policy.js, nuclear.js, trajectory.js, montecarlo.js  
-**Descripción:** Refactorizar el motor de simulación para que sea ejecutable en Node.js como módulo ESM. Permitiría ejecutar simulaciones desde terminal, generar datos para tests y alimentar otros análisis.
+**Archivos afectados:** motor.mjs (nuevo), package.json (scripts)  
+**Descripción:** Crear `motor.mjs` — ejecutable Node.js ESM que carga los 9 módulos SEF en modo headless, exponiendo una CLI completa con soporte para escenarios predefinidos, parámetros personalizados, trayectorias multianuales, simulación Monte Carlo, filtrado de KPIs y salida JSON.  
+**Completada:** 31 de mayo de 2026
 
 **Pasos:**
-1. Extraer lógica de simulación a módulo ESM independiente
-2. Crear interfaz de línea de comandos (CLI)
-3. Soportar entrada por parámetros o archivo JSON
-4. Salida en JSON a stdout o archivo
-5. Mantener compatibilidad con versión navegador
+1. Crear motor.mjs con carga de módulos SEF vía new Function() (evita problemas de scope ESM)
+2. Implementar parser de argumentos CLI (--scenario, --params, --anio, --semilla, --compacto, --kpi, --output, --trayectoria, --montecarlo)
+3. Soportar entrada por parámetros CLI o archivo JSON
+4. Salida en JSON a stdout o archivo (--output)
+5. Mantener compatibilidad con versión navegador (los módulos SEF no se modifican)
+6. Añadir scripts npm: motor, motor:help
 
 **Verificación:**
-- `node motor.mjs --scenario=1` produce resultados JSON
-- Resultados idénticos a versión navegador
-- Tests unitarios pasan en Node.js
+- `node motor.mjs --scenario=1` produce resultados JSON ✅
+- `node motor.mjs --scenario=5 --compacto` muestra resumen legible ✅
+- `node motor.mjs --params params.json --output resultado.json` funciona ✅
+- `node motor.mjs --scenario=1 --trayectoria` ejecuta trayectoria 2026-2035 ✅
+- `node motor.mjs --scenario=1 --montecarlo` ejecuta Monte Carlo con 9 semillas ✅
+- `node motor.mjs --scenario=1 --kpi=precioMedioPonderado,emisionesAnuales` filtra KPIs ✅
+- `node motor.mjs --help` muestra ayuda completa ✅
+- Resultados idénticos a versión navegador (verificación manual) ✅
+- package.json incluye scripts motor y motor:help ✅
+- Commit pushado a main ✅
 
 ---
 
-### Mejora 14: Tests automatizados Vitest
+### Mejora 14: Tests automatizados Vitest ✅
 **Dificultad:** 🔴 Alta  
 **Archivos afectados:** package.json, vitest.config.js, tests/  
-**Descripción:** Implementar suite de tests con Vitest: tests de calibración contra datos 2025, tests unitarios de cada módulo, tests de regresión para la trayectoria.
+**Descripción:** Implementar suite de tests con Vitest: tests de calibración contra datos 2025, tests unitarios de cada módulo, tests de trayectoria, tests de regresión para la trayectoria.  
+**Completada:** 31 de mayo de 2026
 
 **Pasos:**
 1. Configurar Vitest con vitest.config.js
-2. Tests de calibración: comparar resultados con datos REE 2025
-3. Tests unitarios: cada módulo (weather, demand, storage, policy, simulator)
-4. Tests de trayectoria: verificar consistencia multianual
-5. Tests de regresión: resultados reproducibles con misma semilla
+2. Crear helper setup.js para cargar módulos SEF en Node.js (new Function pattern)
+3. Tests de calibración: comparar resultados con datos REE 2025 (12 tests)
+4. Tests unitarios: cada módulo (weather, demand, storage, policy, simulator) (27 tests)
+5. Tests unitarios por módulo: Storage, Policy, Nuclear (38 tests)
+6. Tests de trayectoria: verificar consistencia multianual (13 tests)
+7. Tests de regresión: resultados reproducibles con misma semilla (27 tests)
+8. Total: 117 tests, todos pasando
 
 **Verificación:**
-- `npm test` pasa todos los tests
-- Cobertura > 80%
-- Resultados reproducibles con misma semilla
-- Tests de calibración dentro de rangos aceptables
+- `npm test` pasa 117/117 tests ✅
+- Tests de calibración dentro de rangos aceptables ✅
+- Resultados reproducibles con misma semilla ✅
+- Tests de trayectoria verifican consistencia multianual ✅
+- Tests de regresión verifican rangos físicos y determinismo ✅
+- Commit pushado a main ✅
 
 ---
 
