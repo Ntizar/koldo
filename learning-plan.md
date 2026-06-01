@@ -5,9 +5,9 @@
 
 ## Estado General
 
-- **Total repos explorados**: 10 / 49
-- **Skills creadas**: 10
-- **Última sesión**: 2026-05-27
+- **Total repos explorados**: 15 / 49
+- **Skills creadas**: 12
+- **Última sesión**: 2026-05-31
 
 ## Categorías y Repos Prioritarios
 
@@ -91,19 +91,28 @@
 - [x] Blaizzy/mlx-vlm ⭐4780
 - [x] jamiepine/voicebox ⭐28571
 
-### ✅ Sesión 2 (2026-05-27) - COMPLETADA: 5/5 repos
-- [x] NangoHQ/nango ⭐9010
-- [x] google/eng-practices ⭐22761
-- [x] cporter202/API-mega-list ⭐5487
-- [x] stablyai/orca ⭐3487
-- [x] K-Dense-AI/scientific-agent-skills ⭐26143
+### ✅ Sesión 3 (2026-05-30) - COMPLETADA: 7/7 repos
+- [x] NtizarBrainMasterMind ⭐2
+- [x] Ntizar-Aurora ⭐0
+- [x] esios-dashboard ⭐0
+- [x] solmad ⭐3
+- [x] IRPFdibujitos ⭐1
+- [x] OrbitMixer ⭐1
+- [x] SistemaElectricoFuturo ⭐1
+
+### ✅ Sesión 4 (2026-05-31) - COMPLETADA: 5/5 repos
+- [x] Ntizar/FreeHands ⭐0 - Control multimodal gaze/gesture/voice
+- [x] Ntizar/SistemaElectricoFuturo ⭐1 - Simulador eléctrico 2026-2035
+- [x] Ntizar/MonteCarloInversion ⭐0 - Simulador riesgos bursátiles
+- [x] Ntizar/nap-dashboard ⭐1 - Dashboard transportes España
+- [x] Ntizar/solmad ⭐3 - Buscador terrazas con sol Madrid
 
 ### Siguiente Sesión:
+- [ ] Ntizar/Accidentes2024 — Megadashboard accidentes tráfico España
+- [ ] Ntizar/FamilyTree — Editor visual árboles genealógicos
+- [ ] Ntizar/XVLegislatura — Atlas orgánico Gobierno España D3.js
+- [ ] Ntizar/Voynich_Solving — Descifrado manuscrito Voynich
 - [ ] NousResearch/hermes-agent ⭐169243
-- [ ] PINTO0309/PINTO_model_zoo ⭐4333
-- [ ] antoinelame/GazeTracking ⭐2573
-- [ ] stablyai/orca ⭐3487 (ya hecho)
-- [ ] c2g-dev/city2graph ⭐1212
 
 ### Sesiones Futuras:
 - Transit/GTFS cluster (9 repos)

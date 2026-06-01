@@ -1,52 +1,137 @@
 ---
-name: awesome-transit
+name: awesome-transport-datos
+description: "Patrón de integración de datos de transporte público — GTFS (horarios estáticos) + GBFS (bicicletas tiempo real) + GTFS-RT (tiempo real). Fuentes, herramientas y pipelines para apps de movilidad."
+version: 2.0.0
+author: Ntizar + Koldo
 ---
 
-# Awesome Transit
+# Datos de Transporte Público — GTFS + GBFS
 
-- **URL:** https://github.com/MobilityData/awesome-transit
-- **Categoría:** Backend / Datos de transporte público
-- **¿Qué hace?:**
-Es una lista curada por la comunidad (mantenida por MobilityData) de estándares de datos, APIs, aplicaciones, herramientas, datasets y documentación alrededor de la tecnología open source para transporte público. Cubre GTFS, GTFS Realtime, SIRI, GBFS y otros formatos multimodales. Incluye bibliotecas en múltiples lenguajes (Python, Java, Rust, Go, R, C++, etc.), validadores, convertidores, routers, visualizaciones y directorios de feeds.
+Guía práctica para trabajar con datos de transporte público: feeds GTFS (horarios), GBFS (bicicletas compartidas) y GTFS-RT (tiempo real). Basado en el ecosistema awesome-transit (1.8K⭐).
 
-- **Casos de uso:**
-  - Buscar bibliotecas para leer/escribir GTFS en un lenguaje específico
-  - Encontrar validadores de feeds GTFS/GTFS-RT
-  - Descubrir herramientas de análisis de redes de transporte
-  - Acceder a directorios de feeds GTFS globales (Mobility Database, Transitland)
-  - Integrar datos de transporte público en aplicaciones (trip planning, tracking)
-  - Convertir entre formatos (GTFS ↔ NeTEx, GTFS ↔ SIRI, GTFS ↔ GBFS)
-  - Analizar calidad y accesibilidad de servicios de transporte
+## Arquitectura de Datos
 
-- **Snippets/Conceptos clave:**
-  - **GTFS (General Transit Feed Specification):** Estándar para horarios estáticos de transporte público. Archivos CSV: `stops.txt`, `routes.txt`, `trips.txt`, `stop_times.txt`, `calendar.txt`, `shapes.txt`.
-  - **GTFS Realtime:** Estándar para datos en tiempo real (TripUpdates, VehiclePositions, ServiceAlerts) usando Protocol Buffers.
-  - **Bibliotecas Python clave:**
-    - `gtfs_kit` (mrcagney): Toolkit completo para análisis de GTFS en Python 3.8+
-    - `partridge`: Lector rápido de GTFS basado en pandas DataFrames
-    - `gtfsdb`: Convierte GTFS a base de datos relacional
-    - `gtfspy`: Análisis de redes y cálculo de tiempos de viaje (compatible con Postgres/PostGIS)
-    - `node-gtfs`: Carga GTFS a SQLite desde Node.js
-  - **Bibliotecas Java clave:**
-    - `OneBusAway GTFS Modules`: Lectura, escritura y transformación de GTFS
-    - `gtfs-validator` (MobilityData): Validador canónico Apache v2.0
-    - `R5`: Motor de routing multimodal (transit/bike/walk/car)
-  - **Convertidores importantes:**
-    - `osm2gtfs`: Convierte OpenStreetMap a GTFS
-    - `transit_model` (Rust): Convierte GTFS ↔ NTFS ↔ NeTEx ↔ TransXChange ↔ KV1
-    - `hafas2gtfs`: Convierte endpoints HAFAS a GTFS
-  - **Routers:** OpenTripPlanner, GraphHopper, MOTIS, Navitia
-  - **Directorios de datos:** Mobility Database (2000+ datasets), Transitland, TransitData.io
-  - **SIRI:** Standard europeo para datos en tiempo real (XML-based)
-  - **GBFS:** Standard para bikeshare/scootershare/carshare en tiempo real
+```
+Fuentes de datos                    Procesamiento                  Aplicación
+─────────────────                   ─────────────                  ──────────
+GTFS (horarios estáticos)     →   gtfs-to-html    →  Horarios web
+.zip con rutas, paradas,       →   GTFS Validator →  Datos limpios
+horarios, shapes               →   OpenTripPlanner →  Routing
 
-- **Cómo integrarlo en proyectos:**
-  1. **Para consumir GTFS:** Usa `partridge` (Python/pandas) para lectura rápida o `gtfs_kit` para análisis completo.
-  2. **Para trip planning:** Integra OpenTripPlanner (Java) o MOTIS (Rust, alta performance) como backend de routing.
-  3. **Para datos en tiempo real:** Usa `gtfs-realtime-bindings` (oficiales, multi-lenguaje) para parsear feeds GTFS-RT.
-  4. **Para validación:** Usa `gtfs-validator` de MobilityData o `gtfstidy` (Go) para verificar calidad de feeds.
-  5. **Para visualización:** Combina GTFS con Leaflet/Mapbox GL JS usando `gtfs-to-geojson` para convertir shapes y stops.
-  6. **Para routing móvil:** Usa `Mobroute` (Go) como librería embebida o `MOTIS` para plantillas de routing.
-  7. **Acceder a feeds globales:** Consulta la Mobility Database (https://database.mobilitydata.org/) para encontrar feeds de cualquier ciudad.
+GBFS (bicis tiempo real)      →   Nodo.js cache   →  Dashboard mapa
+.json en tiempo real           →   Leaflet         →  Estaciones cercanas
+(station_status,               →   Haversine       →  Alertas ocupación
+ station_information)
 
-- **Fecha de aprendizaje:** 2026-05-26
+GTFS-RT (tiempo real)          →   OneBusAway      →  Llegadas en vivo
+Alertas, posiciones,           →   transit.land    →  Notificaciones
+actualizaciones
+```
+
+## GBFS — Bicicletas Compartidas (como BiciMAD)
+
+```javascript
+// Obtener estaciones con datos en tiempo real
+const GBFS_BASE = 'https://madrid.publicbikesystem.net/customer/gbfs/v2/en';
+
+const [statusResp, infoResp] = await Promise.all([
+  fetch(`${GBFS_BASE}/station_status`),
+  fetch(`${GBFS_BASE}/station_information`),
+]);
+const status = await statusResp.json();
+const info = await infoResp.json();
+
+// Merge por station_id
+const stations = status.data.stations.map(s => {
+  const meta = info.data.stations.find(i => i.station_id === s.station_id);
+  return {
+    id: s.station_id,
+    name: meta?.name || 'Unknown',
+    lat: meta?.lat,
+    lon: meta?.lon,
+    bikes: s.num_bikes_available,
+    docks: s.num_docks_available,
+    status: s.status,
+  };
+});
+```
+
+## GTFS — Horarios Estáticos
+
+```bash
+# Convertir GTFS a horarios web con gtfs-to-html
+npm install -g gtfs-to-html
+gtfs-to-html --gtfsPath ./madrid-gtfs.zip --outputDir ./horarios
+
+# Validar GTFS con el validador oficial
+docker run -v $(pwd):/gtfs gtfs-validator /gtfs/madrid-gtfs.zip
+```
+
+## GTFS-RT — Tiempo Real (autobuses, metro)
+
+```javascript
+// GTFS-RT usa Protocol Buffers — parsear con gtfs-realtime-bindings
+const GtfsRealtimeBindings = require('gtfs-realtime-bindings');
+const resp = await fetch('https://api.emtmadrid.es/gtfs-realtime/vehicle_positions');
+const buffer = await resp.arrayBuffer();
+const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
+
+feed.entity.forEach(entity => {
+  if (entity.vehicle) {
+    console.log(`🚌 ${entity.vehicle.trip.route_id}: lat=${entity.vehicle.position.latitude}, lon=${entity.vehicle.position.longitude}`);
+  }
+});
+```
+
+## Herramientas del ecosistema
+
+| Herramienta | ⭐ | Qué hace |
+|-------------|---|----------|
+| gtfs-to-html | 225 | Convierte GTFS a horarios web accesibles |
+| static-GTFS-manager | 159 | GUI browser para crear/editar GTFS |
+| OpenTripPlanner | — | Routing multimodal (bus+bici+metro) |
+| OneBusAway | — | Llegadas GTFS-RT en tiempo real |
+| transit.land | — | API de feeds GTFS a nivel mundial |
+| OMT Router | 11 | Routing OSM 100% client-side (A*, Dijkstra) |
+
+## Patrón: Estación más cercana (Haversine)
+
+```javascript
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 6371000; // Radio Tierra en metros
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function findNearbyStations(stations, lat, lon, radiusMeters = 500, minBikes = 1) {
+  return stations
+    .filter(s => s.lat && s.lon && s.bikes >= minBikes && s.status === 'IN_SERVICE')
+    .map(s => ({ ...s, dist: haversine(lat, lon, s.lat, s.lon) }))
+    .filter(s => s.dist <= radiusMeters)
+    .sort((a, b) => a.dist - b.dist);
+}
+```
+
+## Buenas prácticas
+
+1. **GBFS cache 2 min** — el estándar GBFS recomienda no consultar más de cada 2 min
+2. **Merge por station_id** — GBFS separa datos estáticos (info) de dinámicos (status)
+3. **GTFS Validator primero** — siempre validar el feed antes de procesar
+4. **Routing 100% client-side** — OMT Router evita backend para rutas simples
+5. **Colores de estado** — verde (>3 bicis), naranja (1-3), rojo (0), gris (inactiva)
+
+## Pitfalls
+
+- ❌ Cache > 2 min en GBFS → datos desactualizados en dashboard
+- ❌ No mapear station_id correctamente → datos mezclados entre estaciones
+- ❌ GTFS corrupto → gtfs-to-html falla sin mensaje claro
+- ❌ Haversine sin validar lat/lon → NaN en distancias
+
+## Referencia
+
+- awesome-transit: https://github.com/MobilityData/awesome-transit (1.8K⭐)
+- GBFS spec: https://gbfs.org
+- GTFS spec: https://gtfs.org
+- Skills relacionadas: frontend-config-mapa-colores, cache-multicapa-memoria-disco

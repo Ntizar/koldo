@@ -1,201 +1,153 @@
-# Postgres MCP Pro
+---
+name: postgres-mcp-servidor
+description: "Patrón para exponer PostgreSQL como servidor MCP (Model Context Protocol) para agentes AI. Health checks, index tuning con DTA, EXPLAIN plans, y queries seguras desde LLMs como Koldo."
+version: 2.0.0
+author: Ntizar + Koldo
+---
 
-**URL:** https://github.com/crystaldba/postgres-mcp
-**Categoría:** DevOps/Infra
-**Estrellas:** 2,802
-**Lenguaje:** Python
+# PostgreSQL como Servidor MCP
 
-## ¿Qué hace?
-Postgres MCP Pro es un servidor **Model Context Protocol (MCP)** de código abierto creado por [Crystal DBA](https://www.crystaldba.ai) que conecta bases de datos PostgreSQL con agentes de IA (Claude, Cursor, Windsurf, etc.) para **administración, análisis y optimización del ciclo completo de vida de la BD**: desde codificación y testing hasta deployment, tuning y mantenimiento en producción.
+Expone una base de datos PostgreSQL como servidor MCP para que agentes AI (Koldo, Claude Code, Codex, etc.) puedan consultarla, tunear índices, y hacer health checks sin SQL directo.
 
-A diferencia de otros servidores MCP de Postgres que solo permiten ejecutar queries, Postgres MCP Pro añade herramientas deterministas de optimización basadas en algoritmos clásicos probados:
+## Arquitectura
 
-- **Database Health** — Checks deterministas de salud: buffer cache hit rate, conexiones, vacuum health (prevención de transaction ID wraparound), sequence limits, replication lag, constraint validation, index health (duplicados, no usados, bloated).
-- **Index Tuning** — Implementa una versión del **Anytime Algorithm** (inspirado en Microsoft SQL Server Database Tuning Advisor). Explora miles de índices candidatos usando un enfoque greedy con análisis Pareto para encontrar la mejor combinación de índices que balancee rendimiento vs. costo de almacenamiento.
-- **Query Plans** — EXPLAIN plans con soporte para **índices hipotéticos** (vía `hypopg`) que simulan el impacto de índices sin crearlos realmente.
-- **Schema Intelligence** — Herramientas para explorar schemas, objetos y detalles de tablas (columnas, constraints, índices) para que el agente IA genere SQL correcto.
-- **Safe SQL Execution** — Dos modos de acceso:
-  - **Unrestricted** (dev): acceso total read/write
-  - **Restricted** (prod): solo lectura con parseo SQL profundo vía `pglast` que rechaza COMMIT, ROLLBACK, DDL, DML y funciones no permitidas. Timeout configurable por query.
-- **Index Tuning by LLM** (experimental) — Optimización iterativa de índices usando un LLM externo (OpenAI) que propone índices, se valida con `hypopg`, y se retroalimenta hasta converger.
-
-Soporta tres transportes MCP: **stdio**, **SSE** y **streamable-http**. Usa `psycopg3` + `libpq` para conexiones async.
-
-## Casos de uso
-1. **Optimización de rendimiento con IA**: Un equipo genera una app con un asistente IA, pero las queries ORM son lentas. Con Postgres MCP Pro + Cursor, el agente puede analizar queries lentas, obtener recomendaciones de índices y aplicar optimizaciones en minutos.
-2. **Health checks automatizados**: Ejecutar `analyze_db_health` periódicamente para detectar índices duplicados, tablas que necesitan VACUUM, secuencias al borde de su límite, lag de replicación, etc.
-3. **Tuning de índices sin riesgo**: Usar `explain_query` con `hypothetical_indexes` para simular el impacto de nuevos índices sin modificar la base de datos real.
-4. **Análisis de workload**: `analyze_workload_indexes` identifica las queries más costosas del workload y recomienda índices óptimos automáticamente.
-5. **Integración segura en producción**: Usar modo `--access-mode=restricted` para permitir que agentes IA ejecuten queries de lectura segura sin riesgo de modificar datos.
-6. **Diagnóstico de queries lentas**: `get_top_queries` con `sort_by=total_time` o `sort_by=resources` para identificar las queries que más consumen.
-
-## Snippets útiles
-
-### Instalar con pipx
-```bash
-pipx install postgres-mcp
+```
+Agente AI (Koldo)
+    │
+    ▼  MCP Protocol (stdio/HTTP)
+    ┌─────────────────────┐
+    │  postgres-mcp       │  ← Python server
+    │  ───────────        │
+    │  • health_check     │
+    │  • list_tables      │
+    │  • run_query        │
+    │  • explain_query    │
+    │  • suggest_index    │  ← DTA algorithm
+    │  • table_size       │
+    │  • index_usage      │
+    │  • connections      │
+    │  • vacuum_info      │
+    └─────────┬───────────┘
+              │
+              ▼
+        PostgreSQL DB
 ```
 
-### Instalar con Docker
-```bash
-docker pull crystaldba/postgres-mcp
-```
+## Instalación
 
-### Ejecutar con Docker
 ```bash
+# Con pip (Python 3.12+)
+pip install postgres-mcp
+
+# Con Docker (recomendado para aislar)
 docker run -i --rm \
-  -e DATABASE_URI="postgresql://user:pass@localhost:5432/mydb" \
-  crystaldba/postgres-mcp --access-mode=unrestricted
+  -e DATABASE_URI="postgresql://user:pass@host:5432/db" \
+  crystaldba/postgres-mcp --access-mode=restricted
 ```
 
-### Ejecutar con SSE transport (para múltiples clientes)
-```bash
-docker run -p 8000:8000 \
-  -e DATABASE_URI="postgresql://user:pass@localhost:5432/mydb" \
-  crystaldba/postgres-mcp --access-mode=unrestricted --transport=sse
+## Dos modos de acceso
+
+| Modo | Lectura | Escritura | DDL | Uso |
+|------|---------|-----------|-----|-----|
+| `restricted` | ✅ | ❌ | ❌ | Agentes autónomos (seguro) |
+| `unrestricted` | ✅ | ✅ | ✅ | DBA asistido, migraciones |
+
+## Patrón: Integración con Hermes/Koldo
+
+```yaml
+# config.yaml de Hermes
+tools:
+  mcp_servers:
+    postgres:
+      transport: stdio
+      command: npx
+      args: ["postgres-mcp", "--access-mode=restricted"]
+      env:
+        DATABASE_URI: "${POSTGRES_URI}"
 ```
 
-### Configurar Claude Desktop (Docker)
-```json
-{
-  "mcpServers": {
-    "postgres": {
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "-e", "DATABASE_URI", "crystaldba/postgres-mcp", "--access-mode=unrestricted"],
-      "env": {
-        "DATABASE_URI": "postgresql://user:pass@localhost:5432/mydb"
-      }
-    }
-  }
-}
+Desde Koldo, ahora puedes:
+
+```javascript
+// El agente puede:
+// • "Analiza el estado de la base de datos" → health_check
+// • "Lista las tablas del esquema público" → list_tables 
+// • "Qué consulta es más lenta?" → explain_query
+// • "Sugiere índices para mejorar" → suggest_index
+// • "Ejecuta SELECT * FROM usuarios LIMIT 5" → run_query
 ```
 
-### Configurar Claude Desktop (pipx)
-```json
-{
-  "mcpServers": {
-    "postgres": {
-      "command": "postgres-mcp",
-      "args": ["--access-mode=unrestricted"],
-      "env": {
-        "DATABASE_URI": "postgresql://user:pass@localhost:5432/mydb"
-      }
-    }
-  }
-}
-```
+## Patrón: Index Tuning con DTA (Database Tuning Advisor)
 
-### Configurar SSE en cliente MCP (Cursor/Cline)
-```json
-{
-  "mcpServers": {
-    "postgres": {
-      "type": "sse",
-      "url": "http://localhost:8000/sse"
-    }
-  }
-}
-```
-
-### Instalar extensiones requeridas
 ```sql
--- Para index tuning y análisis completo de queries
-CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
-CREATE EXTENSION IF NOT EXISTS hypopg;
+-- El agente ejecuta:
+SELECT * FROM pedidos WHERE fecha > '2026-01-01' AND estado = 'pendiente';
+
+-- postgres-mcp analiza el plan y sugiere:
+/*
+📊 Sugerencias de índices (DTA):
+1. CREATE INDEX idx_pedidos_fecha_estado ON pedidos(fecha, estado);
+   → Costo estimado: 100x -> 1.5x (reducción del 98%)
+
+2. CREATE INDEX idx_pedidos_cliente ON pedidos(cliente_id);
+   → Costo estimado: 50x -> 2x (reducción del 96%)
+*/
 ```
 
-### Instalar desde fuente (desarrollo)
-```bash
-git clone https://github.com/crystaldba/postgres-mcp.git
-cd postgres-mcp
-uv pip install -e .
-uv sync
-uv run postgres-mcp "postgres://user:pass@localhost:5432/mydb"
+## Herramientas MCP disponibles
+
+| Herramienta | Descripción | Modo |
+|-------------|-------------|------|
+| `health_check` | Conexión, tamaño DB, conexiones activas, última analítica | ambos |
+| `list_tables` | Tablas con nº filas, tamaño, estimación | ambos |
+| `run_query` | Ejecuta SQL (SELECT en restricted) | ambos |
+| `explain_query` | EXPLAIN ANALYZE del plan | ambos |
+| `suggest_index` | Recomienda índices basado en queries recientes | ambos |
+| `table_size` | Tamaño total de tabla + índices + TOAST | ambos |
+| `index_usage` | Estadísticas de uso de índices | ambos |
+| `table_summary` | Esquema, filas, columnas de una tabla | ambos |
+| `connections` | Conexiones activas, idle, waiting | ambos |
+| `vacuum_info` | Estado de VACUUM y dead tuples | ambos |
+
+## Patrón: Monitoreo programado vía cron
+
+```javascript
+// En Hermes cron job:
+// - Prompt: "Ejecuta health_check en postgres-mcp y reporta estado"
+// - Skills: postgres-mcp-servidor
+// - Schedule: 0 6 * * * (07:00 Madrid)
+
+// Salida esperada:
+// ✅ PostgreSQL OK | DB: 2.3GB | Conexiones: 4/100 | Última analítica: hoy
+// 📊 Tablas: 42 | Registros: 1.2M | Dead tuples: bajo
+// ⚠️ Índices sin usar: 3 → idx_pedidos_viejo, idx_usuarios_nombre
 ```
 
-## Cómo integrarlo en proyectos
+## Buenas prácticas
 
-### 1. Instalación mínima (5 minutos)
-```bash
-# Instalar el paquete
-pipx install postgres-mcp
+1. **Modo restricted para agentes autónomos** — solo SELECT, sin riesgo de escritura
+2. **Docker para aislar** — no instalar dependencias Python en el server principal
+3. **Variables de entorno** — DATABASE_URI en config.yaml, no hardcodeada
+4. **suggest_index con uso real** — basado en pg_stat_statements, no adivinando
+5. **Health checks automáticos** — cron diario + alerta si algo va mal
+6. **HypoPG opcional** — probar índices hipotéticos sin crearlos realmente
 
-# Configurar en tu IDE (Cursor, Claude Desktop, etc.)
-# Usar la configuración JSON de arriba con tu DATABASE_URI
-```
+## Requisitos
 
-### 2. Integración en producción (modo seguro)
-```bash
-# Ejecutar en modo restricted (solo lectura) con timeout de 30s por query
-docker run -d --name postgres-mcp-pro \
-  -e DATABASE_URI="postgresql://readonly_user:pass@prod-db:5432/appdb" \
-  crystaldba/postgres-mcp \
-  --access-mode=restricted \
-  --transport=sse \
-  --sse-port=8000
-```
-
-### 3. Integración con LLM Index Tuning (experimental)
-```bash
-# Requiere OPENAI_API_KEY para el modo LLM de tuning
-docker run -d \
-  -e DATABASE_URI="postgresql://user:pass@localhost:5432/mydb" \
-  -e OPENAI_API_KEY="sk-..." \
-  crystaldba/postgres-mcp \
-  --access-mode=restricted \
-  --transport=sse
-```
-
-Luego usar la herramienta `analyze_workload_indexes` con `method="llm"` o `analyze_query_indexes` con `method="llm"`.
-
-### 4. Arquitectura recomendada para múltiples clientes
-
-```
-+---------------------------------------------+
-|           MCP Clientes (Cursor, Claude,      |
-|         Windsurf, Cline, etc.)               |
-|         +----------+ +----------+           |
-|         | Cursor   | | Claude   |           |
-|         +----+-----+ +----+-----+           |
-|              |            |                  |
-|         +----v------------v-----+           |
-|         |    SSE Server         |           |
-|         |  localhost:8000/sse   |           |
-|         +---------+-------------+           |
-|                   |                         |
-|         +---------v-------------+           |
-|         |  Postgres MCP Pro     |           |
-|         |  (restricted mode)    |           |
-|         +---------+-------------+           |
-|                   |                         |
-|         +---------v-------------+           |
-|         |   PostgreSQL DB       |           |
-|         |  + pg_stat_statements |           |
-|         |  + hypopg             |           |
-|         +-----------------------+           |
-+---------------------------------------------+
-```
-
-### 5. Flujo de trabajo típico con un agente IA
-1. **Explorar schema**: `list_schemas` -> `list_objects(schema)` -> `get_object_details(schema, table)`
-2. **Identificar problemas**: `analyze_db_health(health_type="all")`
-3. **Encontrar queries lentas**: `get_top_queries(sort_by="resources", limit=10)`
-4. **Optimizar queries**: `explain_query(sql="...", hypothetical_indexes=[...])`
-5. **Tuning automático**: `analyze_workload_indexes()` o `analyze_query_indexes(queries=[...])`
-6. **Ejecutar queries seguras**: `execute_sql("SELECT ...")`
-
-### Dependencias clave
-- `mcp>=1.25.0` — Framework MCP (FastMCP)
-- `psycopg[binary]>=3.3.2` — Driver PostgreSQL async
-- `pglast==7.11` — Parser SQL para validación de queries seguras
-- `humanize>=4.15.0` — Formateo de números legibles
-- `instructor>=1.14.4` — Para integración con LLM (tuning experimental)
-- `psycopg-pool>=3.3.0` — Pool de conexiones
-
-### Requisitos de la base de datos
-- PostgreSQL 13-17 (testing enfocado en 15, 16, 17)
 - Python 3.12+
-- Extensiones opcionales pero recomendadas: `pg_stat_statements`, `hypopg`
-- En cloud providers (AWS RDS, Azure, GCP) las extensiones ya están disponibles
+- PostgreSQL 14+ (con pg_stat_statements para index tuning)
+- Opcional: hypopg (para hypothetical indexes)
 
-## Fecha de aprendizaje: 2026-05-27
+## Pitfalls
+
+- ❌ **Modo unrestricted en agente autónomo** — riesgo de DELETE/DROP
+- ❌ **sin pg_stat_statements** → DTA no tiene datos para recomendar índices
+- ❌ **Conexión pool excedido** — el MCP server abre conexiones extra
+- ❌ **Credenciales en command** — pasar DATABASE_URI por env, no por args
+- ❌ **Timeout en queries largas** — configurar statement_timeout en Postgres
+
+## Referencia
+
+- Repo: https://github.com/crystaldba/postgres-mcp (2.8K⭐)
+- PyPI: https://pypi.org/project/postgres-mcp/
+- Skills relacionadas: env-validacion-estricta, docker-multistage-produccion

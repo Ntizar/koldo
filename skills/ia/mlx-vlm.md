@@ -1,232 +1,159 @@
-# MLX-VLM
+---
+name: mlx-vlm-vision-local
+description: "Patrón de visión por computadora local en Mac con MLX — LLaVA, Pixtral, Florence-2, Molmo. Fine-tuning, inferencia batch y extracción de estructuras (JSON, tablas) desde imágenes."
+version: 2.0.0
+author: Ntizar + Koldo
+---
 
-**URL:** https://github.com/Blaizzy/mlx-vlm
-**Categoría:** Visión/ML
-**Estrellas:** 4,780
-**Lenguaje:** Python
+# Visión Local con MLX-VLM
 
-## ¿Qué hace?
-MLX-VLM es un paquete para **inferencia y fine-tuning** de Vision Language Models (VLMs) y Omni Models (VLMs con soporte de audio y video) en Mac usando el framework MLX de Apple. Soporta más de 60 modelos de visión, incluyendo Qwen2/2.5/3/3.5-VL, LLaVA, Llama-3.2-Vision, DeepSeek-VL, Gemma, Phi-4, y muchos más. Incluye características avanzadas como decoding especulativo (2-3x más rápido), cuantización del KV cache (TurboQuant a 3.5 bits), caching de características de visión, batching continuo, caching automático de prefijos (APC), y una API OpenAI-compatible vía servidor FastAPI.
+Ejecuta modelos de visión-lenguaje (VLM) localmente en Mac con Apple Silicon: LLaVA, Pixtral, Florence-2, Molmo, PaliGemma. Fine-tuning incluido.
 
-## Casos de uso
-1. **Inferencia local de VLMs en Apple Silicon** — Ejecutar modelos como Qwen2-VL o LLaVA directamente en un Mac sin necesidad de GPUs NVIDIA ni conexión a la nube.
-2. **Fine-tuning con LoRA/QLoRA** — Adaptar un VLM preentrenado a un dominio específico (OCR, diagnóstico médico, etc.) con mínimos recursos en un Mac.
-3. **Servidor API OpenAI-compatible** — Levantar un endpoint `/v1/chat/completions` con soporte multimodal (imágenes, audio, video) para integrar VLMs en aplicaciones existentes.
-4. **Análisis de video e imágenes múltiples** — Soporte nativo para análisis de video y comparación de múltiples imágenes en una sola consulta.
-5. **Inferencia distribuida** — Ejecutar modelos masivos (p.ej., Kimi-K2.6 de 1T parámetros) en múltiples Macs conectados por Thunderbolt.
+## Arquitectura
 
-## Snippets útiles
-
-### Inferencia básica (imagen + texto)
-```python
-from mlx_vlm import load, generate
-from mlx_vlm.prompt_utils import apply_chat_template
-from mlx_vlm.utils import load_config
-
-# Cargar modelo
-model_path = "mlx-community/Qwen2-VL-2B-Instruct-4bit"
-model, processor = load(model_path)
-config = load_config(model_path)
-
-# Preparar entrada
-image = ["http://images.cocodataset.org/val2017/000000039769.jpg"]
-prompt = "Describe this image."
-
-# Aplicar chat template
-formatted_prompt = apply_chat_template(
-    processor, config, prompt, num_images=len(image)
-)
-
-# Generar respuesta
-output = generate(model, processor, formatted_prompt, image, verbose=False)
-print(output)
+```
+Imagen (URL/ruta)
+    │
+    ▼
+┌─────────────────────┐
+│   MLX-VLM (Apple)   │  ← Corre en GPU unificada (Metal)
+│   ────────────────  │
+│   Modelo VLM:       │
+│   • LLaVA (7B, 13B) │
+│   • Pixtral (12B)   │
+│   • Florence-2      │
+│   • Molmo           │
+│   • PaliGemma       │
+└─────────┬───────────┘
+          │
+          ▼
+┌─────────────────────┐
+│   Output:           │
+│   • Texto (descripción)│
+│   • JSON (estructurado)│
+│   • Bounding boxes    │
+│   • OCR (texto imagen)│
+└─────────────────────┘
 ```
 
-### Inferencia con audio (Omni Model)
-```python
-from mlx_vlm import load, generate
-from mlx_vlm.prompt_utils import apply_chat_template
+## Instalación
 
-model_path = "mlx-community/gemma-3n-E2B-it-4bit"
-model, processor = load(model_path)
-
-audio = ["/path/to/audio1.wav", "/path/to/audio2.mp3"]
-prompt = "Describe what you hear in these audio files."
-
-formatted_prompt = apply_chat_template(
-    processor, model.config, prompt, num_audios=len(audio)
-)
-
-output = generate(model, processor, formatted_prompt, audio=audio, verbose=False)
-print(output)
-```
-
-### Multi-imagen
-```python
-from mlx_vlm import load, generate
-from mlx_vlm.prompt_utils import apply_chat_template
-
-model, processor = load("mlx-community/Qwen2-VL-2B-Instruct-4bit")
-
-images = ["path/to/image1.jpg", "path/to/image2.jpg"]
-prompt = "Compare these two images."
-
-formatted_prompt = apply_chat_template(
-    processor, model.config, prompt, num_images=len(images)
-)
-
-output = generate(model, processor, formatted_prompt, images, verbose=False)
-print(output)
-```
-
-### Streaming con caching de visión (multi-turn)
-```python
-from mlx_vlm import load, stream_generate, VisionFeatureCache
-from mlx_vlm.prompt_utils import apply_chat_template
-
-model, processor = load("google/gemma-4-26b-a4b-it")
-cache = VisionFeatureCache()
-
-image = "path/to/image.jpg"
-
-# Turno 1 — cache miss (codifica la imagen)
-prompt1 = apply_chat_template(processor, model.config, "Describe this image.", num_images=1)
-for chunk in stream_generate(model, processor, prompt1, image=[image],
-                              max_tokens=200, vision_cache=cache):
-    print(chunk.text, end="")
-
-# Turno 2 — cache hit (omite el encoder visual, 11x más rápido)
-prompt2 = apply_chat_template(processor, model.config, "What colors do you see?", num_images=1)
-for chunk in stream_generate(model, processor, prompt2, image=[image],
-                              max_tokens=200, vision_cache=cache):
-    print(chunk.text, end="")
-```
-
-### Servidor FastAPI (API OpenAI-compatible)
 ```bash
-# Iniciar servidor con modelo precargado
-mlx_vlm.server --model mlx-community/Qwen2-VL-2B-Instruct-4bit --port 8080
+pip install mlx-vlm
 
-# Con cuantización de KV cache (ahorra memoria)
-mlx_vlm.server --model google/gemma-4-26b-a4b-it --kv-bits 8
-
-# Con decoding especulativo (~2-3x más rápido)
-mlx_vlm.server --model Qwen/Qwen3.5-4B \
-    --draft-model z-lab/Qwen3.5-4B-DFlash
+# Verificar Metal (GPU Apple Silicon)
+python -c "import mlx.core as mx; print('GPU:', mx.metal.is_available())"
 ```
+
+## Patrón: Inferencia básica
 
 ```python
-# Consumir el servidor con la librería OpenAI
-from openai import OpenAI
+from mlx_vlm import load, generate
 
-client = OpenAI(base_url="http://localhost:8080/v1", api_key="not-needed")
+# Cargar modelo (descarga automática en primera ejecución)
+model, processor = load("mlx-community/llava-1.5-7b-4bit")
 
-response = client.chat.completions.create(
-    model="mlx-community/Qwen2-VL-2B-Instruct-4bit",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {"type": "text", "text": "What is in this image?"},
-                {"type": "image_url", "image_url": {"url": "path/to/image.jpg"}}
-            ]
-        }
-    ],
-    max_tokens=256,
-    stream=True,
-)
-
-for chunk in response:
-    if chunk.choices[0].delta.content:
-        print(chunk.choices[0].delta.content, end="", flush=True)
-```
-
-### Fine-tuning con LoRA
-```bash
-# LoRA básico
-python -m mlx_vlm.lora \
-    --model-path mlx-community/Qwen3-VL-2B-Instruct-bf16 \
-    --dataset your-dataset-id \
-    --batch-size 2 \
-    --epochs 2 \
-    --learning-rate 2e-5 \
-    --output-path ./qwen3-lora-adapter.safetensors
-
-# QLoRA con modelo cuantizado (menos memoria)
-python -m mlx_vlm.lora \
-    --model-path mlx-community/Qwen3-VL-2B-Instruct-4bit \
-    --dataset your-dataset-id \
-    --batch-size 4 \
-    --epochs 2 \
-    --learning-rate 2e-4 \
-    --lora-rank 16 \
-    --lora-alpha 32 \
-    --output-path ./qwen3-qlora-adapter.safetensors
-
-# Full fine-tuning con módulos de visión
-python -m mlx_vlm.lora \
-    --model-path mlx-community/Qwen3-VL-2B-Instruct-bf16 \
-    --dataset your-dataset-id \
-    --full-finetune \
-    --train-vision \
-    --grad-checkpoint \
-    --output-path ./qwen3-full-finetune.safetensors
-```
-
-### Decoding especulativo (Python API)
-```python
-from mlx_vlm import load
-from mlx_vlm.generate import stream_generate
-from mlx_vlm.speculative.drafters import load_drafter
-
-model, processor = load("Qwen/Qwen3.5-4B")
-drafter = load_drafter("z-lab/Qwen3.5-4B-DFlash")
-
-for result in stream_generate(
+# Inferencia
+response = generate(
     model, processor,
-    prompt="Write a quicksort in Python.",
-    max_tokens=512,
-    temperature=0,
-    draft_model=drafter,
-    enable_thinking=True,
-):
-    print(result.text, end="", flush=True)
-
-print(f"\nAccepted {sum(drafter.accept_lens)/len(drafter.accept_lens):.1f} tokens/round")
+    image="https://ejemplo.com/foto.jpg",
+    prompt="Describe esta imagen en detalle",
+    max_tokens=200,
+    temperature=0.0,  # 0 = determinista
+)
+print(response)
+# → "En la imagen se ve un panel solar en un tejado..."
 ```
 
-## Cómo integrarlo en proyectos
+## Patrón: Extraer datos estructurados
 
-### Instalación
-```bash
-pip install -U mlx-vlm
+```python
+# Forzar salida JSON con system prompt
+response = generate(
+    model, processor,
+    image="factura.jpg",
+    prompt=(
+        "Extrae los siguientes campos de esta factura en formato JSON: "
+        "{\"proveedor\", \"fecha\", \"total\", \"conceptos\": []}"
+    ),
+    max_tokens=500,
+)
+import json
+data = json.loads(response)
+# → {"proveedor": "Iberdrola", "fecha": "2026-05-01", "total": 142.50, ...}
 ```
-Requiere macOS con chip Apple Silicon (M1/M2/M3/M4) y el framework MLX instalado.
 
-### Flujo de integración típico
-1. **Instalar** `mlx-vlm` y `mlx` (depende automáticamente de `mlx-cpu` o `mlx-metal`).
-2. **Elegir un modelo** de la lista de soportados (60+ modelos en `mlx_vlm/models/`): Qwen2-VL, Qwen2.5-VL, Qwen3-VL, LLaVA, Llama-3.2-Vision (mllama), DeepSeek-VL, Gemma, Phi-4, Pixtral, Florence-2, PaliGemma, Molmo, MiniCPM-V, y muchos más.
-3. **Cargar y generar** con la API `load()` + `generate()`, o usar el servidor FastAPI para exponer una API REST compatible con OpenAI.
-4. **Optimizar memoria** con cuantización (`--kv-bits 8` para 8-bit KV cache, `--kv-bits 3.5 --kv-quant-scheme turboquant` para TurboQuant a 3.5 bits — hasta 76% reducción de memoria KV).
-5. **Optimizar velocidad** con decoding especulativo (`--draft-model`) — 2-3x más rápido en Qwen3.5, hasta 3.94x en Gemma 4.
-6. **Fine-tunar** con `lora.py` para adaptar el modelo a datos propios — soporta LoRA, QLoRA y full fine-tuning con opción de entrenar también los módulos visuales.
+## Patrón: OCR y detección
 
-### Modelos soportados (selección)
-| Familia | Modelos |
-|---------|---------|
-| **Qwen** | Qwen2-VL, Qwen2.5-VL, Qwen3-VL, Qwen3.5-VL, Qwen3-VL-MoE, Qwen3-Omni-MoE |
-| **LLaVA** | LLaVA, LLaVA-NeXT, LLaVA-Bunny |
-| **Llama** | Llama-3.2-Vision (mllama), Llama-4 |
-| **Gemma** | Gemma3, Gemma3n, Gemma4 |
-| **Otros** | DeepSeek-VL/V2, Florence-2, PaliGemma, Molmo, Phi-3-V/Phi-4-Multimodal, Pixtral, MiniCPM-V/O, Idefics2/3, Jina VLM, InternVL, y 40+ más |
+```python
+# Florence-2 es mejor para OCR/detección
+model, processor = load("mlx-community/Florence-2-base-4bit")
 
-### Características avanzadas destacadas
-- **Vision Feature Caching** — Reutiliza features visuales en conversaciones multi-turno (11x más rápido en prompt processing).
-- **TurboQuant KV Cache** — Cuantización a 2-4 bits del KV cache con kernels Metal personalizados.
-- **Automatic Prefix Caching (APC)** — Reutiliza bloques de KV cache entre requests con prefijos compartidos, con persistencia en disco.
-- **Continuous Batching** — El servidor procesa múltiples requests concurrentes en batches dinámicos.
-- **Structured Outputs** — Soporte para JSON schema con `response_format` (OpenAI-compatible).
-- **Thinking Budget** — Control del número de tokens en el bloque de razonamiento (think) para modelos como Qwen3.5.
-- **Distributed Inference** — Sharding del LLM en múltiples Macs vía JACCL/Thunderbolt.
+# OCR
+text = generate(model, processor, image="cartel.jpg", prompt="<OCR>")
+print(text)  # → "Prohibido aparcar. 24h. Grúa."
 
-## Fecha de aprendizaje: 2026-05-27
+# Detección de objetos
+boxes = generate(model, processor, image="calle.jpg", prompt="<OD>")
+print(boxes)  # → [{"label": "persona", "bbox": [0.1, 0.2, 0.3, 0.5]}, ...]
+
+# Caption detallado
+caption = generate(model, processor, image="paisaje.jpg", prompt="<CAPTION>")
+```
+
+## Patrón: Fine-tuning
+
+```python
+from mlx_vlm import finetune
+
+# Preparar dataset (JSONL)
+# {"image": "foto1.jpg", "conversations": [
+#   {"role": "user", "content": "¿Qué hay en esta imagen?"},
+#   {"role": "assistant", "content": "Un gato naranja."}
+# ]}
+
+# Entrenar (en GPU, ~2-4h para 1000 imágenes)
+finetune(
+    model_id="mlx-community/llava-1.5-7b-4bit",
+    data_path="./dataset.jsonl",
+    num_epochs=3,
+    learning_rate=1e-5,
+    batch_size=4,
+    output_dir="./checkpoints",
+)
+```
+
+## Modelos disponibles
+
+| Modelo | Tamaño | Uso ideal | RAM requerida |
+|--------|--------|-----------|---------------|
+| LLaVA 1.5 7B | 7B | Uso general, descripciones | 8GB+ |
+| LLaVA 1.5 13B | 13B | Mayor calidad, fine-tuning | 16GB+ |
+| Pixtral 12B | 12B | Documentos, gráficos | 16GB+ |
+| Florence-2 | 0.23B | OCR, detección | 4GB+ |
+| Molmo 7B | 7B | Caption detallado | 8GB+ |
+| PaliGemma 3B | 3B | VQA, OCR | 6GB+ |
+
+## Buenas prácticas
+
+1. **temperature=0 para extracción** — evitar alucinaciones en JSON
+2. **Florence-2 para OCR** — más rápido y preciso que LLaVA para texto
+3. **4-bit quantization** — reducir RAM 4x sin perder calidad notable
+4. **System prompt en JSON** — forzar estructura de salida
+5. **GPU check primero** — `mx.metal.is_available()` antes de cargar modelo
+6. **Batch inference** — procesar imágenes en lote para mayor throughput
+
+## Pitfalls
+
+- ❌ Sin GPU Metal → inferencia 10x más lenta en CPU
+- ❌ temperature > 0 para extracción → formato JSON inconsistente
+- ❌ Imagen demasiado grande > 4K → OOM (redimensionar a 1024x1024)
+- ❌ prompt sin contexto de tarea → respuesta genérica
+- ❌ Florence-2 con tokens insuficientes → respuesta truncada
+
+## Referencia
+
+- Repo: https://github.com/Blaizzy/mlx-vlm (4.8K⭐)
+- Docs MLX: https://ml-explore.github.io/mlx/
+- Modelos HF: https://huggingface.co/mlx-community
+- Skills relacionadas: devops/postgres-mcp-servidor, frontend-api-client-errores
