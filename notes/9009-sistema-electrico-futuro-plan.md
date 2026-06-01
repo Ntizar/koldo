@@ -2,14 +2,22 @@
 
 **Proyecto:** Sistema Eléctrico Futuro 2026-2035  
 **Autor:** David Antizar (Ntizar)  
-**Fecha:** 31 de mayo de 2026  
-**Versión objetivo:** v3.5  
+**Fecha:** 31 de mayo de 2026 (FASE 4 — Reaprendizaje: 1 de junio de 2026)  
+**Versión objetivo:** v3.6 (enriquecida FASE 4)
+
+---
+
+## Resumen FASE 4 (1 de junio 2026)
+
+Se han investigado 8 fuentes externas: Ember, Energy-Charts.info, ElectricityMap, National Grid ESO, NREL SAM, EU Energy Flex App, ESM/OSeMOSYS, PyPSA. Se han identificado 14 nuevas mejoras (#17-#30), elevando el plan de 16 a 30 mejoras totales. Nuevas tendencias: heatmaps temporales, curvas de flexibilidad, análisis de sensibilidad tornado, exportación PDF, comparativa internacional, LCOE/LCOS, alertas de eventos extremos, degradación de baterías.
 
 ---
 
 ## Resumen
 
 Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica: implementable en una única ejecución de cron. Cada entrada incluye descripción, archivos afectados, dificultad y criterios de verificación.
+
+**Resumen FASE 4 (1 de junio 2026):** 30 mejoras totales (17 completadas + 13 nuevas pendientes). Nuevas ideas basadas en investigación de Ember, Energy-Charts.info, ElectricityMap, EU Energy Flex App, NREL SAM, ESM/OSeMOSYS, PyPSA, National Grid ESO.
 
 **Código de dificultad:**
 - 🔵 **Baja** — 1-2 archivos, < 50 líneas, riesgo mínimo
@@ -37,7 +45,23 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 || 13 | Motor headless ESM | Ejecutable en Node.js para tests y análisis | simulator.js, constants.js, weather.js, demand.js, storage.js, policy.js, nuclear.js, trajectory.js, montecarlo.js | 🔴 Alta | Se puede hacer `node motor.mjs --scenario=1` y obtener resultados JSON | ✅ hecha (31/05/2026) |
 || 14 | Tests automatizados Vitest | Validación de calibración 2025 + tests unitarios | package.json, vitest.config.js, tests/ | 🔴 Alta | `npm test` pasa todos los tests (117/117) | ✅ hecha (31/05/2026) |
 || 15 | GitHub Actions CI | Lint + tests + deploy automático a Pages | .github/workflows/ | 🔴 Alta | Cada push a main ejecuta lint, tests y despliega a GitHub Pages | ✅ hecha (31/05/2026) |
-|| 16 | Dashboard Monte Carlo | Tab Incertidumbre con simulación multi-semilla, tabla de percentiles P5/P50/P95, gráficos de banda de confianza y amplitud de incertidumbre | app.js, charts.js, index.html, app.css | 🟡 Media | Tab "Incertidumbre" con ejecutor Monte Carlo, tabla de percentiles y gráficos de bandas | ⏳ pendiente
+||| 16 | Dashboard Monte Carlo | Tab Incertidumbre con simulación multi-semilla, tabla de percentiles P5/P50/P95, gráficos de banda de confianza y amplitud de incertidumbre | app.js, charts.js, index.html, app.css | 🟡 Media | Tab "Incertidumbre" con ejecutor Monte Carlo, tabla de percentiles y gráficos de bandas | ✅ hecha (01/06/2026)
+||| 17 | Panel comparación internacional España vs Europa | Nueva tab con comparativa España vs Alemania, Francia, UK, Portugal en barras apiladas (capacidad, intensidad CO2, precio, renovable) | app.js, charts.js, index.html, ree-data.js, app.css | 🟡 Media | Nueva tab con barras comparativas por país | ⏳ pendiente
+||| 17b | Paradas de recarga nuclear escalonadas | Simular paradas reales de los 7 reactores (~30 días cada 18 meses, escalonados). Capacidad nuclear varía horariamente. KPI "Paradas nuclear" en critical cards. | nuclear.js, simulator.js, app.js | 🔵 Baja | KPI visible en dashboard, simulación horaria, 117/117 tests | ✅ hecha (01/06/2026)
+||| 18 | Curvas de flexibilidad y ventanas de oportunidad | Histograma de horas por rango de precio coloreado por tecnología flexible + curva de flexibilidad. Inspirado en EU Energy Flex App | app.js, charts.js, simulator.js, index.html, app.css | 🟡 Media | Nuevo gráfico de flexibilidad en tab Análisis | ⏳ pendiente
+||| 19 | Análisis de sensibilidad tornado | Gráfico de tornado con barras horizontales ordenadas por magnitud de efecto. Variar ±20% cada parámetro y medir impacto en KPI. Inspirado en ESM/OSeMOSYS | app.js, charts.js, simulator.js, index.html, app.css, montecarlo.js | 🔴 Alta | Gráfico de tornado con barras horizontales | ⏳ pendiente
+||| 20 | Exportar informes en PDF con @media print | CSS @media print dedicado para generar informes profesionales al imprimir (Ctrl+P). Incluir título, KPIs, gráficos, metadatos. Sin dependencias externas | app.css, index.html | 🔵 Baja | Ctrl+P genera PDF con layout profesional | ✅ hecha (01/06/2026)
+||| 21 | Activar eólica offshore con slider dedicado | Slider para capacidad offshore GW con datos de proyectos reales (Galicia Offshore 1.5 GW, Cantábrico Offshore 1.5 GW). Backend ya implementado | app.js, scenarios.js, index.html, charts.js, ree-data.js | 🔵 Baja | Nuevo slider en tab Modelo, Sankey actualizado con flujo offshore | ⏳ pendiente
+||| 22 | Semáforo de cumplimiento PNIEC | La función verificarCumplimientoPNIEC() existe pero no se usa. Crear semáforo visual verde/amarillo/rojo por objetivo PNIEC 2030 | app.js, ree-data.js, index.html, app.css | 🔵 Baja | Semáforo con 3 estados por objetivo PNIEC | ⏳ pendiente
+||| 23 | Indicador degradación baterías acumulada | Mostrar KPI de degradación % acumulada en trayectorias. Backend implementado (2%/365 ciclos + 1.5%/año) | app.js, charts.js, storage.js, index.html, app.css | 🔵 Baja | KPI degradación % en trayectorias + gráfico descendente | ⏳ pendiente
+||| 24 | Vista comparativa cierre vs prórroga nuclear | Vista dedicada comparando escenarios cierre (3, 8) vs prórroga (2, 9) en precio, emisiones, ENS, vertidos, gas | app.js, charts.js, index.html, app.css | 🟡 Media | Vista dedicada con KPIs diferencia y barras comparativas | ⏳ pendiente
+||| 25 | Gráfico evolución capacidad instalada 2026-2035 | Barras apiladas mostrando evolución de capacidad instalada por tecnología a lo largo de la trayectoria. Complemento a trayectoria de generación | app.js, charts.js, trajectory.js, index.html, app.css | 🟡 Media | Nuevo gráfico en tab Trayectoria con barras apiladas | ⏳ pendiente
+||| 26 | Alertas de eventos extremos en trayectoria | Badges en años con ENS > 0, LOLE > umbral, precio > 200 €/MWh, renovables < 40%. Inspirado en National Grid ESO alerts | app.js, charts.js, trajectory.js, app.css | 🟡 Media | Badges de alerta en línea temporal de trayectoria | ⏳ pendiente
+||| 27 | Modo "qué pasaría si" con sliders en tiempo real | Sliders de parámetros clave (gas, CO2, demanda) con efecto inmediato en KPIs sin simulación completa. Inspirado en Energy-Charts.info | app.js, simulator.js, index.html, app.css | 🔴 Alta | Sliders en tiempo real, KPIs se actualizan instantáneamente | ⏳ pendiente
+||| 28 | Panel REE enriquecido con generación horaria | Nuevo gráfico de generación horaria por tecnología en tab REE (inspirado en Energy-Charts.info 24h). Datos de interconexiones si disponibles | app.js, charts.js, ree-data.js, index.html, app.css | 🟡 Media | Nuevo gráfico 24h en tab REE con tecnologías | ⏳ pendiente
+||| 29 | Comparativa LCOE/LCOS por tecnología | Tabla y gráfico de barras comparando coste nivelado por tecnología. Calcular a partir de datos del simulador. Inspirado en NREL SAM | app.js, charts.js, simulator.js, index.html, app.css | 🟡 Media | Tabla LCOE/LCOS + gráfico de barras | ⏳ pendiente
+||| 30 | Visualización vertidos con heatmap horario | Mapa de calor 12x24 (mes x hora) mostrando intensidad de vertido. Complemento visual al KPI de vertidos | app.js, charts.js, simulator.js, index.html, app.css | 🟡 Media | Heatmap 12x24 en tab Análisis con tooltip | ⏳ pendiente
+
 
 ---
 
@@ -451,3 +475,308 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 - 117/117 tests pasando ✅
 - JS válido (node --check) ✅
 - Commit 88eeb7f pushado a main ✅
+
+---
+
+### Mejora 17: Panel de comparación internacional España vs Europa
+**Dificultad:** 🟡 Media  
+**Archivos afectados:** app.js, charts.js, index.html, ree-data.js, app.css  
+**Descripción:** Añadir una nueva tab o sección que compare los resultados del escenario actual con datos reales de otros países europeos (Alemania, Francia, Reino Unido, Portugal). Mostrar capacidad instalada por tecnología, intensidad de carbono, precio medio, proporción renovable. Inspirado en Ember Global Electricity Review y Energy-Charts.info comparativa internacional.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Añadir datos de referencia de países (capacidad, generación, precio, CO2) en ree-data.js
+2. Crear función compararPaises() en app.js que genera datos comparativos
+3. Implementar plotComparacionPaises() en charts.js con barras apiladas por país
+4. Añadir tab "Comparativa Europa" en index.html con contenedores de gráficos
+5. CSS para layout de tarjetas comparativas por país
+
+**Verificación:**
+- Nueva tab con comparativa España vs Alemania vs Francia vs UK vs Portugal
+- Barras apiladas por tecnología y métricas individuales
+- Tooltips con datos detallados por país
+- No se rompe el layout existente
+
+---
+
+### Mejora 18: Curvas de flexibilidad y ventanas de oportunidad
+**Dificultad:** 🟡 Media  
+**Archivos afectados:** app.js, charts.js, simulator.js, index.html, app.css  
+**Descripción:** Visualizar ventanas de oportunidad para carga flexible (VE, H₂, bombeo, baterías) en función del precio horario. Mostrar histograma de horas por rango de precio coloreado por tecnología flexible, y curva de flexibilidad con capacidad disponible por rango de precio. Inspirado en EU Energy Flex App.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Implementar calcularVentanasFlexibilidad() en simulator.js
+2. Implementar plotCurvaFlexibilidad() en charts.js con histograma + curva
+3. Añadir sección en tab "Análisis" con canvas para gráficos de flexibilidad
+4. Mostrar horas de precio negativo, bajo (<30 €/MWh), alto (>100 €/MWh)
+5. Indicador de "horas de vertido absorbibles con flexibilidad"
+
+**Verificación:**
+- Histograma de horas por rango de precio coloreado por tecnología
+- Curva de flexibilidad con capacidad disponible
+- Contadores de horas negativas, bajas, altas
+- No se rompe el layout existente
+
+---
+
+### Mejora 19: Análisis de sensibilidad tornado
+**Dificultad:** 🔴 Alta  
+**Archivos afectados:** app.js, charts.js, simulator.js, index.html, app.css, montecarlo.js  
+**Descripción:** Implementar análisis de sensibilidad que identifique qué parámetros del escenario más influyen en cada KPI. Visualizar con gráfico de tornado (barras horizontales ordenadas por magnitud de efecto). Inspirado en ESM/OSeMOSYS y PyPSA.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Implementar analizarSensibilidad() en simulator.js: variar ±20% cada parámetro, ejecutar simulación, medir cambio en KPI
+2. Implementar plotTornado() en charts.js con Plotly barras horizontales (rojo/azul)
+3. Selector de KPI objetivo (precio, emisiones, ENS, vertidos, renovable)
+4. Añadir tab o sub-sección en "Análisis" con controles y gráfico
+5. Soporte para análisis global (variar múltiples parámetros simultáneamente)
+
+**Verificación:**
+- Gráfico de tornado con barras horizontales ordenadas
+- Selector de KPI objetivo funcional
+- Valores razonables (parámetros más sensibles = barras más largas)
+- No se rompe el layout existente
+
+---
+
+### Mejora 20: Exportar informes en PDF con @media print
+**Dificultad:** 🔵 Baja  
+**Archivos afectados:** app.css, index.html, js/app.js  
+**Descripción:** CSS @media print dedicado para generar informes profesionales al imprimir (Ctrl+P). Incluir título, KPIs, gráficos, metadatos. Sin dependencias externas.
+**Completada:** 1 de junio de 2026
+
+**Pasos:**
+1. Añadir función `imprimirInforme()` en app.js que llama a `window.print()` con validación de datos
+2. Añadir botón "Imprimir" en la barra de acciones del index.html junto a "Exportar CSV"
+3. Añadir `fechaInforme` como computed property en app.js (fecha/hora formateada en español)
+4. Añadir footer del informe en index.html con metadatos (solo visible en impresión)
+5. Añadir `@media print` completo en app.css (259 líneas):
+   - `@page` con tamaño A4 y márgenes
+   - Ocultar UI no relevante (sidebar, botones, controles, sparklines, badges)
+   - Reformat KPIs en grid compacto de tabla
+   - Reformat critical cards en grid 3 columnas
+   - Simplificar gráficos Plotly (sin modebar, sin hover)
+   - Asegurar page-break-inside: avoid en cards y gráficos
+   - Forzar colores de contraste para impresión monocromática
+   - Forzar fondo blanco incluso en tema oscuro
+6. Añadir `imprimirInforme` y `fechaInforme` al return de Vue
+
+**Verificación:**
+- Botón "Imprimir" visible junto a "Exportar CSV" ✅
+- Botón deshabilitado si no hay simulación ✅
+- `@media print` con 259 líneas de CSS profesional ✅
+- KPIs se reorganizan en grid compacto al imprimir ✅
+- Gráficos Plotly se imprimen sin modebar ni hover ✅
+- Footer del informe muestra metadatos (fecha, escenario, semilla) ✅
+- 1683 líneas app.js, 226/226 braces CSS ✅
+- Commit 5d14389 pushado a main ✅
+
+---
+
+### Mejora 21: Activar eólica offshore con slider dedicado
+**Dificultad:** 🔵 Baja  
+**Archivos afectados:** app.js, scenarios.js, index.html, charts.js, ree-data.js  
+**Descripción:** El offshore está implementado en el motor (capacidad, generación, FC 43%) pero sin control UI. Crear slider para capacidad offshore GW con datos de proyectos reales (Galicia Offshore 1.5 GW, Cantábrico Offshore 1.5 GW). Actualizar Sankey y PNIEC.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Añadir slider en tab "Modelo" para eolicaOffshore (GW) con rango 0-15
+2. Mostrar proyectos reales como referencias visuales (barras de progreso)
+3. Actualizar gráfico Sankey para incluir flujo offshore
+4. Actualizar tabla de PNIEC con objetivo offshore (3 GW 2030)
+5. Añadir datos de proyectos en pestaña REE
+
+**Verificación:**
+- Nuevo slider en tab Modelo funcional
+- Proyectos reales como referencias
+- Sankey actualizado con flujo offshore
+- PNIEC actualizado con objetivo offshore
+
+---
+
+### Mejora 22: Semáforo de cumplimiento PNIEC
+**Dificultad:** 🔵 Baja  
+**Archivos afectados:** app.js, ree-data.js, index.html, app.css  
+**Descripción:** La función verificarCumplimientoPNIEC() existe pero no se usa en la UI. Crear un "semáforo" visual que muestre si cada objetivo PNIEC 2030 se cumple (verde), se acerca (amarillo) o se queda corto (rojo). Inspirado en dashboards de cumplimiento normativo.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Llamar a verificarCumplimientoPNIEC() en app.js tras simulación
+2. Crear función renderizarSemforoPNIEC() que genera indicadores visuales
+3. Añadir sección en tab PNIEC con semáforo por objetivo
+4. CSS para indicadores verde/ámbar/rojo con iconos
+
+**Verificación:**
+- Semáforo con 3 estados por objetivo PNIEC
+- Renovables, eficiencia, VE, H₂, almacenamiento
+- Tooltips con valores actuales vs objetivo
+
+---
+
+### Mejora 23: Indicador degradación baterías acumulada
+**Dificultad:** 🔵 Baja  
+**Archivos afectados:** app.js, charts.js, storage.js, index.html, app.css  
+**Descripción:** La degradación de baterías está implementada (2% por 365 ciclos + 1.5%/año calendario) pero sin visualización. Mostrar KPI de degradación acumulada en trayectorias multianuales con gráfico de línea descendente.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Calcular degradación acumulada en storage.js durante trayectoria
+2. Exponer datos de degradación en resultados del simulador
+3. Implementar plotDegradacionBaterias() en charts.js
+4. Añadir KPI de degradación en tab Trayectoria
+5. Gráfico de línea descendente con año en X y % en Y
+
+**Verificación:**
+- KPI de degradación % visible en trayectorias
+- Gráfico de degradación descendente
+- Valores razonables (degradación gradual)
+- No se rompe el layout existente
+
+---
+
+### Mejora 24: Vista comparativa cierre vs prórroga nuclear
+**Dificultad:** 🟡 Media  
+**Archivos afectados:** app.js, charts.js, index.html, app.css  
+**Descripción:** Crear una vista dedicada que compare directamente los escenarios de cierre nuclear (3, 8) vs prórroga nuclear (2, 9). Mostrar diferencias en precio, emisiones, ENS, vertidos, dependencia del gas. Inspirado en la comparación lado a lado existente pero enfocada en nuclear.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Añadir vista dedicada "Nuclear: Cierre vs Prórroga" en app.js
+2. Simular escenarios 3+8 y 2+9 automáticamente
+3. Implementar plotComparacionNuclear() en charts.js con barras diferencia
+4. KPIs de diferencia: precio, emisiones, ENS, gas, renovables
+5. CSS para layout de comparación nuclear
+
+**Verificación:**
+- Vista dedicada con comparativa nuclear
+- KPIs de diferencia calculados correctamente
+- Gráficos de barras comparativas
+- Tema relevante para debate político actual
+
+---
+
+### Mejora 25: Gráfico evolución capacidad instalada 2026-2035
+**Dificultad:** 🟡 Media  
+**Archivos afectados:** app.js, charts.js, trajectory.js, index.html, app.css  
+**Descripción:** Añadir un gráfico de barras apiladas mostrando la evolución de la capacidad instalada por tecnología a lo largo de la trayectoria 2026-2035. Mostrar cómo cambia el mix de capacidad (no solo generación) año a año. Complemento visual a la trayectoria de generación actual.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Calcular capacidad instalada por tecnología en trajectory.js
+2. Implementar plotEvolucionCapacidad() en charts.js con barras apiladas
+3. Añadir gráfico en tab Trayectoria
+4. Eje X = años 2026-2035, Eje Y = GW, colores por tecnología
+5. Tooltip con valores detallados por año y tecnología
+
+**Verificación:**
+- Nuevo gráfico en tab Trayectoria
+- Barras apiladas por tecnología
+- Evolución 2026-2035 visible
+- Tooltips con valores detallados
+
+---
+
+### Mejora 26: Alertas de eventos extremos en trayectoria
+**Dificultad:** 🟡 Media  
+**Archivos afectados:** app.js, charts.js, trajectory.js, app.css  
+**Descripción:** Detectar y marcar visualmente en la trayectoria eventos extremos: años con ENS > 0, años con LOLE > umbral, años con precio medio > 200 €/MWh, años con renovables < 40%. Mostrar como badges/iconos en la línea temporal. Inspirado en National Grid ESO alerts.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Detectar eventos extremos en trajectory.js durante simulación
+2. Implementar renderizarAlertasTraectoria() en app.js
+3. Añadir badges de alerta en línea temporal
+4. Tooltip con detalles del evento
+5. Leyenda de umbrales de alerta
+
+**Verificación:**
+- Badges de alerta en años con eventos extremos
+- Tooltip con detalles del evento
+- Leyenda de umbrales visible
+- No se rompe el layout de trayectoria
+
+---
+
+### Mejora 27: Modo "qué pasaría si" con sliders en tiempo real
+**Dificultad:** 🔴 Alta  
+**Archivos afectados:** app.js, simulator.js, index.html, app.css  
+**Descripción:** Permitir ajustar sliders de parámetros clave (precio gas, precio CO2, demanda industria) y ver el efecto inmediato en los KPIs principales sin ejecutar simulación completa. Inspirado en la interactividad de Energy-Charts.info y dashboards modernos de scenario planning.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Implementar simulación rápida aproximada en simulator.js (sin ciclo completo de 8760h)
+2. Añadir sliders de parámetros clave en app.js
+3. Conectar sliders con actualización de KPIs en tiempo real
+4. Feedback visual de cambio (flechas arriba/abajo, colores)
+5. CSS para sliders y feedback visual
+
+**Verificación:**
+- Sliders en tiempo real funcionales
+- KPIs se actualizan instantáneamente
+- Feedback visual de cambio (colores, flechas)
+- No bloquea la UI durante la simulación
+
+---
+
+### Mejora 28: Panel REE enriquecido con generación horaria
+**Dificultad:** 🟡 Media  
+**Archivos afectados:** app.js, charts.js, ree-data.js, index.html, app.css  
+**Descripción:** En la tab REE existente, añadir un gráfico de generación horaria por tecnología para el día seleccionado, inspirado en Energy-Charts.info vista 24h. Mostrar también datos de interconexiones (francia-españa) si están disponibles.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Añadir gráfico de generación horaria en tab REE (ya existe selector de fecha)
+2. Implementar plotGeneracionHorariaREE() en charts.js con áreas apiladas
+3. Añadir datos de interconexiones si disponibles
+4. CSS para nuevo gráfico en layout existente
+5. Integrar con selector de fecha existente
+
+**Verificación:**
+- Nuevo gráfico de generación horaria en tab REE
+- Datos de interconexiones si disponibles
+- Compatible con selector de fecha existente
+- No se rompe el layout de tab REE
+
+---
+
+### Mejora 29: Comparativa LCOE/LCOS por tecnología
+**Dificultad:** 🟡 Media  
+**Archivos afectados:** app.js, charts.js, simulator.js, index.html, app.css  
+**Descripción:** Añadir una tabla y gráfico de barras comparando el LCOE (Levelized Cost of Energy) y LCOS (Levelized Cost of Storage) de cada tecnología del escenario. Calcular a partir de datos del simulador (coste sistema, generación por tecnología, capacidad instalada). Inspirado en NREL SAM y IEA LCOE reports.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Calcular LCOE/LCOS por tecnología en simulator.js
+2. Implementar plotLCOEComparativa() en charts.js con barras horizontales
+3. Añadir sección en tab "Análisis" con tabla y gráfico
+4. Valores razonables verificables contra datos IEA/NREL
+5. Tooltip con desglose de costes
+
+**Verificación:**
+- Tabla LCOE/LCOS por tecnología visible
+- Gráfico de barras comparativo
+- Valores razonables (verificables contra IEA)
+- No se rompe el layout existente
+
+---
+
+### Mejora 30: Visualización vertidos con heatmap horario
+**Dificultad:** 🟡 Media  
+**Archivos afectados:** app.js, charts.js, simulator.js, index.html, app.css  
+**Descripción:** Crear un mapa de calor (heatmap) mostrando las horas de vertido (exceso de generación renovable sobre demanda) a lo largo del año. Eje X = mes, Eje Y = hora del día, Color = intensidad de vertido. Complemento visual al KPI de vertidos existente.  
+**Completada:** pendiente
+
+**Pasos:**
+1. Calcular vertidos por hora en simulator.js
+2. Implementar plotHeatmapVertidos() en charts.js con Plotly heatmap
+3. Añadir sección en tab "Análisis" con canvas heatmap
+4. Eje X = meses (12), Eje Y = horas (24), Color = intensidad
+5. Tooltip con valores detallados por mes/hora
+
+**Verificación:**
+- Heatmap 12x24 visible en tab Análisis
+- Colores de bajo a alto vertido
+- Tooltip con valores detallados
+- Patrones visibles (vertidos solares en verano, eólicos en noche)
