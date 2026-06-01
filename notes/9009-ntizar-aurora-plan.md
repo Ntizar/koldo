@@ -1,11 +1,11 @@
 # FASE 2 — Plan Maestro de Mejoras para Ntizar-Aurora
 > Pipeline 9009 · 30 de mayo de 2026
-> Versión: v5.1.0 → v5.2.0
+> Versión: v5.1.0 → v5.2.0 (FASE 4 — reaprendizaje 01/06/2026)
 > Principio: mejoras atómicas, bajas dificultades primero, 0 breaking changes
 
 ## Resumen del Plan
 
-Se proponen **15 mejoras atómicas**, cada una implementable en una única ejecución de cron.
+Se proponen **30 mejoras atómicas** (17 existentes + 13 nuevas), cada una implementable en una única ejecución de cron.
 Ordenadas por dificultad creciente (baja → media → alta).
 
 | # | Mejora | Dificultad | Archivo(s) afectado(s) | Impacto |
@@ -28,6 +28,19 @@ Ordenadas por dificultad creciente (baja → media → alta).
 
 | 16 | Gradientes OKLCH para success/danger/warning | ⭐ Baja | `ntizar.next.css` | Coherencia con brand/accent | ✅ hecha 2026-06-01 |
 | 17 | Modificador `.nz-btn--tonal-*` | ⭐ Media | `ntizar.css` | Botones con superficies tonales | ⏳ pendiente |
+| 18 | Refactorizar selectores con `:is()` | ⭐ Baja | `ntizar.css` | Reducir verbosidad | ⏳ pendiente |
+| 19 | Container query units (cqw, cqh, cqi, cqb) | ⭐ Media | `ntizar.css` | Tipografía fluida | ⏳ pendiente |
+| 20 | Microinteracciones CSS (hover, focus, active) | ⭐ Media | `ntizar.css` + `ntizar.motion.css` | Experiencia visual | ⏳ pendiente |
+| 21 | CSS Anchor Positioning para tooltips/popovers | ⭐⭐ Alta | `ntizar.ui.css` + `ntizar.next.css` | Posicionamiento CSS-only | ⏳ pendiente |
+| 22 | CSS @position-try para fallbacks | ⭐⭐ Alta | `ntizar.next.css` | Robustez de posicionamiento | ⏳ pendiente |
+| 23 | CSS inset-area para toasts/notificaciones | ⭐⭐ Alta | `ntizar.ui.css` + `ntizar.next.css` | Posicionamiento automático | ⏳ pendiente |
+| 24 | CSS-only Carousel con scroll-snap + scroll-driven | ⭐⭐⭐ Alta | `ntizar.ui.css` + `ntizar.motion.css` | Nuevo componente | ⏳ pendiente |
+| 25 | CSS-only Popover con :popover + anchor | ⭐⭐⭐ Alta | `ntizar.ui.css` + `ntizar.next.css` | Nuevo componente | ⏳ pendiente |
+| 26 | CSS-only Context Menu con :has() + position-anchor | ⭐⭐⭐ Alta | `ntizar.ui.css` + `ntizar.next.css` | Nuevo componente | ⏳ pendiente |
+| 27 | CSS-only Autocomplete con :has() + listbox | ⭐⭐⭐ Alta | `ntizar.forms.css` + `ntizar.ui.css` | Nuevo componente | ⏳ pendiente |
+| 28 | CSS-only Command Palette con :has() + scroll-driven | ⭐⭐⭐ Alta | `ntizar.ui.css` + `ntizar.motion.css` | Nuevo componente | ⏳ pendiente |
+| 29 | CSS-only Sidebar con :has() + container queries | ⭐⭐⭐ Alta | `ntizar.patterns.css` | Nuevo patrón | ⏳ pendiente |
+| 30 | CSS-only Date Range Picker con :has() + scroll-driven | ⭐⭐⭐ Alta | `ntizar.forms.css` | Nuevo componente | ⏳ pendiente |
 ---
 
 ## Detalle de Cada Mejora
