@@ -36,7 +36,8 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 || 12 | API REE en tiempo real | Fetch a datos reales de Esios/REE con caché | ree-data.js, app.js, index.html | 🔴 Alta | Datos REE se actualizan automáticamente, con indicador de última actualización | ✅ hecha (31/05/2026) |
 || 13 | Motor headless ESM | Ejecutable en Node.js para tests y análisis | simulator.js, constants.js, weather.js, demand.js, storage.js, policy.js, nuclear.js, trajectory.js, montecarlo.js | 🔴 Alta | Se puede hacer `node motor.mjs --scenario=1` y obtener resultados JSON | ✅ hecha (31/05/2026) |
 || 14 | Tests automatizados Vitest | Validación de calibración 2025 + tests unitarios | package.json, vitest.config.js, tests/ | 🔴 Alta | `npm test` pasa todos los tests (117/117) | ✅ hecha (31/05/2026) |
-|| 15 | GitHub Actions CI | Lint + tests + deploy automático a Pages | .github/workflows/ | 🔴 Alta | Cada push a main ejecuta lint, tests y despliega a GitHub Pages | ⏳ pendiente |
+|| 15 | GitHub Actions CI | Lint + tests + deploy automático a Pages | .github/workflows/ | 🔴 Alta | Cada push a main ejecuta lint, tests y despliega a GitHub Pages | ✅ hecha (31/05/2026) |
+|| 16 | Dashboard Monte Carlo | Tab Incertidumbre con simulación multi-semilla, tabla de percentiles P5/P50/P95, gráficos de banda de confianza y amplitud de incertidumbre | app.js, charts.js, index.html, app.css | 🟡 Media | Tab "Incertidumbre" con ejecutor Monte Carlo, tabla de percentiles y gráficos de bandas | ⏳ pendiente
 
 ---
 
@@ -400,20 +401,53 @@ Plan de mejoras priorizadas de menor a mayor dificultad. Cada mejora es atómica
 
 ---
 
-### Mejora 15: GitHub Actions CI
+### Mejora 15: GitHub Actions CI ✅
 **Dificultad:** 🔴 Alta  
-**Archivos afectados:** .github/workflows/  
-**Descripción:** Configurar pipeline CI con GitHub Actions: lint, tests, build y deploy automático a GitHub Pages en cada push a main.
+**Archivos afectados:** .github/workflows/deploy.yml (nuevo), .eslintrc.json (nuevo)  
+**Descripción:** Configurar pipeline CI con GitHub Actions: lint, tests, build y deploy automático a GitHub Pages en cada push a main. Incluye: job de lint+tests+build (lint-and-test), job de deploy a GitHub Pages (deploy) con dependencias, permisos de Pages y environment. Además se creó configuración ESLint (.eslintrc.json) y se corrigió función duplicada getSparklineId en app.js (bug preexistente).
+**Completada:** 31 de mayo de 2026
 
 **Pasos:**
-1. Crear .github/workflows/deploy.yml
-2. Configurar job de lint + tests
-3. Configurar job de build + deploy a Pages
-4. Activar GitHub Pages con source desde GitHub Actions
-5. Verificar deploy automático
+1. Crear .github/workflows/deploy.yml con jobs lint-and-test y deploy
+2. Configurar job de lint + tests + build (lint-and-test, ubuntu-latest)
+3. Configurar job de build + deploy a Pages con permissions y environment
+4. Crear .eslintrc.json con globals (SEF, Vue, Plotly, C) y reglas recomendadas
+5. Corregir función duplicada getSparklineId en app.js (bug preexistente)
+6. Verificar: 0 errores ESLint, 117/117 tests pasando, build HTML preexistente con warning
 
 **Verificación:**
-- Cada push a main ejecuta CI
-- Tests pasan antes del deploy
-- GitHub Pages se actualiza automáticamente
-- Notificaciones de éxito/fallo por email
+- Workflow deploy.yml creado con jobs lint-and-test y deploy ✅
+- ESLint configurado con 0 errores, 15 warnings (variables no usadas) ✅
+- Tests: 117/117 pasando ✅
+- Commit 48d6652 pushado a main ✅
+- Bug corregido: función getSparklineId duplicada en app.js eliminada ✅
+- Nota: error de build HTML (parse5) es preexistente en index.html línea 536, no introducido por esta mejora
+
+---
+
+### Mejora 16: Dashboard Monte Carlo con percentiles P5/P50/P95
+**Dificultad:** 🟡 Media  
+**Archivos afectados:** app.js, charts.js, index.html, app.css  
+**Descripción:** Nueva tab "Incertidumbre" con capacidad de ejecutar simulaciones Monte Carlo (múltiples semillas climáticas) directamente desde la UI. Muestra tabla de percentiles P5/P50/P95 para 8 KPIs principales, gráficos de banda de confianza con área P5-P95 y línea P50, y cálculo de amplitud de incertidumbre con código de colores (verde/ámbar/rojo). Selector de número de semillas (5, 9, 15, 25, 50) con barra de progreso.  
+**Completada:** 1 de junio de 2026
+
+**Pasos:**
+1. Añadir tab "Incertidumbre" a MAIN_TABS en app.js
+2. Añadir estado Monte Carlo (monteCarloEjecutando, monteCarloProgreso, monteCarloN, monteCarloResultados)
+3. Implementar ejecutarMonteCarlo(): bucle con semillas determinísticas, barra de progreso, cálculo de percentiles
+4. Añadir funciones auxiliares fmt(), mcAmplitud(), mcRangoClass()
+5. Implementar plotMonteCarloBar() y plotMonteCarloBand() en charts.js
+6. Implementar renderizarMonteCarlo() para renderizar gráficos al cambiar tab
+7. Añadir HTML con tabla de percentiles, selector de semillas, barra de progreso, 4 gráficos de banda
+8. Añadir CSS para progress bar, amplitud con colores, responsive
+
+**Verificación:**
+- Tab "Incertidumbre" visible en navegación principal ✅
+- Botón "Ejecutar Monte Carlo" funcional con selector de semillas ✅
+- Barra de progreso visible durante ejecución ✅
+- Tabla con 8 KPIs y columnas P5/P50/P95/Rango/Amplitud ✅
+- 4 gráficos de banda de confianza (precio, emisiones, renovable, gas) ✅
+- Amplitud coloreada: verde <15%, ámbar 15-30%, rojo >30% ✅
+- 117/117 tests pasando ✅
+- JS válido (node --check) ✅
+- Commit 88eeb7f pushado a main ✅
