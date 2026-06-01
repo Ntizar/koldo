@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/root/.nvm/versions/node/v20.20.2/bin/node
 /**
  * esios-telegram.js — Informe diario del mercado eléctrico español
  * Con gráficos PNG y análisis del día.
