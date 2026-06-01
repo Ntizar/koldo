@@ -26,7 +26,7 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | 14 | Sistema de tonalidad superficies | ⭐⭐⭐ Alta | `ntizar.next.css` + `ntizar.css` | Profundidad visual | ✅ hecha 2026-05-31 |
 | 15 | CSS-only dropdown avanzado | ⭐⭐⭐ Alta | `ntizar.ui.css` | Cero JS |
 
-| 16 | Gradientes OKLCH para success/danger/warning | ⭐ Baja | `ntizar.next.css` | Coherencia con brand/accent | ⏳ pendiente |
+| 16 | Gradientes OKLCH para success/danger/warning | ⭐ Baja | `ntizar.next.css` | Coherencia con brand/accent | ✅ hecha 2026-06-01 |
 | 17 | Modificador `.nz-btn--tonal-*` | ⭐ Media | `ntizar.css` | Botones con superficies tonales | ⏳ pendiente |
 ---
 
@@ -370,8 +370,8 @@ Ordenadas por dificultad creciente (baja → media → alta).
 | Patrones de layout | 8 | 9 (+ bento grid) |
 | Componentes con subgrid | 0 | 1 (.nz-grid--subgrid) |
 | Breaking changes | 0 | 0 |
-| Tokens nuevos | ~12 | ~48 |
-| Líneas CSS nuevas | ~160 | ~890-990 |
+| Tokens nuevos | ~12 | ~51 |
+| Líneas CSS nuevas | ~160 | ~942-1042 |
 
 ## Riesgos y Mitigación
 
