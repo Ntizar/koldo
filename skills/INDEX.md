@@ -1,7 +1,7 @@
 ---
 name: skills-catalogo-completo
-description: "Catálogo completo de skills del sistema Koldo — ESIOS Dashboard (20 patrones) + APIs nocturnas (14 skills mejoradas). Patrones reutilizables para dashboards, APIs, agentes, visión, voz, document processing, code review y GIS."
-version: 3.0.0
+description: "Catálogo completo de skills del sistema Koldo — ESIOS Dashboard (20 patrones) + APIs nocturnas (10 skills mejoradas). Patrones reutilizables para dashboards, APIs, agentes, visión, voz y GIS."
+version: 2.0.0
 author: Ntizar + Koldo
 ---
 
@@ -74,31 +74,6 @@ author: Ntizar + Koldo
 |-------|-------------|-----|
 | [orca-multi-agente-orquestacion](ia/orca.md) | 🔄 **Mejorado** — Orquestación multi-agente con worktrees, DAG, gates | 🌙 Nocturno |
 | [mlx-vlm-vision-local](ia/mlx-vlm.md) | 🔄 **Mejorado** — Visión local Mac: LLaVA, Pixtral, Florence-2, fine-tuning | 🌙 Nocturno |
-
----
-
-## 📄 Document Processing
-
-| Skill | Descripción | ⭐ |
-|-------|-------------|-----|
-| [markitdown-file-to-markdown](markitdown-file-to-markdown/SKILL.md) | 🆕 **Nuevo** — Conversión 12+ formatos a Markdown para LLMs (markitdown 130k⭐) | 🌙 Nocturno |
-| [liteparse-rust-pdf-ocr](liteparse-rust-pdf-ocr/SKILL.md) | 🆕 **Nuevo** — PDF parser rápido con OCR y spatial extraction (liteparse 7.4k⭐) | 🌙 Nocturno |
-
----
-
-## 🔗 Integrations
-
-| Skill | Descripción | ⭐ |
-|-------|-------------|-----|
-| [nango-800-apis-integrations](nango-800-apis-integrations/SKILL.md) | 🆕 **Nuevo** — Three primitives: Auth, Proxy, Functions para 800+ APIs (Nango 9.5k⭐) | 🌙 Nocturno |
-
----
-
-## 📋 Code Quality
-
-| Skill | Descripción | ⭐ |
-|-------|-------------|-----|
-| [google-engineering-practices-code-review](google-engineering-practices-code-review/SKILL.md) | 🆕 **Nuevo** — Guía completa de code review profesional (Google 23k⭐) | 🌙 Nocturno |
 
 ---
 
