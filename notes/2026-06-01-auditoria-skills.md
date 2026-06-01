@@ -2,14 +2,14 @@
 
 ## Resumen
 
-Auditoría completa del ecosistema de 205 skills + limpieza Fase 1.
+Auditoría completa del ecosistema de 205 skills + limpieza Fase 1 corregida.
 
 ## Fase 1: Limpieza (completada)
 
-### Eliminados: 55 skills
+### Eliminados definitivamente: 20 skills
 
-**Project-readmes (12):**
-- esios-dashboard (47KB) — README del proyecto
+**Project-readmes puros (14):**
+- esios-dashboard (47KB) — README del proyecto esios-work
 - nan-dashboard-deploy (20KB) — Deploy específico
 - nan-spaces-portfolio (14KB) — Deploy específico
 - 9009-mejora-continua (37KB) — Redundante con 9009-multi-iteration
@@ -21,47 +21,55 @@ Auditoría completa del ecosistema de 205 skills + limpieza Fase 1.
 - orbitmixer-satellite-compare — Comparador específico
 - metalhoverlab-cursor-relief — Efecto específico
 - voynich-structural-analysis — Análisis específico
+- sistema-electrico-futuro — README del proyecto
+- rumby-multimodal-mobility — README del proyecto
 
-**CLI Wrappers (25):**
-- productivity/: airtable, notion, linear, nano-pdf, powerpoint, google-workspace, caldav-calendar, teams-meeting-pipeline, maps, ocr-and-documents
-- media/: spotify, gif-search
-- research/: arxiv, blogwatcher, polymarket
-- mlops/: huggingface-hub, llama-cpp
-- smart-home/: openhue
-- gaming/: minecraft-modpack-server, pokemon-player
-- email/: himalaya
-- note-taking/: obsidian
-- social-media/: xurl
+**Listas de referencias (1):**
+- awesome-design-systems — Lista de referencias, no patrón
 
-**Project-readmes top-level (18):**
-- sistema-electrico-futuro, rumby-multimodal-mobility, awesome-design-systems, ia, devops (top-level), frontend (top-level)
+**READMEs de proyecto (3):**
+- ia — README del proyecto
+- devops (top-level) — README del proyecto
+- frontend (top-level) — README del proyecto
 
-**Otros (no encontrados en sus ubicaciones):**
-- metabase, vibevoice
+**Sin valor educativo (2):**
+- metabase — Solo descripción
+- vibevoice — Solo descripción
+
+### Recuperados: 3 skills
+
+- onnx-webgpu-inference → computer-vision/
+- sistema-electrico-simulador → data-science/
+- solar-shadows-web-workers → data-science/
+
+### Tags: 153/153 skills con tags (100%)
 
 ### Reorganización: 49 skills a categorías
 
-Todos los skills top-level sin categoría se movieron a su categoría correspondiente:
-- esios/* (4), frontend/* (3), devops/* (10), github/* (3)
-- data/* (1), data-science/* (1), multi-agent/* (2)
-- herramientas/* (3), creative/* (2), computer-vision/* (3)
-- backend/* (1), software-development/* (6), mlops/* (1)
-- media/* (1), productivity/* (1), infraestructura/* (1)
-
-### Tags: 57 skills etiquetados
-
-Todos los skills sin tags recibieron tags descriptivos (3-5 tags por skill).
+Todos los skills top-level sin categoría se movieron a su categoría correspondiente.
 
 ## Estado Final
 
-| Métrica | Antes | Después | Cambio |
-|---------|-------|---------|--------|
-| Total skills | 205 | 150 | -55 (-27%) |
-| Tamaño total | ~7.7 MB | 5.7 MB | -2 MB |
-| Categorías | 29 | 27 | -2 |
-| Skills con tags | 124 (60%) | 150 (100%) | +40% |
-| Skills sin tags | 81 (39%) | 0 (0%) | -100% |
-| Skills top-level | 50 | 2 | -48 |
+| Métrica | Inicio | Después |
+|---------|--------|---------|
+| Total skills | 205 | 153 |
+| Tamaño total | ~7.7 MB | 5.7 MB |
+| Categorías | 29 | 30 |
+| Skills con tags | 124 (60%) | 153 (100%) |
+| Eliminados | — | 20 (10%) |
+
+## Criterio de Eliminación
+
+Se eliminan SOLO:
+1. **Project-readmes puros** — READMEs de proyectos específicos, no patrones reutilizables
+2. **CLI wrappers sin valor** — Skills que solo documentan cómo usar una CLI con curl
+3. **Listas de referencias** — No son patrones, son catálogos
+
+Se mantienen TODOS los demás, incluyendo:
+- Skills con valor educativo (google-eng-practices, markitdown, etc.)
+- Skills de diseño frontend (service-worker, error-boundaries, debugging)
+- Skills de patrones (web-workers, WebGPU, Kalman, etc.)
+- Skills de infraestructura (api-credentials, liquid-glass-css, etc.)
 
 ## Mantenimiento
 
@@ -69,10 +77,9 @@ Todos los skills sin tags recibieron tags descriptivos (3-5 tags por skill).
 - **Cron job creado:** `skill-maintenance` (83139c479ddb) — auditoría mensual el día 1
 - **Regla añadida:** Solo crear skills que sean patrones reutilizables
 
-## Fase 2 Pendiente
+## Fase 2 Pendiente — Enfoque de Diseño
 
-- Unificar grupo ESIOS (5 → 1)
-- Unificar grupo GitHub (8 → 2)
-- Unificar grupo Frontend (4 → 2)
-- Unificar grupo Infraestructura (7 → 2)
-- Unificar grupo DevOps (11 → 3)
+La próxima fase NO será eliminar más skills, sino:
+1. Revisar cada skill y mejorar su contenido con enfoque en **buenas prácticas de diseño**
+2. Asegurar que cada skill enseñe patrones de diseño, no solo comandos
+3. Organizar por patrones de diseño, no solo por categorías técnicas
